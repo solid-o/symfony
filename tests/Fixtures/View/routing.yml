@@ -1,0 +1,27 @@
+index:
+    path: /
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::indexAction' }
+
+form_invalid:
+    path: /form-invalid
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::formInvalidExceptionAction' }
+
+form_not_submitted:
+    path: /form-not-submitted
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::formNotSubmittedExceptionAction' }
+
+invalid_json:
+    path: /invalid-json
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::invalidJsonExceptionAction' }
+
+custom_serialization_type:
+    path: /custom-serialization-type
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::customSerializationTypeAction' }
+
+custom_serialization_type_iterator:
+    path: /custom-serialization-type-iterator
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::customSerializationTypeWithIteratorAction' }
+
+deprecated:
+    path: /deprecated
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\View\Controller\TestController::deprecatedAction' }

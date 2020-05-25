@@ -1,0 +1,20 @@
+language: php
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+php:
+    - '7.4'
+
+before_install: composer self-update
+install: composer update --prefer-dist --no-progress
+
+jobs:
+    include:
+        - stage: test
+          script: vendor/bin/phpunit
+        - stage: cs-check
+          script: composer cscheck
+        - stage: phpstan
+          script: composer phpstan

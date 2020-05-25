@@ -1,0 +1,3 @@
+index:
+    path: '/'
+    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\BodyConverter\Controller\TestController::indexAction' }

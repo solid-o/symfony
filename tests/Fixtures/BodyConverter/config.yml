@@ -1,0 +1,15 @@
+imports:
+    - { resource: '../../../src/Resources/config/body_converter.xml' }
+
+framework:
+    test: ~
+    secret: 'secret'
+    router:
+        resource: '%kernel.root_dir%/routing.yml'
+
+services:
+    Solido\Symfony\Tests\Fixtures\BodyConverter\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'

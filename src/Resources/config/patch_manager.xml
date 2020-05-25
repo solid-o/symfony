@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Solido\PatchManager\PatchManager" id="Solido\PatchManager\PatchManager" public="true">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="validator" />
+            <call method="setCache">
+                <argument type="service" id="cache.app" on-invalid="null" />
+            </call>
+        </service>
+
+        <service alias="Solido\PatchManager\PatchManager" id="solido.patch_manager" public="true" />
+        <service alias="Solido\PatchManager\PatchManager" id="Solido\PatchManager\PatchManagerInterface" public="true" />
+    </services>
+</container>

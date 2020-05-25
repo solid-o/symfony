@@ -1,0 +1,72 @@
+{
+    "name": "solido/symfony",
+    "description": "Symfony bundle/integration for solido suite",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alessandro Chitolina",
+            "email": "alekitto@gmail.com"
+        },
+        {
+            "name": "Massimiliano Braglia",
+            "email": "massimiliano.braglia@gmail.com"
+        }
+    ],
+    "scripts": {
+        "phpstan": "phpstan analyse src/ -c vendor/solido/php-coding-standards/phpstan.neon --level=8 --no-progress -vvv --memory-limit=2048M",
+        "cscheck": "vendor/bin/phpcs --standard=Solido src/",
+        "csfix": "vendor/bin/phpcbf --standard=Solido src/"
+    },
+    "require": {
+        "php": "^7.4",
+        "symfony/framework-bundle": "^4.4|^5.0",
+        "willdurand/negotiation": "^2.3"
+    },
+    "require-dev": {
+        "doctrine/annotations": "^1.10",
+        "giggsey/libphonenumber-for-php": "^8.10",
+        "jms/serializer": "^3.6",
+        "jms/serializer-bundle": "^3.5",
+        "kcs/serializer": "^3.3",
+        "moneyphp/money": "^3.2",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^8.0|9.1",
+        "refugis/doctrine-extra": "dev-master",
+        "roave/security-advisories": "dev-master",
+        "sensio/framework-extra-bundle": "^5.0",
+        "solido/body-converter": "dev-master",
+        "solido/common": "dev-master",
+        "solido/cors": "dev-master",
+        "solido/data-transformers": "dev-master",
+        "solido/dto-management": "dev-master",
+        "solido/pagination": "dev-master",
+        "solido/patch-manager": "dev-master",
+        "solido/php-coding-standards": "dev-master",
+        "solido/query-language": "dev-master",
+        "solido/versioning": "dev-master",
+        "symfony/browser-kit": "^4.4|^5.0",
+        "symfony/form": "^4.4|^5.0",
+        "symfony/http-foundation": "^4.4|^5.0",
+        "symfony/security-bundle": "^4.4|^5.0",
+        "symfony/serializer": "^4.4|^5.0",
+        "symfony/var-dumper": "^4.4|^5.0",
+        "symfony/yaml": "^4.4|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Solido\\Symfony\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Solido\\Symfony\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "archive": {
+        "exclude": [ ".gitignore", ".travis.yml", "tests" ]
+    }
+}

@@ -1,0 +1,39 @@
+framework:
+    test: ~
+    secret: secret
+    form: ~
+    csrf_protection: false
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+
+security:
+    providers:
+        in_memory:
+            memory: ~
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt))/
+            security: false
+        main:
+            anonymous: ~
+
+sensio_framework_extra:
+    router:      { annotations: false }
+    request:     { converters: true, auto_convert: true }
+    view:        { annotations: false }
+    cache:       { annotations: true }
+    security:    { annotations: true }
+    psr_message: { enabled: false }
+
+services:
+    Solido\Symfony\Tests\Fixtures\View\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'
+
+    Solido\Symfony\Tests\Fixtures\View\Serializer\FooHandler:
+        class: Solido\Symfony\Tests\Fixtures\View\Serializer\FooHandler
+        tags:
+            - { name: 'kcs_serializer.handler' }
