@@ -68,12 +68,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
+        // @phpstan-ignore-next-line
+        $node = $rootNode->children()->arrayNode('cors');
         if (interface_exists(RequestHandlerInterface::class)) {
-            // @phpstan-ignore-next-line
-            $node = $rootNode->children()->arrayNode('cors');
             $node->canBeDisabled();
-
             CorsConfiguration::buildTree($node->children());
+        } else {
+            $node->canBeEnabled();
         }
 
         return $treeBuilder;
