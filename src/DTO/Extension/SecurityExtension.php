@@ -29,12 +29,12 @@ class SecurityExtension implements ExtensionInterface
     use SubscribedServicesGeneratorTrait;
 
     private Reader $reader;
-    private BaseExpressionLanguage $expressionLanguage;
+    private ?BaseExpressionLanguage $expressionLanguage;
 
     public function __construct(?Reader $reader = null, ?BaseExpressionLanguage $expressionLanguage = null)
     {
         $this->reader = $reader ?? new AnnotationReader();
-        $this->expressionLanguage = $expressionLanguage ?? new ExpressionLanguage();
+        $this->expressionLanguage = $expressionLanguage;
     }
 
     public function extend(ProxyBuilder $proxyBuilder): void
@@ -95,7 +95,8 @@ class SecurityExtension implements ExtensionInterface
             $onInvalid = sprintf('throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException(%s);', $message);
         }
 
-        $code = $this->expressionLanguage->compile($annotation->expression, array_merge(['auth_checker', 'token', 'object', 'user'], $parameters));
+        $code = ($this->expressionLanguage ?? $this->getExpressionLanguage())
+            ->compile($annotation->expression, array_merge(['auth_checker', 'token', 'object', 'user'], $parameters));
 
         return sprintf('
 $%1$s = function ()%2$s: bool {
@@ -111,5 +112,10 @@ if (! $%1$s()) {
     %5$s
 }
 ', $property, $usedParams, $this->getContainerName(), $code, $onInvalid);
+    }
+
+    private function getExpressionLanguage(): BaseExpressionLanguage
+    {
+        return $this->expressionLanguage ?? new ExpressionLanguage();
     }
 }

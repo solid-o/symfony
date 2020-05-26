@@ -10,6 +10,7 @@ use Solido\Cors\RequestHandlerInterface;
 use Solido\DataTransformers\TransformerInterface;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
+use Solido\DtoManagement\Proxy\Extension\ExtensionInterface;
 use Solido\PatchManager\PatchManagerInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
@@ -105,6 +106,9 @@ class SolidoExtension extends Extension
 
         if (interface_exists(ResolverInterface::class)) {
             $loader->load('dto.xml');
+
+            $container->registerForAutoconfiguration(ExtensionInterface::class)
+                ->addTag('solido.dto_extension');
 
             $locators = [];
             $iterator = new DTO\Processor($container, $config['dto']['namespaces']);
