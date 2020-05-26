@@ -34,7 +34,7 @@
         <service class="Solido\DataTransformers\Transformer\Money\MoneyTransformer" id="Solido\DataTransformers\Transformer\Money\MoneyTransformer" />
         <service alias="Solido\DataTransformers\Transformer\Money\MoneyTransformer" id="solido.data_transformer.money" />
 
-        <service class="Solido\Symfony\DTO\DataTransformer\TransformerExtension" id="Solido\Symfony\DTO\DataTransformer\TransformerExtension">
+        <service class="Solido\Symfony\DTO\Extension\TransformerExtension" id="Solido\Symfony\DTO\Extension\TransformerExtension">
             <tag name="solido.dto_extension" />
         </service>
     </services>

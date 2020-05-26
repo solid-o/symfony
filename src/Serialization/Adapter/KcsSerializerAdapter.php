@@ -36,6 +36,10 @@ class KcsSerializerAdapter implements SerializerAdapterInterface
             ->setGroups($context['groups'] ?? $this->defaultGroups)
             ->setSerializeNull($context['serialize_null'] ?? true);
 
+        if ($context['enable_max_depth'] ?? false) {
+            $serializerContext->enableMaxDepthChecks();
+        }
+
         assert($serializerContext instanceof SerializationContext);
 
         try {

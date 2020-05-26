@@ -33,6 +33,7 @@ class SymfonySerializerAdapter implements SerializerAdapterInterface
         $context = [
             'groups' => $context['groups'] ?? $this->defaultGroups,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => $context['serialize_null'] ?? true,
+            AbstractObjectNormalizer::ENABLE_MAX_DEPTH => $context['enable_max_depth'] ?? false,
         ];
 
         try {

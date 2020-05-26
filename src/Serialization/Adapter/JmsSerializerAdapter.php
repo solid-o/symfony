@@ -34,6 +34,10 @@ class JmsSerializerAdapter implements SerializerAdapterInterface
             ->setGroups($context['groups'] ?? $this->defaultGroups)
             ->setSerializeNull($context['serialize_null'] ?? true);
 
+        if ($context['enable_max_depth'] ?? false) {
+            $serializerContext->enableMaxDepthChecks();
+        }
+
         try {
             return $this->serializer->serialize($data, $format, $serializerContext, $context['type'] ?? null);
         } catch (JMSUnsupportedFormatExceptionAlias $e) {

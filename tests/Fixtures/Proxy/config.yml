@@ -1,0 +1,61 @@
+framework:
+    test: ~
+    secret: secret
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+
+solido:
+    dto:
+        namespaces:
+            - 'Solido\Symfony\Tests\Fixtures\Proxy\Model'
+            - 'Solido\Symfony\Tests\Fixtures\Proxy\SemVerModel'
+        exclude:
+            - 'Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface'
+
+services:
+    Solido\Symfony\Tests\Fixtures\Proxy\Model\:
+        resource: './Model/*'
+        exclude: './Model/{Interfaces}'
+        autowire: true
+        autoconfigure: true
+        shared: false
+
+    Solido\Symfony\Tests\Fixtures\Proxy\SemVerModel\:
+        resource: './SemVerModel/*'
+        exclude: './SemVerModel/{Interfaces}'
+        autowire: true
+        autoconfigure: true
+        shared: false
+
+    Solido\Symfony\Tests\Fixtures\Proxy\Transformer\TestTransform: ~
+    Solido\Symfony\Tests\Fixtures\Proxy\Security\AccessDeniedHandler: ~
+
+    Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:
+        autoconfigure: true
+        autowire: true
+
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    admin:
+                        password: admin
+                        roles: [ ROLE_ADMIN ]
+                    user:
+                        password: user
+                        roles: [ ROLE_USER ]
+
+    firewalls:
+        dev:
+            access_denied_handler: Solido\Symfony\Tests\Fixtures\Proxy\Security\AccessDeniedHandler
+            pattern: ^/
+            security: true
+            provider: in_memory
+            http_basic: true
+
+    access_control:
+        - { path: "^/protected", roles: [IS_AUTHENTICATED_FULLY] }

@@ -28,6 +28,7 @@ final class View
     /** @var string[]|null */
     public ?array $serializationGroups;
     public bool $serializeNull = true;
+    public bool $enableMaxDepthChecks = false;
 
     /**
      * @param mixed $result

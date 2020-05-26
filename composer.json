@@ -46,6 +46,8 @@
         "solido/query-language": "dev-master",
         "solido/versioning": "dev-master",
         "symfony/browser-kit": "^4.4|^5.0",
+        "symfony/debug-bundle": "^5.0",
+        "symfony/expression-language": "^4.4|^5.0",
         "symfony/form": "^4.4|^5.0",
         "symfony/http-foundation": "^4.4|^5.0",
         "symfony/security-bundle": "^4.4|^5.0",

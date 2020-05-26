@@ -141,6 +141,7 @@ class ViewHandler implements EventSubscriberInterface
             'groups' => $view->serializationGroups,
             'type' => $view->serializationType,
             'serialize_null' => $view->serializeNull,
+            'enable_max_depth' => $view->enableMaxDepthChecks,
         ];
 
         return $this->serializer->serialize($result, $format, $context);

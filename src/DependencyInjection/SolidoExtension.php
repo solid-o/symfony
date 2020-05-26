@@ -8,6 +8,8 @@ use Solido\BodyConverter\Decoder\DecoderProviderInterface;
 use Solido\Cors\RequestHandler;
 use Solido\Cors\RequestHandlerInterface;
 use Solido\DataTransformers\TransformerInterface;
+use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
+use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
 use Solido\PatchManager\PatchManagerInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
@@ -21,9 +23,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use function array_merge;
+use function array_values;
 use function assert;
 use function class_exists;
+use function in_array;
 use function interface_exists;
+use function Safe\array_combine;
 
 class SolidoExtension extends Extension
 {
@@ -89,8 +95,35 @@ class SolidoExtension extends Extension
 
         if ($config['serializer']['enabled']) {
             $loader->load('view.xml');
+            $loader->load('serializer.xml');
+            if ($config['serializer']['catch_exceptions']) {
+                $loader->load('serializer_error_renderer.xml');
+            }
 
             $container->findDefinition(ViewHandler::class)->replaceArgument(2, $config['serializer']['charset']);
+        }
+
+        if (interface_exists(ResolverInterface::class)) {
+            $loader->load('dto.xml');
+
+            $locators = [];
+            $iterator = new DTO\Processor($container, $config['dto']['namespaces']);
+            foreach ($iterator as $interface => $definition) {
+                if (in_array($interface, $config['dto']['exclude'], true)) {
+                    continue;
+                }
+
+                if (isset($locators[$interface])) {
+                    // How can this case be possible?!
+                    $arguments = array_merge($locators[$interface]->getArgument(0), $definition->getArgument(0));
+                    $locators[$interface]->setArguments([array_values(array_combine($arguments, $arguments))]);
+                } else {
+                    $locators[$interface] = $definition;
+                }
+            }
+
+            $container->findDefinition(ServiceLocatorRegistry::class)->setArgument(0, $locators);
+            $container->setParameter('solido.dto-management.versions', $iterator->getVersions());
         }
 
         $this->loadIfExists($loader, 'data_transformers.xml', TransformerInterface::class);
