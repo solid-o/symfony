@@ -33,9 +33,11 @@
 
         <service id="solido.dto-management.resolver" alias="Solido\DtoManagement\InterfaceResolver\ResolverInterface" public="true" />
         <service id="Solido\DtoManagement\InterfaceResolver\ResolverInterface" alias="Solido\DtoManagement\InterfaceResolver\Resolver" public="true" />
+        <service id="Solido\DtoManagement\InterfaceResolver\Resolver" alias="Solido\Symfony\DTO\Resolver" />
 
-        <service id="Solido\DtoManagement\InterfaceResolver\Resolver" class="Solido\DtoManagement\InterfaceResolver\Resolver">
+        <service id="Solido\Symfony\DTO\Resolver" class="Solido\Symfony\DTO\Resolver">
             <argument type="service" id="Solido\DtoManagement\Finder\ServiceLocatorRegistry" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="Solido\Symfony\DTO\ArgumentResolver" class="Solido\Symfony\DTO\ArgumentResolver">
