@@ -106,9 +106,11 @@ class SolidoExtension extends Extension
 
         if (interface_exists(ResolverInterface::class)) {
             $loader->load('dto.xml');
+            $container->registerForAutoconfiguration(ExtensionInterface::class)->addTag('solido.dto_extension');
 
-            $container->registerForAutoconfiguration(ExtensionInterface::class)
-                ->addTag('solido.dto_extension');
+            if ($config['dto']['routing']['loader']) {
+                $loader->load('dto_routing_loader.xml');
+            }
 
             $definition = $container->findDefinition(ServiceLocatorRegistry::class);
             foreach ($config['dto']['namespaces'] as $namespace) {

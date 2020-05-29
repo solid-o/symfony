@@ -1,3 +1,7 @@
+dtos:
+    resource: dto
+    type: dto_annotations
+
 index:
     path: /
     defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:indexAction' }

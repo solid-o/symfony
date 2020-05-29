@@ -10,11 +10,13 @@ use Kcs\ClassFinder\Finder\RecursiveFinder;
 use RuntimeException;
 use Solido\DtoManagement\Exception\EmptyBuilderException;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
+use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
 use Solido\DtoManagement\Proxy\Factory\AccessInterceptorFactory;
 use Solido\Symfony\DependencyInjection\DTO\Processor;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use function array_merge;
 use function array_values;
@@ -23,6 +25,7 @@ use function class_exists;
 use function in_array;
 use function interface_exists;
 use function is_dir;
+use function is_string;
 use function is_subclass_of;
 use function mkdir;
 use function Safe\array_combine;
@@ -79,7 +82,13 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         }
 
         foreach ($locators as $interface => $serviceLocator) {
+            assert(is_string($interface));
+
             $this->processLocator($container, $serviceLocator);
+            $container->register($interface, $interface)
+                ->setFactory([new Reference(ResolverInterface::class), 'resolve'])
+                ->addArgument($interface)
+                ->setPublic(true);
         }
 
         $definition->setArgument(0, $locators);
