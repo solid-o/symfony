@@ -45,6 +45,10 @@ class SolidoExtension extends Extension
             $loader->load('body_converter.xml');
         }
 
+        if ($config['form']['register_data_mapper']) {
+            $loader->load('form_data_mapper.xml');
+        }
+
         $corsConfig = $container->resolveEnvPlaceholders($config['cors']);
         if ($corsConfig['enabled'] && interface_exists(RequestHandlerInterface::class)) {
             $loader->load('cors.xml');

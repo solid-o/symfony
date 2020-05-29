@@ -23,6 +23,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()
+                ->arrayNode('form')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('register_data_mapper')->defaultFalse()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('request')
                     ->canBeDisabled()
                     ->fixXmlConfig('priority', 'priorities')
