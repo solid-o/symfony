@@ -18,14 +18,12 @@ services:
         exclude: './Model/{Interfaces}'
         autowire: true
         autoconfigure: true
-        shared: false
 
     Solido\Symfony\Tests\Fixtures\Proxy\SemVerModel\:
         resource: './SemVerModel/*'
         exclude: './SemVerModel/{Interfaces}'
         autowire: true
         autoconfigure: true
-        shared: false
 
     Solido\Symfony\Tests\Fixtures\Proxy\Transformer\TestTransform: ~
     Solido\Symfony\Tests\Fixtures\Proxy\Security\AccessDeniedHandler: ~

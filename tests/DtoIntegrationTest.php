@@ -106,6 +106,20 @@ class DtoIntegrationTest extends WebTestCase
         self::assertFalse($container->get(ResolverInterface::class)->has(ExcludedInterface::class));
     }
 
+    public function testDtoAreNotSharedServices(): void
+    {
+        $client = self::createClient();
+        $client->getKernel()->boot();
+
+        $container = $client->getContainer();
+        $resolver = $container->get(ResolverInterface::class);
+
+        $dto1 = $resolver->resolve(UserInterface::class);
+        $dto2 = $resolver->resolve(UserInterface::class);
+
+        self::assertNotSame($dto1, $dto2);
+    }
+
     public function testProxyCasterIsRegistered(): void
     {
         $client = self::createClient();

@@ -12,6 +12,8 @@ use Solido\DtoManagement\Finder\ServiceLocator;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 use function array_filter;
 use function array_values;
@@ -79,7 +81,7 @@ class Processor implements IteratorAggregate
 
         $locators = [];
         foreach ($modelsByInterface as $interface => $versions) {
-            $id = '.dto.service_locator.' . $interface;
+            $id = '.solido.dto.service_locator.' . $interface;
             $container->register($id, ServiceLocator::class)->addArgument($versions);
             $locators[$interface] = new ServiceClosureArgument(new Reference($id));
         }
@@ -112,7 +114,23 @@ class Processor implements IteratorAggregate
             $version = str_replace('_', '.', $m[1]);
             assert(is_string($version));
 
-            $models[$version] = new ServiceClosureArgument(new Reference($reflector->getName()));
+            try {
+                $definition = $container->findDefinition($reflector->getName());
+                $definition = clone $definition;
+            } catch (ServiceNotFoundException $e) {
+                $definition = null;
+            }
+
+            if ($definition === null) {
+                $definition = new Definition($reflector->getName());
+                $definition->setAutowired(true);
+                $definition->setAutoconfigured(true);
+            }
+
+            $definition->setShared(false);
+            $container->setDefinition($id = '.solido.dto.' . $interface . '.' . $class, $definition);
+
+            $models[$version] = new ServiceClosureArgument(new Reference($id));
             $this->versions[$version] = preg_replace('/(?<=\d)\.(?=[a-z])/i', '-', $version);
         }
 

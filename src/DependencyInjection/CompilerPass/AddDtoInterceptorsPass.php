@@ -8,18 +8,24 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Error;
 use Kcs\ClassFinder\Finder\RecursiveFinder;
 use RuntimeException;
-use Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface;
+use Solido\DtoManagement\Exception\EmptyBuilderException;
+use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\Proxy\Factory\AccessInterceptorFactory;
+use Solido\Symfony\DependencyInjection\DTO\Processor;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use function array_merge;
+use function array_values;
 use function assert;
 use function class_exists;
+use function in_array;
 use function interface_exists;
 use function is_dir;
 use function is_subclass_of;
 use function mkdir;
+use function Safe\array_combine;
 use function Safe\file_put_contents;
 use function Safe\sprintf;
 use function strpos;
@@ -46,12 +52,38 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $this->proxyFactory = $factory;
         AnnotationRegistry::registerUniqueLoader('class_exists');
 
-        $definition = $container->findDefinition(ServiceLocatorRegistryInterface::class);
-        $interfaces = $definition->getArgument(0);
+        $definition = $container->findDefinition(ServiceLocatorRegistry::class);
+        $namespaces = $exclude = [];
+        foreach ($definition->getTag('solido.dto_service_locator_registry.namespace') as $tag) {
+            $namespaces[] = $tag['value'];
+        }
 
-        foreach ($interfaces as $interface => $serviceLocator) {
+        foreach ($definition->getTag('solido.dto_service_locator_registry.exclude') as $tag) {
+            $exclude[] = $tag['value'];
+        }
+
+        $locators = [];
+        $iterator = new Processor($container, $namespaces);
+        foreach ($iterator as $interface => $interfaceDefinition) {
+            if (in_array($interface, $exclude, true)) {
+                continue;
+            }
+
+            if (isset($locators[$interface])) {
+                // How can this case be possible?!
+                $arguments = array_merge($locators[$interface]->getArgument(0), $interfaceDefinition->getArgument(0));
+                $locators[$interface]->setArguments([array_values(array_combine($arguments, $arguments))]);
+            } else {
+                $locators[$interface] = $interfaceDefinition;
+            }
+        }
+
+        foreach ($locators as $interface => $serviceLocator) {
             $this->processLocator($container, $serviceLocator);
         }
+
+        $definition->setArgument(0, $locators);
+        $container->setParameter('solido.dto-management.versions', $iterator->getVersions());
 
         $this->generateClassMap($cacheDir, $container->getParameter('kernel.cache_dir') . '/dto-proxies-map.php');
     }
@@ -62,14 +94,20 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         /** @var ServiceClosureArgument[] $versions */
         $versions = $locator->getArgument(0);
 
-        foreach ($versions as $version) {
+        foreach ($versions as &$version) {
             $definition = $container->findDefinition((string) $version->getValues()[0]);
+            $definition->setShared(false);
+
             $className = $definition->getClass();
             if ($className === null || (! class_exists($className) && ! interface_exists($className))) {
                 throw new Error(sprintf('"%s" class does not exist', $className));
             }
 
-            $proxyClass = $this->proxyFactory->generateProxy($className);
+            try {
+                $proxyClass = $this->proxyFactory->generateProxy($className, ['throw_empty' => true]);
+            } catch (EmptyBuilderException $e) {
+                continue;
+            }
 
             $definition->setClass($proxyClass);
             if (! is_subclass_of($proxyClass, ServiceSubscriberInterface::class)) {

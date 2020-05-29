@@ -1,0 +1,14 @@
+{
+    "registrar": [
+        {
+            "signatures": [
+                {
+                    "class": "Solido\\DataTransformers\\Annotation\\Transform",
+                    "type": "annotation"
+                }
+            ],
+            "provider": "symfony.services",
+            "language": "php"
+        }
+    ]
+}
