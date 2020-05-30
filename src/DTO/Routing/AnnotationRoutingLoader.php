@@ -10,6 +10,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
@@ -39,6 +40,10 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
      */
     public function load($resource, ?string $type = null): RouteCollection
     {
+        if (\substr($resource, -1) !== '\\') {
+            throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
+        }
+
         $collection = new RouteCollection();
         if ($this->locator === null) {
             return $collection;
@@ -46,8 +51,11 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
         $interfaces = $this->locator->getInterfaces();
         foreach ($interfaces as $interface) {
-            $class = new ReflectionClass($interface);
+            if (0 !== strpos($interface, $resource)) {
+                continue;
+            }
 
+            $class = new ReflectionClass($interface);
             $globals = $this->getGlobals($class);
 
             $filename = $class->getFileName();

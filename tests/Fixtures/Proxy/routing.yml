@@ -1,5 +1,5 @@
 dtos:
-    resource: dto
+    resource: Solido\Symfony\Tests\Fixtures\Proxy\Model\
     type: dto_annotations
 
 index:
