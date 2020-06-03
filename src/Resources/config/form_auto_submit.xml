@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Solido\Common\Form\AutoSubmitRequestHandler" id="Solido\Common\Form\AutoSubmitRequestHandler">
+            <argument type="service" id="form.server_params" />
+            <argument type="service" id="solido.body_converter" />
+        </service>
+
+        <service class="Solido\Symfony\Form\AutoSubmitTypeExtension" id="Solido\Symfony\Form\AutoSubmitTypeExtension">
+            <tag name="form.type_extension" />
+            <argument type="service" id="Solido\Common\Form\AutoSubmitRequestHandler" />
+        </service>
+    </services>
+</container>

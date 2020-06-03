@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('register_data_mapper')->defaultFalse()->end()
+                        ->booleanNode('auto_submit')->defaultFalse()->end()
                     ->end()
                 ->end()
                 ->arrayNode('request')

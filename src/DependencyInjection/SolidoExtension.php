@@ -16,6 +16,7 @@ use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Versioning\VersionGuesserInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Alias;
@@ -47,6 +48,14 @@ class SolidoExtension extends Extension
 
         if ($config['form']['register_data_mapper']) {
             $loader->load('form_data_mapper.xml');
+        }
+
+        if ($config['form']['auto_submit']) {
+            if (! $config['body_converter']['enabled']) {
+                throw new InvalidConfigurationException('Form auto submit needs body converter to be enabled');
+            }
+
+            $loader->load('form_auto_submit.xml');
         }
 
         $corsConfig = $container->resolveEnvPlaceholders($config['cors']);

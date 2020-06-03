@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\EventListener;
 
-use Solido\BodyConverter\BodyConverter as Converter;
+use Solido\BodyConverter\BodyConverterInterface as Converter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

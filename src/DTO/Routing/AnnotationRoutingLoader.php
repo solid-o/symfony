@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use function Safe\substr;
+use function strpos;
 
 class AnnotationRoutingLoader extends AnnotationClassLoader
 {
@@ -40,7 +42,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
      */
     public function load($resource, ?string $type = null): RouteCollection
     {
-        if (\substr($resource, -1) !== '\\') {
+        if (substr($resource, -1) !== '\\') {
             throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
         }
 
@@ -51,7 +53,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
         $interfaces = $this->locator->getInterfaces();
         foreach ($interfaces as $interface) {
-            if (0 !== strpos($interface, $resource)) {
+            if (strpos($interface, $resource) !== 0) {
                 continue;
             }
 

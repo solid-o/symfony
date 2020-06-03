@@ -14,12 +14,14 @@
             <tag name="solido.body_converter.decoder" />
         </service>
 
+        <service alias="Solido\BodyConverter\BodyConverter" id="Solido\BodyConverter\BodyConverterInterface" />
+        <service alias="Solido\BodyConverter\BodyConverterInterface" id="solido.body_converter" />
         <service class="Solido\BodyConverter\BodyConverter" id="Solido\BodyConverter\BodyConverter">
             <argument type="service" id="Solido\BodyConverter\Decoder\DecoderProviderInterface" />
         </service>
 
         <service class="Solido\Symfony\EventListener\BodyConverter" id="Solido\Symfony\EventListener\BodyConverter">
-            <argument type="service" id="Solido\BodyConverter\BodyConverter" />
+            <argument type="service" id="solido.body_converter" />
             <tag name="kernel.event_subscriber" />
         </service>
     </services>
