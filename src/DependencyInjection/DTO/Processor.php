@@ -128,6 +128,8 @@ class Processor implements IteratorAggregate
             }
 
             $definition->setShared(false);
+            $definition->addTag('controller.service_arguments');
+
             $container->setDefinition($id = '.solido.dto.' . $interface . '.' . $class, $definition);
 
             $models[$version] = new ServiceClosureArgument(new Reference($id));

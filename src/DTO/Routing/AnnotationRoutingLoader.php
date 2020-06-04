@@ -10,7 +10,6 @@ use ReflectionClass;
 use ReflectionMethod;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface;
-use Solido\Symfony\Annotation\View;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
@@ -18,7 +17,6 @@ use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use function Safe\substr;
-use function serialize;
 use function strpos;
 
 class AnnotationRoutingLoader extends AnnotationClassLoader
@@ -105,8 +103,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
      */
     protected function configureRoute(Route $route, ReflectionClass $class, ReflectionMethod $method, $annot): void
     {
-        $annotation = $this->reader->getMethodAnnotation($method, View::class);
-        $route->setDefault('_route_view', $annotation === null ? true : serialize($annotation));
+        $route->setDefault('_solido_dto_interface', $class->getName());
 
         // controller
         if ($method->getName() === '__invoke') {

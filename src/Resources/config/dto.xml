@@ -14,7 +14,7 @@
             </call>
             <call method="setGeneratorStrategy">
                 <argument type="service">
-                    <service class="Solido\DtoManagement\Proxy\GeneratorStrategy\CacheWriterGeneratorStrategy">
+                    <service class="Solido\Symfony\DTO\Proxy\CacheWriterGeneratorStrategy">
                         <argument type="service" id="solido.dto-management.proxy_factory.configuration" />
                         <argument>%kernel.debug%</argument>
                     </service>

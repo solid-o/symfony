@@ -22,6 +22,6 @@ class SolidoBundle extends Bundle
             ->addCompilerPass(new RegisterDtoExtensionsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 40)
             ->addCompilerPass(new RegisterBodyConverterDecoders())
             ->addCompilerPass(new RegisterSerializerPass())
-            ->addCompilerPass(new AddDtoInterceptorsPass());
+            ->addCompilerPass(new AddDtoInterceptorsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 15);
     }
 }

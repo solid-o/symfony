@@ -6,8 +6,10 @@ namespace Solido\Symfony\EventListener;
 
 use Solido\BodyConverter\BodyConverterInterface as Converter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function class_exists;
 
 class BodyConverter implements EventSubscriberInterface
 {
@@ -27,7 +29,8 @@ class BodyConverter implements EventSubscriberInterface
             return;
         }
 
-        $request->request = $parameterBag;
+        // @phpstan-ignore-next-line
+        $request->request = class_exists(InputBag::class) ? new InputBag($parameterBag->all()) : $parameterBag;
     }
 
     /**

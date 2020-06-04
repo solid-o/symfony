@@ -167,8 +167,9 @@ DUMP
     /**
      * {@inheritdoc}
      */
-    protected function tearDown(): void
+    public static function tearDownAfterClass(): void
     {
+        self::bootKernel();
         self::ensureKernelShutdown();
 
         $fs = new Filesystem();

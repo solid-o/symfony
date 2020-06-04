@@ -2,6 +2,7 @@
 
 namespace Solido\Symfony\Tests\Fixtures\Proxy\Model\v2017\v20171215;
 
+use Solido\PatchManager\PatchManagerInterface;
 use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\RoutedInterface;
 
 class Routed implements RoutedInterface
@@ -11,7 +12,7 @@ class Routed implements RoutedInterface
      */
     public $id;
 
-    public function routed(): RoutedInterface
+    public function routed(PatchManagerInterface $patchManager): RoutedInterface
     {
         $this->id = 'what_a_nice_id';
 

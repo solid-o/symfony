@@ -2,6 +2,7 @@
 
 namespace Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces;
 
+use Solido\PatchManager\PatchManagerInterface;
 use Solido\Symfony\Annotation\View;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,5 +13,5 @@ interface RoutedInterface
      * @Route("/routed-dto")
      * @View(statusCode=Response::HTTP_CREATED)
      */
-    public function routed(): self;
+    public function routed(PatchManagerInterface $patchManager): self;
 }
