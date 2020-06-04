@@ -107,6 +107,7 @@ class SolidoExtension extends Extension
             $loader->load('view.xml');
             $loader->load('serializer.xml');
             if ($config['serializer']['catch_exceptions']) {
+                $loader->load('exception_listeners.xml');
                 $loader->load('serializer_error_renderer.xml');
             }
 

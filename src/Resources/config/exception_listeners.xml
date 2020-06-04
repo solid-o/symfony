@@ -16,5 +16,9 @@
         <service class="Solido\Symfony\EventListener\InvalidJSONExceptionSubscriber" id="Solido\Symfony\EventListener\InvalidJSONExceptionSubscriber">
             <tag name="kernel.event_subscriber" />
         </service>
+
+        <service class="Solido\Symfony\EventListener\UnmergeablePatchExceptionSubscriber" id="Solido\Symfony\EventListener\UnmergeablePatchExceptionSubscriber">
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 </container>

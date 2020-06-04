@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\EventListener;
 
 use Solido\PatchManager\Exception\FormInvalidException;
+use Solido\Symfony\Annotation\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
