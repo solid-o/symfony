@@ -23,10 +23,12 @@ use function class_exists;
 use function get_class;
 use function is_array;
 use function is_object;
+use function is_string;
 use function method_exists;
 use function Safe\preg_match;
 use function stripos;
 use function trim;
+use function unserialize;
 
 class ViewHandler implements EventSubscriberInterface
 {
@@ -55,7 +57,13 @@ class ViewHandler implements EventSubscriberInterface
             return;
         }
 
-        $annotation = $request->attributes->get('_rest_view', $request->attributes->get('_route_view') ? new ViewAnnotation() : null);
+        $annotation = $request->attributes->get('_rest_view', $request->attributes->get('_route_view'));
+        if ($annotation === true) {
+            $annotation = new ViewAnnotation();
+        } elseif (is_string($annotation)) {
+            $annotation = unserialize($annotation, [ ViewAnnotation::class ]);
+        }
+
         if (! $annotation instanceof ViewAnnotation) {
             return;
         }

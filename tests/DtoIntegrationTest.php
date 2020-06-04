@@ -33,7 +33,7 @@ class DtoIntegrationTest extends WebTestCase
         ]);
 
         $response = $client->getResponse();
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(201, $response->getStatusCode());
         self::assertEquals('{"id":"what_a_nice_id"}', $response->getContent());
     }
 
