@@ -103,6 +103,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
      */
     protected function configureRoute(Route $route, ReflectionClass $class, ReflectionMethod $method, $annot): void
     {
+        $route->setDefault('_route_view', true);
         $route->setDefault('_solido_dto_interface', $class->getName());
 
         // controller
