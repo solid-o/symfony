@@ -7,6 +7,7 @@ namespace Solido\Symfony\DependencyInjection;
 use Solido\BodyConverter\Decoder\DecoderProviderInterface;
 use Solido\Cors\RequestHandler;
 use Solido\Cors\RequestHandlerInterface;
+use Solido\DataTransformers\Transformer\DateTimeTransformer;
 use Solido\DataTransformers\TransformerInterface;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
@@ -133,6 +134,9 @@ class SolidoExtension extends Extension
         }
 
         $this->loadIfExists($loader, 'data_transformers.xml', TransformerInterface::class);
+        $dateTimeTransformerDefinition = $container->getDefinition(DateTimeTransformer::class);
+        $dateTimeTransformerDefinition->replaceArgument(0, $config['data_transformers']['date_time']['timezone']);
+
         $this->loadIfExists($loader, 'patch_manager.xml', PatchManagerInterface::class);
         $this->loadIfExists($loader, 'query_language.xml', FieldInterface::class);
     }
