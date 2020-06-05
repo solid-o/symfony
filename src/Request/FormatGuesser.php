@@ -10,6 +10,7 @@ use Negotiation\Negotiator;
 use Symfony\Component\HttpFoundation\Request;
 use function assert;
 use function is_string;
+use function Safe\preg_replace;
 
 class FormatGuesser implements FormatGuesserInterface
 {
@@ -37,7 +38,7 @@ class FormatGuesser implements FormatGuesserInterface
 
         $negotiator = new Negotiator();
         try {
-            $header = $negotiator->getBest($requestHeader, $this->priorities);
+            $header = $negotiator->getBest(preg_replace('/;\s*version=.+?(?=;|$)/', '', $requestHeader), $this->priorities);
         } catch (InvalidMediaType $exception) {
             return null;
         }
