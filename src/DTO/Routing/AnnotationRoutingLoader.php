@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use function Safe\sort;
 use function Safe\substr;
 use function strpos;
 
@@ -52,6 +53,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
         }
 
         $interfaces = $this->locator->getInterfaces();
+        sort($interfaces);
         foreach ($interfaces as $interface) {
             if (strpos($interface, $resource) !== 0) {
                 continue;
