@@ -10,6 +10,7 @@
         <service alias="Solido\Symfony\Cors\HandlerFactory" id="solido.cors.handler_factory" public="true" />
 
         <service class="Solido\Symfony\EventListener\CorsListener" id="Solido\Symfony\EventListener\CorsListener">
+            <tag name="kernel.event_subscriber" />
             <argument type="service" id="Solido\Symfony\Cors\HandlerFactory" />
         </service>
     </services>
