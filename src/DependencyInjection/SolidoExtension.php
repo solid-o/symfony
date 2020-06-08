@@ -82,6 +82,17 @@ class SolidoExtension extends Extension
             }
 
             unset($pathConfig);
+
+            $corsConfig['factory'] = new ServiceClosureArgument(new Reference('.solido.symfony-bundle.cors.handler.main'));
+            $container->register('.solido.symfony-bundle.cors.handler.main', RequestHandler::class)
+                ->setArguments([
+                    $corsConfig['allow_credentials'],
+                    $corsConfig['allow_origin'],
+                    $corsConfig['allow_headers'],
+                    $corsConfig['expose_headers'],
+                    $corsConfig['max_age'],
+                ]);
+
             $container->getDefinition(HandlerFactory::class)->replaceArgument(0, $corsConfig);
         }
 
