@@ -12,6 +12,8 @@ use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use function file_exists;
+use function Safe\spl_autoload_register;
 
 class SolidoBundle extends Bundle
 {
@@ -23,5 +25,24 @@ class SolidoBundle extends Bundle
             ->addCompilerPass(new RegisterBodyConverterDecoders())
             ->addCompilerPass(new RegisterSerializerPass())
             ->addCompilerPass(new AddDtoInterceptorsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 15);
+    }
+
+    public function boot(): void
+    {
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        $dtoMapFile = $cacheDir . '/dto-proxies-map.php';
+        if (! file_exists($dtoMapFile)) {
+            return;
+        }
+
+        $classMap = require $dtoMapFile;
+        spl_autoload_register(static function (string $className) use (&$classMap): void {
+            if (! isset($classMap[$className])) {
+                return;
+            }
+
+            require $classMap[$className];
+        });
     }
 }
