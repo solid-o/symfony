@@ -1,0 +1,3 @@
+list_foo:
+    path: /foos
+    controller: Solido\Symfony\Tests\Fixtures\PolicyChecker\Controller\TestController:listFoo

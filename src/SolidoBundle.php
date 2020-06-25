@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony;
 
 use Solido\Symfony\DependencyInjection\CompilerPass\AddDtoInterceptorsPass;
+use Solido\Symfony\DependencyInjection\CompilerPass\PolicyCheckerCollectorTemplatePass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterBodyConverterDecoders;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterDtoExtensionsPass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterDtoProxyCasterPass;
@@ -24,6 +25,7 @@ class SolidoBundle extends Bundle
             ->addCompilerPass(new RegisterDtoExtensionsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 40)
             ->addCompilerPass(new RegisterBodyConverterDecoders())
             ->addCompilerPass(new RegisterSerializerPass())
+            ->addCompilerPass(new PolicyCheckerCollectorTemplatePass())
             ->addCompilerPass(new AddDtoInterceptorsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 15);
     }
 

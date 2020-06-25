@@ -1,0 +1,50 @@
+{% extends collector.baseTemplate %}
+
+{% block panel %}
+    {{ parent() }}
+
+    <h4>Security Policies</h4>
+
+    {% if collector.policyPermissions|default([]) is empty %}
+        <div class="empty">
+            <p>No policy check recorded.</p>
+        </div>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Resource</th>
+                <th>Subject</th>
+                <th>Context</th>
+            </tr>
+            </thead>
+
+            {% set previous = (collector.policyPermissions|first) %}
+            {% for permission in collector.policyPermissions %}
+                {% if loop.first or acl != previous %}
+                    {% if not loop.first %}
+                        </tbody>
+                    {% endif %}
+
+                    <tbody>
+                    {% set previous = permission %}
+                {% endif %}
+
+                <tr>
+                    <td class="font-normal">
+                        {{ permission.action }}<br />
+                        {{ permission.result ? '<span class="label status-success same-width">GRANTED</span>' : '<span class="label status-error same-width">DENIED</span>' }}
+                    </td>
+                    <td class="font-normal">{{ permission.resource }}</td>
+                    <td class="font-normal">{{ permission.subject }}</td>
+                    <td class="font-normal">{{ permission.context ? profiler_dump(permission.context) : '(none)' }}</td>
+                </tr>
+
+                {% if loop.last %}
+                    </tbody>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

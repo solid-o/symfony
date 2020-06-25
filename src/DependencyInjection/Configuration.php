@@ -7,6 +7,7 @@ namespace Solido\Symfony\DependencyInjection;
 use Solido\BodyConverter\BodyConverterInterface;
 use Solido\Cors\Configuration as CorsConfiguration;
 use Solido\Cors\RequestHandlerInterface;
+use Solido\PolicyChecker\PolicyChecker;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -23,6 +24,19 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()
+                ->arrayNode('security')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('action_listener')->defaultFalse()->end()
+                        ->arrayNode('policy_checker')
+                            ->canBeEnabled()
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->variableNode('service')->defaultValue(PolicyChecker::class)->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('form')
                     ->addDefaultsIfNotSet()
                     ->children()

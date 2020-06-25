@@ -44,6 +44,7 @@
         "solido/patch-manager": "dev-master",
         "solido/php-coding-standards": "dev-master",
         "solido/query-language": "dev-master",
+        "solido/security-policy-checker": "dev-master",
         "solido/versioning": "dev-master",
         "symfony/browser-kit": "^4.4|^5.0",
         "symfony/debug-bundle": "^5.0",
@@ -53,6 +54,7 @@
         "symfony/security-bundle": "^4.4|^5.0",
         "symfony/serializer": "^4.4|^5.0",
         "symfony/var-dumper": "^4.4|^5.0",
+        "symfony/web-profiler-bundle": "^4.4|^5.0",
         "symfony/yaml": "^4.4|^5.0"
     },
     "autoload": {

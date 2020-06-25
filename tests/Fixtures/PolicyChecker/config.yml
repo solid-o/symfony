@@ -1,0 +1,50 @@
+framework:
+    test: ~
+    secret: secret
+    form: ~
+    csrf_protection: false
+    session:
+        storage_id: session.storage.mock_file
+    profiler: { collect: true }
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+
+security:
+    providers:
+        in_memory:
+            memory: ~
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt))/
+            security: false
+        main:
+            anonymous: false
+            guard:
+                authenticators:
+                    - Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
+                entry_point: Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
+
+sensio_framework_extra:
+    router:      { annotations: false }
+    request:     { converters: true, auto_convert: true }
+    view:        { annotations: false }
+    cache:       { annotations: true }
+    security:    { annotations: true }
+    psr_message: { enabled: false }
+
+solido:
+    security:
+        action_listener: true
+        policy_checker: ~
+
+services:
+    Solido\Symfony\Tests\Fixtures\PolicyChecker\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'
+
+    Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator:
+        autowire: true
+        autoconfigure: true

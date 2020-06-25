@@ -13,9 +13,12 @@ use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
 use Solido\DtoManagement\Proxy\Extension\ExtensionInterface;
 use Solido\PatchManager\PatchManagerInterface;
+use Solido\PolicyChecker\PolicyCheckerInterface;
+use Solido\PolicyChecker\Voter\VoterInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
 use Solido\Symfony\EventListener\ViewHandler;
+use Solido\Symfony\Security\ActionListener;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -45,6 +48,25 @@ class SolidoExtension extends Extension
 
         if ($config['body_converter']['enabled'] && interface_exists(DecoderProviderInterface::class)) {
             $loader->load('body_converter.xml');
+        }
+
+        if ($config['security']) {
+            if ($config['security']['action_listener']) {
+                $container->register(ActionListener::class, ActionListener::class)
+                    ->addTag('kernel.event_subscriber')
+                    ->addArgument(new Reference('security.token_storage'))
+                    ->addArgument(new Reference('security.authorization_checker'));
+            }
+
+            if ($config['security']['policy_checker']['enabled']) {
+                $loader->load('security_policy_checker.xml');
+                if ($container->getParameter('kernel.debug')) {
+                    $loader->load('security_policy_checker_debug.xml');
+                }
+
+                $container->setAlias(PolicyCheckerInterface::class, $config['security']['policy_checker']['service']);
+                $container->registerForAutoconfiguration(VoterInterface::class)->addTag('solido.security.policy_checker.voter');
+            }
         }
 
         if ($config['form']['register_data_mapper']) {
