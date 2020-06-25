@@ -1,4 +1,4 @@
-{% extends collector.baseTemplate %}
+{% extends collector.baseTemplate|default('@Security/Collector/security.html.twig') %}
 
 {% block panel %}
     {{ parent() }}
