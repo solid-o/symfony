@@ -46,24 +46,9 @@ array:1 [
     "action" => "ListFoo"
     "resource" => "*"
     "subject" => "urn:::::user:user-id"
-    "context" => Symfony\Component\VarDumper\Cloner\Data {#%d
-      -data: array:2 [
-        0 => array:1 [
-          0 => array:1 [
-            1 => 1
-          ]
-        ]
-        1 => array:1 [
-          "sourceIP" => "127.0.0.1"
-        ]
-      ]
-      -position: 0
-      -key: 0
-      -maxDepth: 20
-      -maxItemsPerDepth: -1
-      -useRefHandles: -1
-      -context: []
-    }
+    "context" => array:1 [
+      "sourceIP" => "127.0.0.1"
+    ]
     "result" => false
   ]
 ]\n
