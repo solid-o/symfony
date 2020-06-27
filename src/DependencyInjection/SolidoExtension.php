@@ -13,7 +13,9 @@ use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
 use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
 use Solido\DtoManagement\Proxy\Extension\ExtensionInterface;
 use Solido\PatchManager\PatchManagerInterface;
+use Solido\PolicyChecker\PolicyChecker;
 use Solido\PolicyChecker\PolicyCheckerInterface;
+use Solido\PolicyChecker\Test\TestPolicyChecker;
 use Solido\PolicyChecker\Voter\VoterInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
@@ -52,6 +54,10 @@ class SolidoExtension extends Extension
 
         if ($config['test']) {
             $loader->load('test.xml');
+
+            if ($config['security']['policy_checker']['enabled'] && ! isset($config['security']['policy_checker']['service'])) {
+                $config['security']['policy_checker']['service'] = TestPolicyChecker::class;
+            }
         }
 
         if ($config['security']) {
@@ -68,7 +74,7 @@ class SolidoExtension extends Extension
                     $loader->load('security_policy_checker_debug.xml');
                 }
 
-                $container->setAlias(PolicyCheckerInterface::class, $config['security']['policy_checker']['service']);
+                $container->setAlias(PolicyCheckerInterface::class, $config['security']['policy_checker']['service'] ?? PolicyChecker::class);
                 $container->registerForAutoconfiguration(VoterInterface::class)->addTag('solido.security.policy_checker.voter');
             }
         }
