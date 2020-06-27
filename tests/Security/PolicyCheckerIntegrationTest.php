@@ -26,7 +26,7 @@ class PolicyCheckerIntegrationTest extends WebTestCase
     public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
-        $fs->remove(__DIR__.'/../../var');
+        $fs->remove(__DIR__.'/../Fixtures/PolicyChecker/var');
     }
 
     public function testShouldCheckForAllowingPolicy(): void

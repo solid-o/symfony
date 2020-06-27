@@ -50,6 +50,10 @@ class SolidoExtension extends Extension
             $loader->load('body_converter.xml');
         }
 
+        if ($config['test']) {
+            $loader->load('test.xml');
+        }
+
         if ($config['security']) {
             if ($config['security']['action_listener']) {
                 $container->register(ActionListener::class, ActionListener::class)

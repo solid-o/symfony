@@ -4,12 +4,12 @@ namespace Solido\Symfony\Tests\Fixtures\PolicyChecker;
 
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Solido\Symfony\SolidoBundle;
-use Solido\Symfony\Tests\Fixtures\TestKernel;
+use Solido\Symfony\Tests\Fixtures\TestKernel as Base;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
-class AppKernel extends TestKernel
+class TestKernel extends Base
 {
     /**
      * {@inheritdoc}
@@ -30,6 +30,6 @@ class AppKernel extends TestKernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/config.yml');
+        $loader->load(__DIR__.'/config_test.yml');
     }
 }

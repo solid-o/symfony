@@ -8,9 +8,11 @@ use Solido\BodyConverter\BodyConverterInterface;
 use Solido\Cors\Configuration as CorsConfiguration;
 use Solido\Cors\RequestHandlerInterface;
 use Solido\PolicyChecker\PolicyChecker;
+use Solido\PolicyChecker\Test\TestPolicyChecker;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use function array_key_exists;
 use function interface_exists;
 
 class Configuration implements ConfigurationInterface
@@ -22,21 +24,27 @@ class Configuration implements ConfigurationInterface
 
         // @phpstan-ignore-next-line
         $rootNode
+            ->beforeNormalization()
+                ->ifTrue(static function (array $v) {
+                    if (! array_key_exists('test', $v) || $v['test'] === false) {
+                        return false;
+                    }
+
+                    if (! array_key_exists('security', $v) || ! array_key_exists('policy_checker', $v['security'])) {
+                        return false;
+                    }
+
+                    return $v['security']['policy_checker'] === null || ! isset($v['security']['policy_checker']['service']);
+                })
+                ->then(static function ($v) {
+                    $v['security']['policy_checker']['service'] = TestPolicyChecker::class;
+
+                    return $v;
+                })
+            ->end()
             ->addDefaultsIfNotSet()
             ->children()
-                ->arrayNode('security')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('action_listener')->defaultFalse()->end()
-                        ->arrayNode('policy_checker')
-                            ->canBeEnabled()
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->variableNode('service')->defaultValue(PolicyChecker::class)->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
+                ->booleanNode('test')->treatNullLike(true)->defaultFalse()->end()
                 ->arrayNode('form')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -118,6 +126,19 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('exclude')
                             ->scalarPrototype()->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('security')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('action_listener')->defaultFalse()->end()
+                        ->arrayNode('policy_checker')
+                            ->canBeEnabled()
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->variableNode('service')->defaultValue(PolicyChecker::class)->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
