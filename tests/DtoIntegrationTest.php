@@ -37,6 +37,21 @@ class DtoIntegrationTest extends WebTestCase
         self::assertEquals('{"id":"what_a_nice_id"}', $response->getContent());
     }
 
+    public function testShouldLoadRoutingFromDtoInvokableInterface(): void
+    {
+        $client = self::createClient();
+        $client->catchExceptions(false);
+        $client->request('GET', '/routed-invokable', [], [], [
+            'HTTP_ACCEPT' => 'application/json',
+            'PHP_AUTH_USER' => 'user',
+            'PHP_AUTH_PW' => 'user',
+        ]);
+
+        $response = $client->getResponse();
+        self::assertEquals(202, $response->getStatusCode());
+        self::assertEquals('{"id":"what_a_nice_id"}', $response->getContent());
+    }
+
     public function testShouldThrowAccessDeniedExceptionIfRoleDoesNotMatch(): void
     {
         $client = self::createClient();

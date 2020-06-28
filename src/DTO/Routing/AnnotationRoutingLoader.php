@@ -47,18 +47,20 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
         }
 
-        $collection = new RouteCollection();
+        $routeCollection = new RouteCollection();
         if ($this->locator === null) {
-            return $collection;
+            return $routeCollection;
         }
 
         $interfaces = $this->locator->getInterfaces();
         sort($interfaces);
+
         foreach ($interfaces as $interface) {
             if (strpos($interface, $resource) !== 0) {
                 continue;
             }
 
+            $collection = new RouteCollection();
             $class = new ReflectionClass($interface);
             $globals = $this->getGlobals($class);
 
@@ -79,6 +81,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             }
 
             if ($collection->count() !== 0 || ! $class->hasMethod('__invoke')) {
+                $routeCollection->addCollection($collection);
                 continue;
             }
 
@@ -90,9 +93,11 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
                 $this->addRoute($collection, $annot, $globals, $class, $class->getMethod('__invoke'));
             }
+
+            $routeCollection->addCollection($collection);
         }
 
-        return $collection;
+        return $routeCollection;
     }
 
     /**
@@ -110,7 +115,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
         // controller
         if ($method->getName() === '__invoke') {
-            $route->setDefault('_controller', $class->getName());
+            $route->setDefault('_controller', $class->getName() . '::__invoke');
         } else {
             $route->setDefault('_controller', $class->getName() . '::' . $method->getName());
         }
@@ -132,6 +137,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             'host' => '',
             'condition' => '',
             'name' => '',
+            'priority' => 0,
         ];
     }
 }
