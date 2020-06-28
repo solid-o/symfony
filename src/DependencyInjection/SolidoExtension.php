@@ -61,11 +61,12 @@ class SolidoExtension extends Extension
         }
 
         if ($config['security']) {
-            if ($config['security']['action_listener']) {
+            if ($config['security']['action_listener']['enabled']) {
                 $container->register(ActionListener::class, ActionListener::class)
                     ->addTag('kernel.event_subscriber')
                     ->addArgument(new Reference('security.token_storage'))
-                    ->addArgument(new Reference('security.authorization_checker'));
+                    ->addArgument(new Reference('security.authorization_checker'))
+                    ->addArgument($config['security']['action_listener']['prefix'] ?? null);
             }
 
             if ($config['security']['policy_checker']['enabled']) {

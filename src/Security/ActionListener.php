@@ -30,11 +30,13 @@ class ActionListener implements EventSubscriberInterface
 {
     private TokenStorageInterface $tokenStorage;
     private AuthorizationCheckerInterface $authorizationChecker;
+    private string $prefix;
 
-    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker, ?string $prefix)
     {
         $this->tokenStorage = $tokenStorage;
         $this->authorizationChecker = $authorizationChecker;
+        $this->prefix = $prefix ? $prefix . ':' : '';
     }
 
     public function onKernelControllerArguments(ControllerArgumentsEvent $event): void
@@ -75,6 +77,7 @@ class ActionListener implements EventSubscriberInterface
             }
         }
 
+        $methodName = $this->prefix . $methodName;
         if (! $this->authorizationChecker->isGranted($methodName, $item ?? null)) {
             throw new AccessDeniedException(sprintf('Access denied: you don\'t have "%s" permission%s.', $methodName, $item instanceof UrnGeneratorInterface ? ' on resource "' . $item->getUrn() . '"' : ''));
         }
