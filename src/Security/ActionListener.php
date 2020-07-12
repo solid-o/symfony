@@ -53,11 +53,13 @@ class ActionListener implements EventSubscriberInterface
 
         $object = null;
         if (is_array($controller)) {
+            $reflClass = new ReflectionClass($controller[0]);
             $r = new ReflectionMethod($controller[0], $controller[1]);
+            $shortName = $reflClass->isSubclassOf(ProxyInterface::class) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
+
             $methodName = $r->getName();
             if (! $controller[0] instanceof AbstractController) {
-                $reflClass = new ReflectionClass($controller[0]);
-                $methodName .= $reflClass->isSubclassOf(ProxyInterface::class) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
+                $methodName = $methodName === '__invoke' ? $shortName : $methodName . $shortName;
             }
         } elseif (is_object($controller) && is_callable([$controller, '__invoke'])) {
             $reflClass = new ReflectionClass($controller);
