@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Solido\Symfony\Security;
 
 use Closure;
-use ProxyManager\Proxy\ProxyInterface;
+use ProxyManager\Proxy\ProxyInterface as ProxyManagerProxyInterface;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use Solido\Common\Urn\UrnGeneratorInterface;
+use Solido\DtoManagement\Proxy\ProxyInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +56,10 @@ class ActionListener implements EventSubscriberInterface
         if (is_array($controller)) {
             $reflClass = new ReflectionClass($controller[0]);
             $r = new ReflectionMethod($controller[0], $controller[1]);
-            $shortName = $reflClass->isSubclassOf(ProxyInterface::class) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
+            $shortName = (
+                $reflClass->isSubclassOf(ProxyInterface::class) ||
+                $reflClass->isSubclassOf(ProxyManagerProxyInterface::class)
+            ) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
 
             $methodName = $r->getName();
             if (! $controller[0] instanceof AbstractController) {
@@ -63,7 +67,10 @@ class ActionListener implements EventSubscriberInterface
             }
         } elseif (is_object($controller) && is_callable([$controller, '__invoke'])) {
             $reflClass = new ReflectionClass($controller);
-            $methodName = $reflClass->isSubclassOf(ProxyInterface::class) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
+            $methodName = (
+                $reflClass->isSubclassOf(ProxyInterface::class) ||
+                $reflClass->isSubclassOf(ProxyManagerProxyInterface::class)
+            ) && ($parent = $reflClass->getParentClass()) ? $parent->getShortName() : $reflClass->getShortName();
         } else {
             $r = new ReflectionFunction(Closure::fromCallable($controller));
             $methodName = $r->getName();
