@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63339ee5a62c4501dd1fcffdfff62037",
+    "content-hash": "a2fab8f2551862db3a11d794dc0d0a27",
     "packages": [
         {
             "name": "psr/cache",
@@ -6569,6 +6569,73 @@
             "time": "2021-07-12T17:14:11+00:00"
         },
         {
+            "name": "solido/atlante-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/solid-o/atlante-php.git",
+                "reference": "6f00971106b049f05638296212162ed1af526d52"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/solid-o/atlante-php/zipball/6f00971106b049f05638296212162ed1af526d52",
+                "reference": "6f00971106b049f05638296212162ed1af526d52",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4|^8.0",
+                "symfony/polyfill-php80": "^1.0",
+                "thecodingmachine/safe": "^1.1"
+            },
+            "require-dev": {
+                "jangregor/phpstan-prophecy": "^0.8.0",
+                "laminas/laminas-diactoros": "^2.3",
+                "phpunit/phpunit": "^8.1|^9.0",
+                "psr/cache": "^1.0",
+                "psr/http-client": "^1.0",
+                "psr/http-client-implementation": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-factory-implementation": "^1.0",
+                "psr/http-message": "^1.0",
+                "roave/security-advisories": "dev-master",
+                "solido/php-coding-standards": "dev-master",
+                "symfony/http-client": "^5.1",
+                "symfony/string": "^5.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solido\\Atlante\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Chitolina",
+                    "email": "alekitto@gmail.com"
+                },
+                {
+                    "name": "Massimiliano Braglia",
+                    "email": "massimiliano.braglia@gmail.com"
+                },
+                {
+                    "name": "Rubens Panfili",
+                    "email": "rubens.panfili@gmail.com"
+                }
+            ],
+            "description": "REST API client utilities",
+            "support": {
+                "issues": "https://github.com/solid-o/atlante-php/issues",
+                "source": "https://github.com/solid-o/atlante-php/tree/master"
+            },
+            "time": "2021-04-14T07:25:06+00:00"
+        },
+        {
             "name": "solido/body-converter",
             "version": "dev-master",
             "source": {
@@ -9999,6 +10066,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "roave/security-advisories": 20,
+        "solido/atlante-php": 20,
         "solido/body-converter": 20,
         "solido/common": 20,
         "solido/cors": 20,

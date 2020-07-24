@@ -35,6 +35,7 @@
         "refugis/doctrine-extra": "^2.0",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^5.0 || ^6.0",
+        "solido/atlante-php": "dev-master",
         "solido/body-converter": "dev-master",
         "solido/common": "dev-master",
         "solido/cors": "dev-master",
