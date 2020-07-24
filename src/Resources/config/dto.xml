@@ -37,7 +37,7 @@
 
         <service id="Solido\Symfony\DTO\Resolver" class="Solido\Symfony\DTO\Resolver">
             <argument type="service" id="Solido\DtoManagement\Finder\ServiceLocatorRegistry" />
-            <argument type="service" id="request_stack" />
+            <argument type="service" id="request_stack" on-invalid="null" />
         </service>
 
         <service id="Solido\Symfony\DTO\ArgumentResolver" class="Solido\Symfony\DTO\ArgumentResolver">

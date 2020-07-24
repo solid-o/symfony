@@ -6,10 +6,10 @@
 
     <services>
         <service class="Solido\PatchManager\PatchManager" id="Solido\PatchManager\PatchManager" public="true">
-            <argument type="service" id="form.factory" />
-            <argument type="service" id="validator" />
+            <argument type="service" id="form.factory" on-invalid="null" />
+            <argument type="service" id="validator" on-invalid="null" />
             <call method="setCache">
-                <argument type="service" id="cache.app" on-invalid="null" />
+                <argument type="service" id="cache.app" on-invalid="ignore" />
             </call>
         </service>
 

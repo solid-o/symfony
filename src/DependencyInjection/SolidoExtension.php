@@ -21,6 +21,7 @@ use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Symfony\Cors\HandlerFactory;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Symfony\Security\ActionListener;
+use Solido\Symfony\Serialization\SerializerInterface;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -157,6 +158,7 @@ class SolidoExtension extends Extension
             }
 
             $container->findDefinition(ViewHandler::class)->replaceArgument(2, $config['serializer']['charset']);
+            $container->setAlias(SerializerInterface::class, new Alias('solido.serializer', true));
         }
 
         if (interface_exists(ResolverInterface::class)) {

@@ -27,7 +27,7 @@ class RegisterSerializerPass implements CompilerPassInterface
         }
 
         if (isset($config['serializer']['id'])) {
-            $container->setAlias('solido.serializer', new Alias($config['serializer']['id']));
+            $container->setAlias('solido.serializer', new Alias($config['serializer']['id'], true));
 
             return;
         }
@@ -46,5 +46,6 @@ class RegisterSerializerPass implements CompilerPassInterface
         }
 
         $def->addArgument($config['serializer']['groups']);
+        $def->setPublic(true);
     }
 }
