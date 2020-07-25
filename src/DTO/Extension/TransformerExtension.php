@@ -10,6 +10,8 @@ use Solido\DataTransformers\TransformerExtension as BaseExtension;
 use Solido\DataTransformers\TransformerInterface;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use function class_exists;
+use function is_subclass_of;
 use function Safe\sprintf;
 
 class TransformerExtension extends BaseExtension
