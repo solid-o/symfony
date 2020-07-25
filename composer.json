@@ -24,7 +24,7 @@
         "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
-        "doctrine/annotations": "^1.10",
+        "doctrine/annotations": "^1.10|^2.0",
         "giggsey/libphonenumber-for-php": "^8.10",
         "jms/serializer": "^3.6",
         "jms/serializer-bundle": "^3.5",

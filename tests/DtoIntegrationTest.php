@@ -166,6 +166,7 @@ Solido\\Symfony\\Tests\\Fixtures\\Proxy\\Model\\v2017\\v20171215\\User (proxy) {
   +barPublic: "pubb"
   +barBar: "test"
   +foobar: "ciao"
+  +bazbar: "ciao"
 }
 DUMP
             , $dumper->dump($cloner->cloneVar($user), true));

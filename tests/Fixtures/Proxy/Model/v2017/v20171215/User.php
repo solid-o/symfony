@@ -22,6 +22,11 @@ class User implements UserInterface
      */
     public $foobar = 'ciao';
 
+    /**
+     * @Transform("transformer.service_transformer")
+     */
+    public $bazbar = 'ciao';
+
     public function __construct()
     {
     }

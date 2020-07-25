@@ -22,6 +22,7 @@ use function array_merge;
 use function array_values;
 use function assert;
 use function class_exists;
+use function function_exists;
 use function in_array;
 use function interface_exists;
 use function is_dir;
@@ -53,7 +54,9 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         assert($factory instanceof AccessInterceptorFactory);
 
         $this->proxyFactory = $factory;
-        AnnotationRegistry::registerUniqueLoader('class_exists');
+        if (function_exists(AnnotationRegistry::class . '::registerUniqueLoader')) {
+            AnnotationRegistry::registerUniqueLoader('class_exists');
+        }
 
         $definition = $container->findDefinition(ServiceLocatorRegistry::class);
         $namespaces = $exclude = [];

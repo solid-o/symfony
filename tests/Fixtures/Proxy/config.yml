@@ -13,6 +13,9 @@ solido:
             - 'Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface'
 
 services:
+    transformer.service_transformer:
+        class: Solido\Symfony\Tests\Fixtures\Proxy\Transformer\TestTransform
+
     Solido\Symfony\Tests\Fixtures\Proxy\Model\:
         resource: './Model/*'
         exclude: './Model/{Interfaces}'
