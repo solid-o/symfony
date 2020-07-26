@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Solido\Symfony\DTO\Extension;
 
 use Doctrine\Common\Annotations\Reader;
-use LogicException;
 use Solido\DataTransformers\TransformerExtension as BaseExtension;
-use Solido\DataTransformers\TransformerInterface;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use function class_exists;
-use function is_subclass_of;
 use function Safe\sprintf;
 
 class TransformerExtension extends BaseExtension
@@ -66,13 +62,7 @@ try {
     {
         if ($this->container->has($transformer)) {
             $definition = $this->container->findDefinition($transformer);
-            $class = $definition->getClass() ?? $transformer;
-
-            if (! class_exists($class) || ! is_subclass_of($class, TransformerInterface::class)) {
-                throw new LogicException(sprintf('Transformer class "%s" does not exist or does not implement "%s".', $class, TransformerInterface::class));
-            }
-
-            return;
+            $transformer = $definition->getClass() ?? $transformer;
         }
 
         parent::assertExists($transformer);
