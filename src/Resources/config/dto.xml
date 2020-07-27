@@ -46,7 +46,7 @@
         </service>
 
         <service class="Solido\Symfony\DTO\Extension\SecurityExtension" id="Solido\Symfony\DTO\Extension\SecurityExtension">
-            <tag name="solido.dto_extension" />
+            <tag name="solido.dto_extension" priority="30" />
         </service>
     </services>
 </container>
