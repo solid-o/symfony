@@ -126,7 +126,9 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
                 continue;
             }
 
-            $definition->addTag('container.service_subscriber');
+            foreach ($proxyClass::getSubscribedServices() as $key => $class) {
+                $definition->addTag('container.service_subscriber', ['key' => $key, 'id' => $key]);
+            }
         }
     }
 
