@@ -18,10 +18,10 @@ use Solido\PolicyChecker\PolicyCheckerInterface;
 use Solido\PolicyChecker\Test\TestPolicyChecker;
 use Solido\PolicyChecker\Voter\VoterInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
+use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\Cors\HandlerFactory;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Symfony\Security\ActionListener;
-use Solido\Symfony\Serialization\SerializerInterface;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -150,6 +150,10 @@ class SolidoExtension extends Extension
         }
 
         if ($config['serializer']['enabled']) {
+            if (! interface_exists(SerializerInterface::class)) {
+                throw new InvalidConfigurationException('Solido serialization component is not installed. Run composer require solido/serialization to install it.');
+            }
+
             $loader->load('view.xml');
             $loader->load('serializer.xml');
             if ($config['serializer']['catch_exceptions']) {

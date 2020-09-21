@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DependencyInjection\CompilerPass;
 
+use Solido\Serialization\Adapter\JmsSerializerAdapter;
+use Solido\Serialization\Adapter\KcsSerializerAdapter;
+use Solido\Serialization\Adapter\SymfonySerializerAdapter;
 use Solido\Symfony\DependencyInjection\Configuration;
-use Solido\Symfony\Serialization\Adapter\JmsSerializerAdapter;
-use Solido\Symfony\Serialization\Adapter\KcsSerializerAdapter;
-use Solido\Symfony\Serialization\Adapter\SymfonySerializerAdapter;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Alias;

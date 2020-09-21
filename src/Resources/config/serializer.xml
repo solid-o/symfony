@@ -4,11 +4,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service class="Solido\Symfony\Serialization\DTO\KcsSerializerProxySubscriber" id="Solido\Symfony\Serialization\DTO\KcsSerializerProxySubscriber">
+        <service class="Solido\Serialization\DTO\KcsSerializerProxySubscriber" id="Solido\Symfony\Serialization\DTO\KcsSerializerProxySubscriber">
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service class="Solido\Symfony\Serialization\DTO\JmsSerializerProxySubscriber" id="Solido\Symfony\Serialization\DTO\JmsSerializerProxySubscriber">
+        <service class="Solido\Serialization\DTO\JmsSerializerProxySubscriber" id="Solido\Symfony\Serialization\DTO\JmsSerializerProxySubscriber">
             <tag name="jms_serializer.event_subscriber" />
         </service>
     </services>

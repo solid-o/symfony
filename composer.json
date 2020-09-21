@@ -45,6 +45,7 @@
         "solido/php-coding-standards": "dev-master",
         "solido/query-language": "dev-master",
         "solido/security-policy-checker": "dev-master",
+        "solido/serialization": "dev-master",
         "solido/versioning": "dev-master",
         "symfony/browser-kit": "^4.4|^5.0",
         "symfony/debug-bundle": "^5.0",

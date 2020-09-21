@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\ErrorRenderer;
 
+use Solido\Serialization\Exception\UnsupportedFormatException;
+use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\ErrorRenderer\Exception\DebugSerializableException;
 use Solido\Symfony\ErrorRenderer\Exception\SerializableException;
-use Solido\Symfony\Serialization\Exception\UnsupportedFormatException;
-use Solido\Symfony\Serialization\SerializerInterface;
 use Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\RequestStack;

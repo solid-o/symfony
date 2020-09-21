@@ -4,11 +4,11 @@ namespace Solido\Symfony\Tests\DependencyInjection;
 
 use Kcs\Serializer\Bundle\DependencyInjection\CompilerPass\NamingStrategyPass;
 use Kcs\Serializer\Bundle\DependencyInjection\SerializerExtension;
+use PHPUnit\Framework\TestCase;
+use Solido\Serialization\Adapter\KcsSerializerAdapter;
+use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Solido\Symfony\DependencyInjection\SolidoExtension;
-use PHPUnit\Framework\TestCase;
-use Solido\Symfony\Serialization\Adapter\KcsSerializerAdapter;
-use Solido\Symfony\Serialization\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerRealRefPass;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerWeakRefPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
