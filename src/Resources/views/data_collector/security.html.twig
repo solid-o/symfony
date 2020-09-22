@@ -22,7 +22,7 @@
 
             {% set previous = (collector.policyPermissions|first) %}
             {% for permission in collector.policyPermissions %}
-                {% if loop.first or acl != previous %}
+                {% if loop.first or permission != previous %}
                     {% if not loop.first %}
                         </tbody>
                     {% endif %}
