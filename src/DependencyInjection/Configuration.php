@@ -126,6 +126,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('urn')
+                    ->canBeDisabled()
+                ->end()
             ->end();
 
         // @phpstan-ignore-next-line

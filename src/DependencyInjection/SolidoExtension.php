@@ -53,6 +53,10 @@ class SolidoExtension extends Extension
             $loader->load('body_converter.xml');
         }
 
+        if ($config['urn']['enabled']) {
+            $loader->load('urn.xml');
+        }
+
         if ($config['test']) {
             $loader->load('test.xml');
 
