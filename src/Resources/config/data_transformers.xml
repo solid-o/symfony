@@ -28,6 +28,9 @@
         <service class="Solido\DataTransformers\Transformer\PhoneNumberTransformer" id="Solido\DataTransformers\Transformer\PhoneNumberTransformer" />
         <service alias="Solido\DataTransformers\Transformer\PhoneNumberTransformer" id="solido.data_transformer.phone_number" />
 
+        <service class="Solido\DataTransformers\Transformer\UrnToItemTransformer" id="Solido\DataTransformers\Transformer\UrnToItemTransformer" />
+        <service alias="Solido\DataTransformers\Transformer\UrnToItemTransformer" id="solido.data_transformer.urn_to_item" />
+
         <service class="Solido\DataTransformers\Transformer\Money\CurrencyTransformer" id="Solido\DataTransformers\Transformer\Money\CurrencyTransformer" />
         <service alias="Solido\DataTransformers\Transformer\Money\CurrencyTransformer" id="solido.data_transformer.money_currency" />
 
