@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Solido\Symfony\Urn;
 
 use Solido\Common\Urn\UrnConverter;
+use Solido\Common\Urn\UrnConverterInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmer;
 
 class UrnClassCacheWarmer extends CacheWarmer
 {
-    private UrnConverter $urnConverter;
+    private UrnConverterInterface $urnConverter;
 
-    public function __construct(UrnConverter $urnConverter)
+    public function __construct(UrnConverterInterface $urnConverter)
     {
         $this->urnConverter = $urnConverter;
     }
@@ -26,6 +27,10 @@ class UrnClassCacheWarmer extends CacheWarmer
      */
     public function warmUp(string $cacheDir): array
     {
+        if (! $this->urnConverter instanceof UrnConverter) {
+            return [];
+        }
+
         $this->urnConverter->getUrnClassMap($cacheDir);
 
         return [
