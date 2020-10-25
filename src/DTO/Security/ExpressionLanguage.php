@@ -6,6 +6,7 @@ namespace Solido\Symfony\DTO\Security;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLanguage;
+
 use function Safe\sprintf;
 
 class ExpressionLanguage extends BaseExpressionLanguage

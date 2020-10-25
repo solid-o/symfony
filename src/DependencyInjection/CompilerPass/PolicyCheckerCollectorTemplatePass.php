@@ -30,6 +30,6 @@ class PolicyCheckerCollectorTemplatePass implements CompilerPassInterface
             return;
         }
 
-        $definition->addMethodCall('setBaseTemplate', [ $tag[0]['template'] ]);
+        $definition->addMethodCall('setBaseTemplate', [$tag[0]['template']]);
     }
 }

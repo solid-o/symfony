@@ -10,6 +10,7 @@ use Solido\Cors\RequestHandlerInterface;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+
 use function interface_exists;
 
 class Configuration implements ConfigurationInterface

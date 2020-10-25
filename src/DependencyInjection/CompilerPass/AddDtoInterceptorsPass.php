@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
 use function array_merge;
 use function array_values;
 use function assert;

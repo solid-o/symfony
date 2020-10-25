@@ -12,10 +12,12 @@ use ReflectionClass;
 use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\Config\Resource\ReflectionClassResource;
+
 use function restore_error_handler;
 use function set_error_handler;
 use function str_replace;
 use function trim;
+
 use const DIRECTORY_SEPARATOR;
 
 class CacheWriterGeneratorStrategy implements GeneratorStrategyInterface

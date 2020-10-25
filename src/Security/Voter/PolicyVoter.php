@@ -9,6 +9,7 @@ use Solido\PolicyChecker\PolicyCheckerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+
 use function array_key_first;
 use function count;
 

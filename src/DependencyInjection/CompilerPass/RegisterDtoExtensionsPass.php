@@ -20,7 +20,7 @@ class RegisterDtoExtensionsPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('solido.dto-management.proxy_factory.configuration');
         foreach ($this->findAndSortTaggedServices('solido.dto_extension', $container) as $reference) {
-            $definition->addMethodCall('addExtension', [ $reference ]);
+            $definition->addMethodCall('addExtension', [$reference]);
         }
     }
 }

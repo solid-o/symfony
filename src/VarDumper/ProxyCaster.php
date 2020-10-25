@@ -6,6 +6,7 @@ namespace Solido\Symfony\VarDumper;
 
 use Solido\DtoManagement\Proxy\ProxyInterface;
 use Symfony\Component\VarDumper\Cloner\Stub;
+
 use function get_class;
 use function get_parent_class;
 use function strpos;

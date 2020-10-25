@@ -16,6 +16,7 @@ use Solido\Symfony\DTO\Security\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLanguage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use function array_map;
 use function array_merge;
 use function assert;

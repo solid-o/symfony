@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\DTO;
 
 use Laminas\Code\Generator\MethodGenerator;
+
 use function array_keys;
 use function array_map;
 use function implode;

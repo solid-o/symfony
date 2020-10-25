@@ -8,6 +8,7 @@ use Doctrine\Common\Annotations\Reader;
 use Solido\DataTransformers\TransformerExtension as BaseExtension;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use function Safe\sprintf;
 
 class TransformerExtension extends BaseExtension

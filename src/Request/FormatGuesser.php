@@ -8,6 +8,7 @@ use Negotiation\Accept;
 use Negotiation\Exception\InvalidMediaType;
 use Negotiation\Negotiator;
 use Symfony\Component\HttpFoundation\Request;
+
 use function assert;
 use function is_string;
 use function Safe\preg_replace;

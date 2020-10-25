@@ -13,6 +13,7 @@ use RuntimeException;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Solido\Symfony\DTO\GetSubscribedServicesGenerator;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
 use function Safe\sprintf;
 use function sha1;
 use function uniqid;

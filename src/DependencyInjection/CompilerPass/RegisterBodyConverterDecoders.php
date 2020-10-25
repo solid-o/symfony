@@ -9,6 +9,7 @@ use Solido\BodyConverter\Decoder\DecoderProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+
 use function assert;
 use function is_subclass_of;
 

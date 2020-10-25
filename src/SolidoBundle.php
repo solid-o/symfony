@@ -13,6 +13,7 @@ use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+
 use function file_exists;
 use function Safe\spl_autoload_register;
 

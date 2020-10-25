@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\Cors;
 
 use Solido\Cors\RequestHandlerInterface;
+
 use function Safe\preg_match;
 
 class HandlerFactory
