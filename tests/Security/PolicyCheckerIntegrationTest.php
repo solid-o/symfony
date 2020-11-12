@@ -7,11 +7,11 @@ use Solido\Symfony\Tests\Fixtures\PolicyChecker\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 class PolicyCheckerIntegrationTest extends WebTestCase
 {
+    use DumpTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -53,15 +53,5 @@ array:1 [
   ]
 ]\n
 EOF, $this->getDump($collector->getPolicyPermissions()));
-    }
-
-    private function getDump(Data $data): string
-    {
-        $output = fopen('php://memory', 'r+b');
-        $dumper = new CliDumper($output);
-        $dumper->dump($data);
-
-        rewind($output);
-        return stream_get_contents($output);
     }
 }

@@ -44,7 +44,7 @@ services:
         autowire: true
         autoconfigure: true
         tags:
-            - 'controller.argument_value_resolver'
+            - 'controller.service_arguments'
 
     Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator:
         autowire: true

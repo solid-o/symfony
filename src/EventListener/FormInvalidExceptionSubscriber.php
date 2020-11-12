@@ -35,6 +35,7 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
     {
         $attributes = [
             '_controller' => [$this, 'formAction'],
+            '_security' => false,
             'form' => $form,
         ];
 

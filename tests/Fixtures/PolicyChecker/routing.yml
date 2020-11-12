@@ -1,3 +1,7 @@
 list_foo:
     path: /foos
     controller: Solido\Symfony\Tests\Fixtures\PolicyChecker\Controller\TestController:listFoo
+
+invalid_foo:
+    path: /invalid-form
+    controller: Solido\Symfony\Tests\Fixtures\PolicyChecker\Controller\TestController:invalidFoo
