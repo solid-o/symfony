@@ -44,18 +44,8 @@ class TransformerExtension extends BaseExtension
         }
 
         return sprintf('
-try {
-    $transformer = $this->%s->get(\'%s\');
-    $%s = $transformer->transform($%s);
-} catch (\Solido\DataTransformers\Exception\TransformationFailedException $exception) {
-    throw new \Symfony\Component\Form\Exception\TransformationFailedException(
-        \'Transformation failed: \'.$exception->getMessage(),
-        $exception->getCode(),
-        $exception,
-        $exception->getInvalidMessage(),
-        $exception->getInvalidMessageParameters()
-    );
-}
+$transformer = $this->%s->get(\'%s\');
+$%s = $transformer->transform($%s);
 ', $this->getContainerName(), $transformer, $parameterName, $parameterName);
     }
 

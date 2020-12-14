@@ -5,8 +5,20 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Solido\Symfony\Form\OneWayDataMapper" id="Solido\Symfony\Form\OneWayDataMapper">
+        <service id="Solido\Symfony\Form\DataAccessor\CallbackAccessor" class="Solido\Symfony\Form\DataAccessor\CallbackAccessor" />
+        <service id="Solido\Symfony\Form\DataAccessor\PropertyPathAccessor" class="Solido\Symfony\Form\DataAccessor\PropertyPathAccessor">
             <argument type="service" id="property_accessor" />
+        </service>
+
+        <service id="Solido\Symfony\Form\DataAccessor\ChainAccessor" class="Solido\Symfony\Form\DataAccessor\ChainAccessor">
+            <argument type="collection">
+                <argument type="service" id="Solido\Symfony\Form\DataAccessor\CallbackAccessor" />
+                <argument type="service" id="Solido\Symfony\Form\DataAccessor\PropertyPathAccessor" />
+            </argument>
+        </service>
+
+        <service class="Solido\Symfony\Form\OneWayDataMapper" id="Solido\Symfony\Form\OneWayDataMapper">
+            <argument type="service" id="Solido\Symfony\Form\DataAccessor\ChainAccessor" />
         </service>
 
         <service class="Solido\Symfony\Form\FormTypeExtension" id="Solido\Symfony\Form\FormTypeExtension">
