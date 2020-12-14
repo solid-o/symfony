@@ -19,6 +19,7 @@
 
         <service class="Solido\Symfony\Urn\UrnClassCacheWarmer" id="solido.urn.urn_class_cache_warmer" public="false">
             <argument type="service" id="solido.urn.urn_converter" />
+            <argument />
             <tag name="kernel.cache_warmer" />
         </service>
     </services>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\DependencyInjection;
 
 use Solido\BodyConverter\Decoder\DecoderProviderInterface;
+use Solido\Common\Urn\UrnConverter;
 use Solido\Cors\RequestHandler;
 use Solido\Cors\RequestHandlerInterface;
 use Solido\DataTransformers\Transformer\DateTimeTransformer;
@@ -31,6 +32,7 @@ use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
 use function assert;
@@ -56,6 +58,14 @@ class SolidoExtension extends Extension
 
         if ($config['urn']['enabled']) {
             $loader->load('urn.xml');
+
+            if ($container->hasParameter('kernel.build_dir')) {
+                $container->getDefinition(UrnConverter::class)
+                    ->replaceArgument(2, new Parameter('kernel.build_dir'));
+
+                $container->getDefinition('solido.urn.urn_class_cache_warmer')
+                    ->replaceArgument(1, new Parameter('kernel.build_dir'));
+            }
         }
 
         if ($config['test']) {
