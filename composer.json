@@ -19,9 +19,9 @@
         "csfix": "vendor/bin/phpcbf --standard=Solido src/"
     },
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
         "symfony/framework-bundle": "^4.4|^5.0",
-        "willdurand/negotiation": "^2.3"
+        "willdurand/negotiation": "^2.3|^3.0"
     },
     "require-dev": {
         "doctrine/annotations": "^1.10|^2.0",
@@ -31,7 +31,7 @@
         "kcs/serializer": "^3.3",
         "moneyphp/money": "^3.2",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^8.0|9.1",
+        "phpunit/phpunit": "^9.1",
         "refugis/doctrine-extra": "dev-master",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^5.0",
