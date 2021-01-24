@@ -152,8 +152,6 @@ if (! $%1$s()) {
             $annotation = $this->reader->getMethodAnnotation($reflector, Security::class);
         }
 
-        assert($annotation === null || $annotation instanceof Security);
-
         return $annotation;
     }
 }

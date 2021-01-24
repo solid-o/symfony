@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\Annotation;
 
+// phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
+// phpcs:enable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Response;
 use TypeError;
