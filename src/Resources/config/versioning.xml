@@ -9,7 +9,7 @@
             <argument>%solido.format.priorities%</argument>
         </service>
 
-        <service alias="Solido\Versioning\AcceptHeaderVersionGuesser" id="solido.versioning.version_guesser_custom_header" />
+        <service alias="Solido\Versioning\CustomHeaderVersionGuesser" id="solido.versioning.version_guesser_custom_header" />
         <service class="Solido\Versioning\CustomHeaderVersionGuesser" id="Solido\Versioning\CustomHeaderVersionGuesser">
             <argument>%solido.versioning.custom_header_name%</argument>
         </service>

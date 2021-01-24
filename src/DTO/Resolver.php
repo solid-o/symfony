@@ -24,8 +24,7 @@ class Resolver extends BaseResolver
     public function resolve(string $interface, $version = null)
     {
         if ($version === null && $this->requestStack !== null) {
-            $request = $this->requestStack->getCurrentRequest();
-            $version = $request !== null ? $request->attributes->get('_version') : null;
+            $version = $this->requestStack->getCurrentRequest();
         }
 
         return parent::resolve($interface, $version);

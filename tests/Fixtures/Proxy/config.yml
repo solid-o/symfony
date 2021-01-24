@@ -12,6 +12,11 @@ solido:
         exclude:
             - 'Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface'
 
+    request:
+        versioning:
+            guesser: custom_header
+            custom_header_name: X-Version
+
 services:
     transformer.service_transformer:
         class: Solido\Symfony\Tests\Fixtures\Proxy\Transformer\TestTransform

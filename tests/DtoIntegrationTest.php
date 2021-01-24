@@ -30,6 +30,7 @@ class DtoIntegrationTest extends WebTestCase
             'HTTP_ACCEPT' => 'application/json',
             'PHP_AUTH_USER' => 'user',
             'PHP_AUTH_PW' => 'user',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -45,6 +46,7 @@ class DtoIntegrationTest extends WebTestCase
             'HTTP_ACCEPT' => 'application/json',
             'PHP_AUTH_USER' => 'user',
             'PHP_AUTH_PW' => 'user',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -58,6 +60,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/protected', [], [], [
             'PHP_AUTH_USER' => 'user',
             'PHP_AUTH_PW' => 'user',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -70,6 +73,40 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/protected', [], [], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20171215',
+        ]);
+
+        $response = $client->getResponse();
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('"CIAO"', $response->getContent());
+    }
+
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testShouldThrowAccessDeniedExceptionIfRoleDoesNotMatchWithAttribute(): void
+    {
+        $client = self::createClient();
+        $client->request('GET', '/protected', [], [], [
+            'PHP_AUTH_USER' => 'user',
+            'PHP_AUTH_PW' => 'user',
+            'HTTP_X_VERSION' => '20210124',
+        ]);
+
+        $response = $client->getResponse();
+        self::assertEquals(403, $response->getStatusCode());
+    }
+
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testShouldExecuteOperationsIfRolesAreCorrectWithAttribute(): void
+    {
+        $client = self::createClient();
+        $client->request('GET', '/protected', [], [], [
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20210124',
         ]);
 
         $response = $client->getResponse();
@@ -83,6 +120,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/unavailable', [], [], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -96,6 +134,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/semver/1.0', [], [], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -108,6 +147,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/semver/1.1', [], [], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -120,6 +160,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->request('GET', '/semver/2.0-alpha-1', [], [], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '20171215',
         ]);
 
         $response = $client->getResponse();
@@ -156,7 +197,7 @@ class DtoIntegrationTest extends WebTestCase
         $client->getKernel()->boot();
 
         $container = $client->getContainer();
-        $user = $container->get(ResolverInterface::class)->resolve(UserInterface::class);
+        $user = $container->get(ResolverInterface::class)->resolve(UserInterface::class, '20171215');
 
         $dumper = new CliDumper();
         $cloner = $container->get('var_dumper.cloner');
