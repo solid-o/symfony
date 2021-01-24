@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony;
 
+use Solido\Common\Urn\Urn;
 use Solido\Symfony\DependencyInjection\CompilerPass\AddDtoInterceptorsPass;
 use Solido\Symfony\DependencyInjection\CompilerPass\PolicyCheckerCollectorTemplatePass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterBodyConverterDecoders;
@@ -32,8 +33,11 @@ class SolidoBundle extends Bundle
 
     public function boot(): void
     {
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        if ($this->container->hasParameter('solido.urn.urn_default_domain')) {
+            Urn::$defaultDomain = $this->container->getParameter('solido.urn.urn_default_domain');
+        }
 
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
         $dtoMapFile = $cacheDir . '/dto-proxies-map.php';
         if (! file_exists($dtoMapFile)) {
             return;

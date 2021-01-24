@@ -58,6 +58,7 @@ class SolidoExtension extends Extension
 
         if ($config['urn']['enabled']) {
             $loader->load('urn.xml');
+            $container->setParameter('solido.urn.urn_default_domain', $config['urn']['default_domain'] ?? '');
 
             if ($container->hasParameter('kernel.build_dir')) {
                 $container->getDefinition(UrnConverter::class)

@@ -163,6 +163,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('urn')
                     ->canBeDisabled()
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('default_domain')
+                            ->info('The URN default domain')
+                            ->defaultNull()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
 
