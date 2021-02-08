@@ -15,7 +15,9 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+use function assert;
 use function file_exists;
+use function is_string;
 use function Safe\spl_autoload_register;
 
 class SolidoBundle extends Bundle
@@ -34,10 +36,15 @@ class SolidoBundle extends Bundle
     public function boot(): void
     {
         if ($this->container->hasParameter('solido.urn.urn_default_domain')) {
-            Urn::$defaultDomain = $this->container->getParameter('solido.urn.urn_default_domain');
+            $defaultDomain = $this->container->getParameter('solido.urn.urn_default_domain');
+            assert(is_string($defaultDomain));
+
+            Urn::$defaultDomain = $defaultDomain;
         }
 
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        assert(is_string($cacheDir));
+
         $dtoMapFile = $cacheDir . '/dto-proxies-map.php';
         if (! file_exists($dtoMapFile)) {
             return;

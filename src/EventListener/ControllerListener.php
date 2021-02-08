@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Solido\Symfony\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Persistence\Proxy;
 use LogicException;
+use ReflectionAttribute;
 use ReflectionClass;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use ReflectionMethod;
 use Solido\DtoManagement\Proxy\ProxyInterface;
+use Solido\Symfony\Configuration\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -16,11 +19,19 @@ use UnexpectedValueException;
 
 use function array_key_exists;
 use function array_keys;
+use function array_map;
 use function array_merge;
+use function array_push;
+use function class_exists;
 use function get_class;
 use function get_parent_class;
 use function is_array;
+use function method_exists;
 use function Safe\sprintf;
+use function Safe\substr;
+use function strrpos;
+
+use const PHP_VERSION_ID;
 
 /**
  * The ControllerListener class parses annotation blocks located in
@@ -28,9 +39,9 @@ use function Safe\sprintf;
  */
 class ControllerListener implements EventSubscriberInterface
 {
-    private Reader $reader;
+    private ?Reader $reader;
 
-    public function __construct(Reader $reader)
+    public function __construct(?Reader $reader = null)
     {
         $this->reader = $reader;
     }
@@ -44,17 +55,25 @@ class ControllerListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $className = $request->attributes->get('_solido_dto_interface');
+
+        /** @phpstan-var object|array{0: object, 1: string} $controller */
+        $controller = $event->getController();
         if ($className === null) {
-            return;
+            if (! is_array($controller) && method_exists($controller, '__invoke')) {
+                $controller = [$controller, '__invoke'];
+            }
+
+            if (is_array($controller)) {
+                $className = self::getRealClass(get_class($controller[0]));
+            }
         }
 
         /** @phpstan-var array{0: object, 1: string} $controller */
-        $controller = $event->getController();
         $object = new ReflectionClass($className);
         $method = $object->getMethod($controller[1]);
 
-        $classConfigurations = $this->getConfigurations($this->reader->getClassAnnotations($object));
-        $methodConfigurations = $this->getConfigurations($this->reader->getMethodAnnotations($method));
+        $classConfigurations = $this->getConfigurations($this->getClassAttributes($object));
+        $methodConfigurations = $this->getConfigurations($this->getMethodAttributes($method));
 
         $configurations = [];
         foreach (array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
@@ -76,6 +95,10 @@ class ControllerListener implements EventSubscriberInterface
 
         foreach ($configurations as $key => $attributes) {
             $request->attributes->set($key, $attributes);
+        }
+
+        if (! $request->attributes->has('_solido_dto_interface')) {
+            return;
         }
 
         $controllerName = sprintf(
@@ -103,14 +126,11 @@ class ControllerListener implements EventSubscriberInterface
             }
 
             $index = '_' . $configuration->getAliasName();
-            if ($configuration->allowArray()) {
-                // @phpstan-ignore-next-line
-                $configurations[$index][] = $configuration;
-            } elseif (! isset($configurations[$index])) {
-                $configurations[$index] = $configuration;
-            } else {
+            if (isset($configurations[$index])) {
                 throw new LogicException(sprintf('Multiple "%s" annotations are not allowed.', $configuration->getAliasName()));
             }
+
+            $configurations[$index] = $configuration;
         }
 
         return $configurations;
@@ -122,5 +142,53 @@ class ControllerListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::CONTROLLER => 'onKernelController'];
+    }
+
+    private static function getRealClass(string $class): string
+    {
+        if (class_exists(Proxy::class)) {
+            $pos = strrpos($class, '\\' . Proxy::MARKER . '\\');
+            if ($pos === false) {
+                return $class;
+            }
+
+            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+        }
+
+        return $class;
+    }
+
+    /**
+     * @return object[]
+     */
+    private function getClassAttributes(ReflectionClass $object): array
+    {
+        $annotations = $this->reader !== null ? $this->reader->getClassAnnotations($object) : [];
+        if (PHP_VERSION_ID >= 80000) {
+            $attributes = $object->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            array_push(
+                $annotations,
+                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes)
+            );
+        }
+
+        return $annotations;
+    }
+
+    /**
+     * @return object[]
+     */
+    private function getMethodAttributes(ReflectionMethod $method): array
+    {
+        $annotations = $this->reader !== null ? $this->reader->getMethodAnnotations($method) : [];
+        if (PHP_VERSION_ID >= 80000) {
+            $attributes = $method->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            array_push(
+                $annotations,
+                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes)
+            );
+        }
+
+        return $annotations;
     }
 }

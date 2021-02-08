@@ -98,7 +98,10 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $definition->setArgument(0, $locators);
         $container->setParameter('solido.dto-management.versions', $iterator->getVersions());
 
-        $this->generateClassMap($cacheDir, $container->getParameter('kernel.cache_dir') . '/dto-proxies-map.php');
+        $kernelCacheDir = $container->getParameter('kernel.cache_dir');
+        assert(is_string($kernelCacheDir));
+
+        $this->generateClassMap($cacheDir, $kernelCacheDir . '/dto-proxies-map.php');
     }
 
     private function processLocator(ContainerBuilder $container, ServiceClosureArgument $argument): void

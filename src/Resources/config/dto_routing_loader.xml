@@ -12,7 +12,7 @@
 
         <service id="solido.dto-management.controller_listener" class="Solido\Symfony\EventListener\ControllerListener">
             <tag name="kernel.event_subscriber" />
-            <argument type="service" id="annotations.reader" />
+            <argument type="service" id="annotations.reader" on-invalid="null" />
         </service>
     </services>
 </container>

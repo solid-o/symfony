@@ -7,7 +7,7 @@ namespace Solido\Symfony\Annotation;
 // phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
 // phpcs:enable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Solido\Symfony\Configuration\ConfigurationInterface;
 use TypeError;
 
 use function get_debug_type;
@@ -43,10 +43,5 @@ class Sunset implements ConfigurationInterface
     public function getAliasName(): string
     {
         return 'rest_sunset';
-    }
-
-    public function allowArray(): bool
-    {
-        return false;
     }
 }

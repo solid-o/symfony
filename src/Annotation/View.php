@@ -7,7 +7,7 @@ namespace Solido\Symfony\Annotation;
 // phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
 // phpcs:enable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Solido\Symfony\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Response;
 use TypeError;
 
@@ -54,10 +54,5 @@ class View implements ConfigurationInterface
     public function getAliasName(): string
     {
         return 'rest_view';
-    }
-
-    public function allowArray(): bool
-    {
-        return false;
     }
 }
