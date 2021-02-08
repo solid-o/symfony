@@ -38,6 +38,25 @@ class DtoIntegrationTest extends WebTestCase
         self::assertEquals('{"id":"what_a_nice_id"}', $response->getContent());
     }
 
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testShouldLoadRoutingFromAttributesOnDtoInterface(): void
+    {
+        $client = self::createClient();
+        $client->catchExceptions(false);
+        $client->request('GET', '/routed-with-attribute', [], [], [
+            'HTTP_ACCEPT' => 'application/json',
+            'PHP_AUTH_USER' => 'user',
+            'PHP_AUTH_PW' => 'user',
+            'HTTP_X_VERSION' => '20171215',
+        ]);
+
+        $response = $client->getResponse();
+        self::assertEquals(201, $response->getStatusCode());
+        self::assertEquals('{"id":"what_a_nice_attribute"}', $response->getContent());
+    }
+
     public function testShouldLoadRoutingFromDtoInvokableInterface(): void
     {
         $client = self::createClient();

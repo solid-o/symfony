@@ -18,4 +18,11 @@ class Routed implements RoutedInterface
 
         return $this;
     }
+
+    public function routedWithAttribute(PatchManagerInterface $patchManager): RoutedInterface
+    {
+        $this->id = 'what_a_nice_attribute';
+
+        return $this;
+    }
 }

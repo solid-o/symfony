@@ -21,6 +21,8 @@ use function Safe\sort;
 use function Safe\substr;
 use function strpos;
 
+use const PHP_VERSION_ID;
+
 class AnnotationRoutingLoader extends AnnotationClassLoader
 {
     private ?ServiceLocatorRegistry $locator;
@@ -72,7 +74,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
             foreach ($class->getMethods() as $method) {
                 $this->defaultRouteIndex = 0;
-                foreach ($this->reader->getMethodAnnotations($method) as $annot) {
+                foreach ($this->getAnnotations($method) as $annot) {
                     if (! $annot instanceof RouteAnnotation) {
                         continue;
                     }
@@ -87,7 +89,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             }
 
             $globals = $this->resetGlobals();
-            foreach ($this->reader->getClassAnnotations($class) as $annot) {
+            foreach ($this->getAnnotations($class) as $annot) {
                 if (! $annot instanceof RouteAnnotation) {
                     continue;
                 }
@@ -119,6 +121,38 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             $route->setDefault('_controller', $class->getName() . '::__invoke');
         } else {
             $route->setDefault('_controller', $class->getName() . '::' . $method->getName());
+        }
+    }
+
+    /**
+     * @param ReflectionClass|ReflectionMethod $reflection
+     *
+     * @return RouteAnnotation[]
+     */
+    private function getAnnotations(object $reflection): iterable
+    {
+        if (PHP_VERSION_ID >= 80000) {
+            foreach ($reflection->getAttributes($this->routeAnnotationClass) as $attribute) {
+                /** @phpstan-ignore-next-line */
+                yield $attribute->newInstance();
+            }
+        }
+
+        if (! $this->reader) {
+            return;
+        }
+
+        $anntotations = $reflection instanceof ReflectionClass
+            ? $this->reader->getClassAnnotations($reflection)
+            : $this->reader->getMethodAnnotations($reflection);
+
+        foreach ($anntotations as $annotation) {
+            if (! ($annotation instanceof $this->routeAnnotationClass)) {
+                continue;
+            }
+
+            /** @phpstan-ignore-next-line */
+            yield $annotation;
         }
     }
 

@@ -14,4 +14,8 @@ interface RoutedInterface
      * @View(statusCode=Response::HTTP_CREATED)
      */
     public function routed(PatchManagerInterface $patchManager): self;
+
+    #[Route('/routed-with-attribute')]
+    #[View(statusCode: Response::HTTP_CREATED)]
+    public function routedWithAttribute(PatchManagerInterface $patchManager): self;
 }
