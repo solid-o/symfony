@@ -30,7 +30,7 @@ class CacheWriterGeneratorStrategy implements GeneratorStrategyInterface
     {
         $this->configuration = $configuration;
         $this->debug = $debug;
-        $this->emptyErrorHandler = static function () {
+        $this->emptyErrorHandler = static function (): void {
         };
     }
 
@@ -42,7 +42,7 @@ class CacheWriterGeneratorStrategy implements GeneratorStrategyInterface
         $code = $classGenerator->generate();
 
         $cacheFactory = new ConfigCacheFactory($this->debug);
-        $cache = $cacheFactory->cache($fileName, static function (ConfigCacheInterface $cache) use ($code, $classGenerator) {
+        $cache = $cacheFactory->cache($fileName, static function (ConfigCacheInterface $cache) use ($code, $classGenerator): void {
             /** @phpstan-var class-string $superClass */
             $superClass = $classGenerator->getExtendedClass();
             $cache->write('<?php ' . $code, [new ReflectionClassResource(new ReflectionClass($superClass))]);
