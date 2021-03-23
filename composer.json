@@ -3,6 +3,7 @@
     "description": "Symfony bundle/integration for solido suite",
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Alessandro Chitolina",

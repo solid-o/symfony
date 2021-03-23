@@ -14,5 +14,10 @@
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="annotations.reader" on-invalid="null" />
         </service>
+
+        <service id="solido.dto-management.controller_version_validator_listener" class="Solido\Symfony\EventListener\ControllerVersionValidatorListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface" />
+        </service>
     </services>
 </container>
