@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Solido\Symfony\Tests\DependencyInjection;
 
@@ -9,12 +11,17 @@ use Solido\Serialization\Adapter\KcsSerializerAdapter;
 use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Solido\Symfony\DependencyInjection\SolidoExtension;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerRealRefPass;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerWeakRefPass;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+
+use function get_debug_type;
 use function Safe\tempnam;
+use function sys_get_temp_dir;
 
 class SolidoExtensionTest extends TestCase
 {
@@ -46,14 +53,35 @@ class SolidoExtensionTest extends TestCase
 
         $this->container->loadFromExtension('kcs_serializer', []);
         $this->container->loadFromExtension($this->extension->getAlias(), [
-            'serializer' => [
-                'enabled' => true,
-            ],
+            'serializer' => ['enabled' => true],
         ]);
 
         $this->container->compile();
 
         self::assertTrue($this->container->hasAlias(SerializerInterface::class));
         self::assertEquals(KcsSerializerAdapter::class, $this->container->findDefinition(SerializerInterface::class)->getClass());
+    }
+
+    /**
+     * @dataProvider provideInvalidGroups
+     */
+    public function testShouldThrowOnInvalidSerializationGroupsType($data): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('expected array, ' . get_debug_type($data) . ' given');
+
+        $this->container->registerExtension($this->extension);
+        $this->container->loadFromExtension($this->extension->getAlias(), [
+            'serializer' => ['groups' => $data],
+        ]);
+
+        $this->container->compile();
+    }
+
+    public function provideInvalidGroups()
+    {
+        yield [''];
+        yield [42];
+        yield [new stdClass()];
     }
 }

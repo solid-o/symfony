@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DependencyInjection;
 
+use InvalidArgumentException;
 use Solido\BodyConverter\BodyConverterInterface;
 use Solido\Cors\Configuration as CorsConfiguration;
 use Solido\Cors\RequestHandlerInterface;
@@ -11,7 +12,10 @@ use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+use function get_debug_type;
 use function interface_exists;
+use function is_array;
+use function Safe\sprintf;
 
 class Configuration implements ConfigurationInterface
 {
@@ -93,10 +97,14 @@ class Configuration implements ConfigurationInterface
                             ->info('The serializer id (must implement Solido\Serialization\SerializerInterface)')
                         ->end()
                         ->scalarNode('charset')->defaultValue('UTF-8')->end()
-                        ->arrayNode('groups')
-                            ->requiresAtLeastOneElement()
-                            ->defaultValue(['Default'])
-                            ->scalarPrototype()->end()
+                        ->variableNode('groups')
+                            ->defaultValue(null)
+                            ->validate()
+                                ->ifTrue(static fn ($data): bool => $data !== null && ! is_array($data))
+                                ->then(static function ($data): void {
+                                    throw new InvalidArgumentException(sprintf('expected array, %s given', get_debug_type($data)));
+                                })
+                            ->end()
                         ->end()
                         ->booleanNode('catch_exceptions')
                             ->defaultValue(true)

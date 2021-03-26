@@ -32,10 +32,13 @@ class RegisterSerializerPass implements CompilerPassInterface
             return;
         }
 
+        $defaultGroups = $config['serializer']['groups'];
         if ($container->hasDefinition('kcs_serializer.serializer')) {
+            $defaultGroups ??= ['Default'];
             $def = $container->register('solido.serializer', KcsSerializerAdapter::class)
                 ->addArgument(new Reference('kcs_serializer.serializer'));
         } elseif ($container->hasDefinition('jms_serializer.serializer')) {
+            $defaultGroups ??= ['Default'];
             $def = $container->register('solido.serializer', JmsSerializerAdapter::class)
                 ->addArgument(new Reference('jms_serializer.serializer'));
         } elseif ($container->hasDefinition('serializer')) {
@@ -45,7 +48,7 @@ class RegisterSerializerPass implements CompilerPassInterface
             throw new InvalidConfigurationException('Cannot find a valid serializer. Install or enable one of kcs/serializer, jms/serializer-bundle, symfony/serializer or specify the serializer adapter service id under solido.serializer.id configuration key.');
         }
 
-        $def->addArgument($config['serializer']['groups']);
+        $def->addArgument($defaultGroups);
         $def->setPublic(true);
     }
 }
