@@ -36,7 +36,7 @@ class CacheWriterGeneratorStrategy implements GeneratorStrategyInterface
 
     public function generate(ClassGenerator $classGenerator): string
     {
-        $className = trim($classGenerator->getNamespaceName(), '\\') . '\\' . trim($classGenerator->getName(), '\\');
+        $className = trim($classGenerator->getNamespaceName() ?? '', '\\') . '\\' . trim($classGenerator->getName(), '\\');
         $fileName = $this->configuration->getProxiesTargetDir() . DIRECTORY_SEPARATOR . str_replace('\\', '', $className) . '.php';
 
         $code = $classGenerator->generate();

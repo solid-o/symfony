@@ -3,6 +3,7 @@
 namespace Solido\Symfony\Tests\Fixtures\Proxy;
 
 use Kcs\Serializer\Bundle\SerializerBundle;
+use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Solido\Symfony\SolidoBundle;
 use Solido\Symfony\Tests\Fixtures\TestKernel;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -19,6 +20,7 @@ class AppKernel extends TestKernel
     {
         return [
             new FrameworkBundle(),
+            new SensioFrameworkExtraBundle(),
             new SolidoBundle(),
             new DebugBundle(),
             new SecurityBundle(),

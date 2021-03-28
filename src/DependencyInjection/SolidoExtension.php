@@ -51,6 +51,7 @@ class SolidoExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('compat_sensio_framework_extra.xml');
 
         if ($config['body_converter']['enabled'] && interface_exists(DecoderProviderInterface::class)) {
             $loader->load('body_converter.xml');

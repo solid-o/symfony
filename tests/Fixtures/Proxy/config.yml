@@ -1,6 +1,8 @@
 framework:
     test: ~
     secret: secret
+    profiler:
+        collect: true
     router:
         resource: "%kernel.root_dir%/routing.yml"
 

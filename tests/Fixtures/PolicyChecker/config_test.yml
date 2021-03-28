@@ -31,7 +31,6 @@ sensio_framework_extra:
     view:        { annotations: false }
     cache:       { annotations: true }
     security:    { annotations: true }
-    psr_message: { enabled: false }
 
 solido:
     test: ~

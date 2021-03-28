@@ -24,7 +24,6 @@ sensio_framework_extra:
     view:        { annotations: false }
     cache:       { annotations: true }
     security:    { annotations: true }
-    psr_message: { enabled: false }
 
 services:
     Solido\Symfony\Tests\Fixtures\View\Controller\TestController:
