@@ -18,6 +18,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php_version }}
                   extensions: :opcache
+
             - run: composer install
             - run: vendor/bin/phpunit --coverage-clover phpunit/phpunit.coverage.xml --log-junit phpunit/junit.xml
 
