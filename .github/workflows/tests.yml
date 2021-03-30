@@ -19,4 +19,29 @@ jobs:
                   php-version: ${{ matrix.php_version }}
                   extensions: :opcache
             - run: composer install
-            - run: vendor/bin/phpunit
+            - run: vendor/bin/phpunit --coverage-clover phpunit/phpunit.coverage.xml --log-junit phpunit/junit.xml
+
+            - name: Set repository name
+              id: repository-name
+              run: >
+                echo ::set-output name=REPOSITORY_NAME::$(echo $GITHUB_REPOSITORY | tr '/' '_') ;
+                echo ::set-output name=REPOSITORY_OWNER::$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+            - name: fix code coverage paths
+              working-directory: ./phpunit
+              run: |
+                sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' phpunit.coverage.xml
+                sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' junit.xml
+
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@v1.5
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              with:
+                  args:
+                      -Dsonar.projectKey=${{ steps.repository-name.outputs.REPOSITORY_NAME }}
+                      -Dsonar.organization=${{ steps.repository-name.outputs.REPOSITORY_OWNER }}
+                      -Dsonar.sources=src
+                      -Dsonar.tests=tests
+                      -Dsonar.php.coverage.reportPaths=phpunit/phpunit.coverage.xml
+                      -Dsonar.php.tests.reportPath=phpunit/junit.xml
