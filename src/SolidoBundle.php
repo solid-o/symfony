@@ -10,6 +10,7 @@ use Solido\Symfony\DependencyInjection\CompilerPass\PolicyCheckerCollectorTempla
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterBodyConverterDecoders;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterDtoExtensionsPass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterDtoProxyCasterPass;
+use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSecurityExtensionLanguageProviderPass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,6 +31,7 @@ class SolidoBundle extends Bundle
             ->addCompilerPass(new RegisterBodyConverterDecoders())
             ->addCompilerPass(new RegisterSerializerPass())
             ->addCompilerPass(new PolicyCheckerCollectorTemplatePass())
+            ->addCompilerPass(new RegisterSecurityExtensionLanguageProviderPass())
             ->addCompilerPass(new AddDtoInterceptorsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 15);
     }
 

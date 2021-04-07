@@ -2453,16 +2453,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "2afde5a9844126bc311cd5f548b5475e75f800d3"
+                "reference": "a036d90c303f3163b5be8b8fde9b6755b2be4a3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/2afde5a9844126bc311cd5f548b5475e75f800d3",
-                "reference": "2afde5a9844126bc311cd5f548b5475e75f800d3",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/a036d90c303f3163b5be8b8fde9b6755b2be4a3a",
+                "reference": "a036d90c303f3163b5be8b8fde9b6755b2be4a3a",
                 "shasum": ""
             },
             "require": {
@@ -2475,7 +2475,8 @@
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpunit": "^7.5.20 || ^8.5 || ^9.0",
                 "squizlabs/php_codesniffer": "^3.0",
-                "symfony/phpunit-bridge": "^4.0.5"
+                "symfony/phpunit-bridge": "^4.0.5",
+                "vimeo/psalm": "^4.4"
             },
             "type": "library",
             "autoload": {
@@ -2522,7 +2523,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/common/issues",
-                "source": "https://github.com/doctrine/common/tree/3.1.1"
+                "source": "https://github.com/doctrine/common/tree/3.1.2"
             },
             "funding": [
                 {
@@ -2538,7 +2539,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-20T19:58:05+00:00"
+            "time": "2021-02-10T20:18:51+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -2964,16 +2965,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.20",
+            "version": "8.12.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "743585979ef96f2be123518c0a58083cf678bd47"
+                "reference": "272b8123ba7f1b7975620c6389e7206281b4a3ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/743585979ef96f2be123518c0a58083cf678bd47",
-                "reference": "743585979ef96f2be123518c0a58083cf678bd47",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/272b8123ba7f1b7975620c6389e7206281b4a3ce",
+                "reference": "272b8123ba7f1b7975620c6389e7206281b4a3ce",
                 "shasum": ""
             },
             "require": {
@@ -3033,7 +3034,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2021-03-17T11:05:55+00:00"
+            "time": "2021-04-06T08:37:32+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -3317,16 +3318,16 @@
         },
         {
             "name": "kcs/class-finder",
-            "version": "0.2.2",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alekitto/class-finder.git",
-                "reference": "0881f19dcc54035d1aa3ede470f495f1fed9f349"
+                "reference": "18898c239517d10f1b2dda066135faa221b7cbb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alekitto/class-finder/zipball/0881f19dcc54035d1aa3ede470f495f1fed9f349",
-                "reference": "0881f19dcc54035d1aa3ede470f495f1fed9f349",
+                "url": "https://api.github.com/repos/alekitto/class-finder/zipball/18898c239517d10f1b2dda066135faa221b7cbb9",
+                "reference": "18898c239517d10f1b2dda066135faa221b7cbb9",
                 "shasum": ""
             },
             "require": {
@@ -3366,7 +3367,7 @@
             "description": "Utility classes to help discover other classes/namespaces",
             "support": {
                 "issues": "https://github.com/alekitto/class-finder/issues",
-                "source": "https://github.com/alekitto/class-finder/tree/0.2.2"
+                "source": "https://github.com/alekitto/class-finder/tree/0.3.0"
             },
             "funding": [
                 {
@@ -3374,20 +3375,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-02-22T12:24:33+00:00"
+            "time": "2021-03-31T08:52:52+00:00"
         },
         {
             "name": "kcs/metadata",
-            "version": "v4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alekitto/metadata.git",
-                "reference": "80da67df89e586c1742cfc2d8d957536c1cbcc2f"
+                "reference": "300db25452038f7108965b46fb69602b22dbe21a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alekitto/metadata/zipball/80da67df89e586c1742cfc2d8d957536c1cbcc2f",
-                "reference": "80da67df89e586c1742cfc2d8d957536c1cbcc2f",
+                "url": "https://api.github.com/repos/alekitto/metadata/zipball/300db25452038f7108965b46fb69602b22dbe21a",
+                "reference": "300db25452038f7108965b46fb69602b22dbe21a",
                 "shasum": ""
             },
             "require": {
@@ -3397,7 +3398,7 @@
             "require-dev": {
                 "doctrine/annotations": "~1.2",
                 "doctrine/cache": "^1.4",
-                "kcs/class-finder": "^0.2",
+                "kcs/class-finder": "^0.2|^0.3",
                 "mikey179/vfsstream": "^1.6",
                 "phpspec/prophecy-phpunit": "^2.0",
                 "phpunit/phpunit": "^9.0",
@@ -3442,7 +3443,7 @@
             ],
             "support": {
                 "issues": "https://github.com/alekitto/metadata/issues",
-                "source": "https://github.com/alekitto/metadata/tree/v4.0.0"
+                "source": "https://github.com/alekitto/metadata/tree/4.0.1"
             },
             "funding": [
                 {
@@ -3450,7 +3451,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-19T15:02:46+00:00"
+            "time": "2021-03-31T15:53:23+00:00"
         },
         {
             "name": "kcs/serializer",
@@ -4503,16 +4504,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.82",
+            "version": "0.12.83",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11"
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
-                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4a967cec6efb46b500dd6d768657336a3ffe699f",
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f",
                 "shasum": ""
             },
             "require": {
@@ -4543,7 +4544,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.82"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.83"
             },
             "funding": [
                 {
@@ -4559,7 +4560,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-19T06:08:17+00:00"
+            "time": "2021-04-03T15:35:45+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5064,12 +5065,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "0a55b3eacf6b4a0fdc6ec9d01e00285ca9942b2b"
+                "reference": "f3d64e623a75abaababa97e02a31e3771dea481a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0a55b3eacf6b4a0fdc6ec9d01e00285ca9942b2b",
-                "reference": "0a55b3eacf6b4a0fdc6ec9d01e00285ca9942b2b",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f3d64e623a75abaababa97e02a31e3771dea481a",
+                "reference": "f3d64e623a75abaababa97e02a31e3771dea481a",
                 "shasum": ""
             },
             "conflict": {
@@ -5113,7 +5114,7 @@
                 "doctrine/doctrine-module": "<=0.7.1",
                 "doctrine/mongodb-odm": ">=1,<1.0.2",
                 "doctrine/mongodb-odm-bundle": ">=2,<3.0.1",
-                "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
+                "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1|>=2.8.3,<2.8.4",
                 "dolibarr/dolibarr": "<11.0.4",
                 "dompdf/dompdf": ">=0.6,<0.6.2",
                 "drupal/core": ">=7,<7.74|>=8,<8.8.11|>=8.9,<8.9.9|>=9,<9.0.8",
@@ -5180,7 +5181,7 @@
                 "magento/magento1ee": ">=1,<1.14.4.3",
                 "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.2-p.2",
                 "marcwillmann/turn": "<0.3.3",
-                "mautic/core": "<2.16.5|>=3,<3.2.4|= 2.13.1",
+                "mautic/core": "<3.3.2|= 2.13.1",
                 "mediawiki/core": ">=1.27,<1.27.6|>=1.29,<1.29.3|>=1.30,<1.30.2|>=1.31,<1.31.9|>=1.32,<1.32.6|>=1.32.99,<1.33.3|>=1.33.99,<1.34.3|>=1.34.99,<1.35",
                 "mittwald/typo3_forum": "<1.2.1",
                 "monolog/monolog": ">=1.8,<1.12",
@@ -5224,6 +5225,7 @@
                 "prestashop/contactform": ">1.0.1,<4.3",
                 "prestashop/gamification": "<2.3.2",
                 "prestashop/productcomments": ">=4,<4.2.1",
+                "prestashop/ps_emailsubscription": "<2.6.1",
                 "prestashop/ps_facetedsearch": "<3.4.1",
                 "privatebin/privatebin": "<1.2.2|>=1.3,<1.3.2",
                 "propel/propel": ">=2-alpha.1,<=2-alpha.7",
@@ -5393,7 +5395,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-29T21:01:39+00:00"
+            "time": "2021-04-06T18:11:53+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -6749,16 +6751,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/dto-management.git",
-                "reference": "8f977b7018e8de8303a57c779f3070f92dffad43"
+                "reference": "1075d40ea68973230e94e4c0a1301eb0185f150c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/dto-management/zipball/8f977b7018e8de8303a57c779f3070f92dffad43",
-                "reference": "8f977b7018e8de8303a57c779f3070f92dffad43",
+                "url": "https://api.github.com/repos/solid-o/dto-management/zipball/1075d40ea68973230e94e4c0a1301eb0185f150c",
+                "reference": "1075d40ea68973230e94e4c0a1301eb0185f150c",
                 "shasum": ""
             },
             "require": {
-                "kcs/class-finder": "^0.1.5|^0.2",
+                "kcs/class-finder": "^0.1.5|^0.2|^0.3",
                 "nikic/php-parser": "^4.4",
                 "ocramius/proxy-manager": "^2.6",
                 "php": "^7.4|^8.0",
@@ -6800,9 +6802,9 @@
             "description": "Versioned DTO management library.",
             "support": {
                 "issues": "https://github.com/solid-o/dto-management/issues",
-                "source": "https://github.com/solid-o/dto-management/tree/v0.1.1"
+                "source": "https://github.com/solid-o/dto-management/tree/master"
             },
-            "time": "2021-03-23T13:15:08+00:00"
+            "time": "2021-04-01T07:31:53+00:00"
         },
         {
             "name": "solido/pagination",
