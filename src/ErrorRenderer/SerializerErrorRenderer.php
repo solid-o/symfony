@@ -13,6 +13,8 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
+use function method_exists;
+
 class SerializerErrorRenderer implements ErrorRendererInterface
 {
     private ErrorRendererInterface $fallbackErrorRenderer;
@@ -28,7 +30,6 @@ class SerializerErrorRenderer implements ErrorRendererInterface
 
     /**
      * @param array<string, mixed> $serializationContext
-     *
      * @phpstan-param array{groups?: string[]|null, type?: ?string, serialize_null?: bool} $serializationContext
      */
     public function __construct(ErrorRendererInterface $fallbackErrorRenderer, RequestStack $requestStack, SerializerInterface $serializer, array $serializationContext, bool $debug = false)
@@ -42,7 +43,12 @@ class SerializerErrorRenderer implements ErrorRendererInterface
 
     public function render(Throwable $exception): FlattenException
     {
-        $request = $this->requestStack->getMasterRequest();
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            $request = $this->requestStack->getMasterRequest();
+        }
+
         if ($request === null) {
             return $this->fallbackErrorRenderer->render($exception);
         }

@@ -32,7 +32,6 @@ class View implements ConfigurationInterface
     /**
      * @param int|array<string, mixed>|null $statusCode
      * @param string[]|array<string|int, mixed> $groups
-     *
      * @phpstan-param mixed $statusCode
      */
     public function __construct($statusCode = null, ?string $groupsProvider = null, ?string $serializationType = null, ?array $groups = null)

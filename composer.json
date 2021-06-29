@@ -35,7 +35,6 @@
         "refugis/doctrine-extra": "^2.0",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^5.0 || ^6.0",
-        "slevomat/coding-standard": "^6.3",
         "solido/body-converter": "dev-master",
         "solido/common": "dev-master",
         "solido/cors": "dev-master",

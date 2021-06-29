@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 use function array_key_first;
 use function count;
+use function method_exists;
 
 class PolicyVoter implements VoterInterface
 {
@@ -48,7 +49,12 @@ class PolicyVoter implements VoterInterface
      */
     protected function getContext(): array
     {
-        $request = $this->requestStack->getMasterRequest();
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            $request = $this->requestStack->getMasterRequest();
+        }
+
         if ($request === null) {
             return [];
         }

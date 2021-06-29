@@ -1,6 +1,8 @@
 framework:
     test: ~
     secret: secret
+    annotations: true
+    property_access: true
     profiler:
         collect: true
     router:

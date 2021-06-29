@@ -92,10 +92,9 @@ class Processor implements IteratorAggregate
 
     /**
      * @param array<string, ReflectionClass> $classes
+     * @phpstan-param array<class-string, ReflectionClass> $classes
      *
      * @return array<string, ServiceClosureArgument>
-     *
-     * @phpstan-param array<class-string, ReflectionClass> $classes
      */
     private function processInterface(ContainerBuilder $container, string $interface, string $namespace, array $classes): array
     {
