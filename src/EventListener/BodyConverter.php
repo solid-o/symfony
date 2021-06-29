@@ -30,6 +30,7 @@ class BodyConverter implements EventSubscriberInterface
             return;
         }
 
+        // @phpstan-ignore-next-line
         $request->request = class_exists(InputBag::class) ? new InputBag($parameterBag->all()) : $parameterBag;
     }
 
