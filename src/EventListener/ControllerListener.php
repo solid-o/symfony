@@ -10,11 +10,16 @@ use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
+use RuntimeException;
 use Solido\DtoManagement\Proxy\ProxyInterface;
 use Solido\Symfony\Configuration\ConfigurationInterface;
+use Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Symfony\Component\Config\ConfigCacheInterface;
+use Symfony\Component\Config\Resource\ReflectionClassResource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\VarExporter\VarExporter;
 use UnexpectedValueException;
 
 use function array_key_exists;
@@ -30,20 +35,52 @@ use function method_exists;
 use function Safe\sprintf;
 use function Safe\substr;
 use function strrpos;
+use function strtr;
 
 use const PHP_VERSION_ID;
 
 /**
  * The ControllerListener class parses annotation blocks located in
  * controller classes.
+ *
+ * @internal
  */
 class ControllerListener implements EventSubscriberInterface
 {
+    private ConfigCacheFactoryInterface $cacheFactory;
+    private string $cacheDir;
     private ?Reader $reader;
 
-    public function __construct(?Reader $reader = null)
+    public function __construct(ConfigCacheFactoryInterface $cacheFactory, string $cacheDir, ?Reader $reader = null)
     {
+        $this->cacheFactory = $cacheFactory;
+        $this->cacheDir = $cacheDir;
         $this->reader = $reader;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [KernelEvents::CONTROLLER => 'onKernelController'];
+    }
+
+    /**
+     * @internal
+     */
+    public static function getRealClass(string $class): string
+    {
+        if (class_exists(Proxy::class)) {
+            $pos = strrpos($class, '\\' . Proxy::MARKER . '\\');
+            if ($pos === false) {
+                return $class;
+            }
+
+            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+        }
+
+        return $class;
     }
 
     /**
@@ -68,13 +105,12 @@ class ControllerListener implements EventSubscriberInterface
             }
         }
 
+        if ($className === null) {
+            return;
+        }
+
         /** @phpstan-var array{0: object, 1: string} $controller */
-        $object = new ReflectionClass($className);
-        $method = $object->getMethod($controller[1]);
-
-        $classConfigurations = $this->getConfigurations($this->getClassAttributes($object));
-        $methodConfigurations = $this->getConfigurations($this->getMethodAttributes($method));
-
+        [$classConfigurations, $methodConfigurations] = $this->getConfigurations($this->cacheDir, $className, $controller[1]);
         $configurations = [];
         foreach (array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
             if (! array_key_exists($key, $classConfigurations)) {
@@ -101,6 +137,9 @@ class ControllerListener implements EventSubscriberInterface
             return;
         }
 
+        $object = new ReflectionClass($className);
+        $method = $object->getMethod($controller[1]);
+
         $controllerName = sprintf(
             '.solido.dto.%s.%s:%s',
             $className,
@@ -112,11 +151,49 @@ class ControllerListener implements EventSubscriberInterface
     }
 
     /**
+     * @internal
+     *
+     * @phpstan-param class-string $className
+     */
+    public function getConfigCache(string $className, string $methodName, string $cacheDir): ConfigCacheInterface
+    {
+        $filename = sprintf('/solido_attributes/%s/%s.php', strtr($className, ['/' => '', '\\' => '']), $methodName);
+
+        return $this->cacheFactory->cache($cacheDir . $filename, function (ConfigCacheInterface $cache) use ($className, $methodName): void {
+            $object = new ReflectionClass($className);
+            $method = $object->getMethod($methodName);
+
+            $classConfigurations = $this->getConfigurationsFromAttributes($this->getClassAttributes($object));
+            $methodConfigurations = $this->getConfigurationsFromAttributes($this->getMethodAttributes($method));
+
+            $exported = VarExporter::export([$classConfigurations, $methodConfigurations]);
+            $cache->write('<?php return ' . $exported . ';', [new ReflectionClassResource($object)]);
+        });
+    }
+
+    /**
+     * @phpstan-param class-string $className
+     *
+     * @return ConfigurationInterface[][]
+     * @phpstan-return array{0: array<string, ConfigurationInterface|ConfigurationInterface[]>, 1: array<string, ConfigurationInterface|ConfigurationInterface[]>}
+     */
+    private function getConfigurations(string $cacheDir, string $className, string $methodName): array
+    {
+        if (! class_exists(VarExporter::class)) {
+            throw new RuntimeException('Symfony VarExporter needs to be installed. Please run composer require symfony/var-exporter');
+        }
+
+        $cache = $this->getConfigCache($className, $methodName, $cacheDir);
+
+        return require $cache->getPath();
+    }
+
+    /**
      * @param object[] $annotations
      *
      * @return ConfigurationInterface[]|ConfigurationInterface[][]
      */
-    private function getConfigurations(array $annotations): array
+    private function getConfigurationsFromAttributes(array $annotations): array
     {
         /** @phpstan-var array<string, ConfigurationInterface|ConfigurationInterface[]> $configurations */
         $configurations = [];
@@ -134,28 +211,6 @@ class ControllerListener implements EventSubscriberInterface
         }
 
         return $configurations;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [KernelEvents::CONTROLLER => 'onKernelController'];
-    }
-
-    private static function getRealClass(string $class): string
-    {
-        if (class_exists(Proxy::class)) {
-            $pos = strrpos($class, '\\' . Proxy::MARKER . '\\');
-            if ($pos === false) {
-                return $class;
-            }
-
-            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
-        }
-
-        return $class;
     }
 
     /**

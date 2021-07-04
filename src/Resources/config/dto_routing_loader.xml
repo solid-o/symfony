@@ -12,7 +12,15 @@
 
         <service id="solido.dto-management.controller_listener" class="Solido\Symfony\EventListener\ControllerListener">
             <tag name="kernel.event_subscriber" />
+            <argument type="service" id="config_cache_factory" />
+            <argument>%kernel.cache_dir%</argument>
             <argument type="service" id="annotations.reader" on-invalid="null" />
+        </service>
+
+        <service id="solido.dto-management.controller_listener_warmer" class="Solido\Symfony\Config\ControllerCacheWarmer">
+            <argument type="service" id="solido.dto-management.controller_listener" />
+            <argument type="service" id="router.default" />
+            <argument type="service" id="controller_resolver" />
         </service>
 
         <service id="solido.dto-management.controller_version_validator_listener" class="Solido\Symfony\EventListener\ControllerVersionValidatorListener">
