@@ -8,6 +8,7 @@ use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface;
 use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 

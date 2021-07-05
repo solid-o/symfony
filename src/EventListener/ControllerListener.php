@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\EventListener;
 
+use Closure;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\Proxy;
 use LogicException;
@@ -95,6 +96,10 @@ class ControllerListener implements EventSubscriberInterface
 
         /** @phpstan-var object|array{0: object, 1: string} $controller */
         $controller = $event->getController();
+        if ($controller instanceof Closure) {
+            return;
+        }
+
         if ($className === null) {
             if (! is_array($controller) && method_exists($controller, '__invoke')) {
                 $controller = [$controller, '__invoke'];

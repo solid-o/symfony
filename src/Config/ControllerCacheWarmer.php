@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\Config;
 
+use Closure;
 use InvalidArgumentException;
 use Solido\Symfony\EventListener\ControllerListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +57,10 @@ class ControllerCacheWarmer implements CacheWarmerInterface
             try {
                 $controller = $this->controllerResolver->getController($request);
             } catch (InvalidArgumentException $e) {
+                continue;
+            }
+
+            if ($controller instanceof Closure) {
                 continue;
             }
 
