@@ -69,18 +69,19 @@ class ControllerListener implements EventSubscriberInterface
 
     /**
      * @internal
+     *
+     * @phpstan-return class-string
      */
     public static function getRealClass(string $class): string
     {
         if (class_exists(Proxy::class)) {
             $pos = strrpos($class, '\\' . Proxy::MARKER . '\\');
-            if ($pos === false) {
-                return $class;
+            if ($pos !== false) {
+                $class = substr($class, $pos + Proxy::MARKER_LENGTH + 2);
             }
-
-            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
         }
 
+        /** @phpstan-var class-string $class */
         return $class;
     }
 

@@ -12,6 +12,7 @@ use Solido\Symfony\Annotation\View;
 use Solido\Symfony\Config\ControllerCacheWarmer;
 use Solido\Symfony\EventListener\ControllerListener;
 
+use Solido\Symfony\EventListener\FormInvalidExceptionSubscriber;
 use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
@@ -77,6 +78,17 @@ class ControllerCacheWarmerTest extends TestCase
 
         $this->router->getRouteCollection()->willReturn($collection);
         self::assertEquals([], $this->warmer->warmUp($this->cacheDir));
+    }
+
+    public function testShouldProcessAdditionalControllers(): void
+    {
+        $collection = new RouteCollection();
+        $this->router->getRouteCollection()->willReturn($collection);
+
+        $this->warmer->addAdditionalController([FormInvalidExceptionSubscriber::class, 'formAction']);
+        self::assertEquals([
+            $this->cacheDir . '/solido_attributes/' . str_replace('\\', '', FormInvalidExceptionSubscriber::class) . '/formAction.php',
+        ], $this->warmer->warmUp($this->cacheDir));
     }
 
     public function testShouldSkipRoutesWithFunctionController(): void

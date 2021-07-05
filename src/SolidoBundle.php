@@ -6,6 +6,7 @@ namespace Solido\Symfony;
 
 use Solido\Common\Urn\Urn;
 use Solido\Symfony\DependencyInjection\CompilerPass\AddDtoInterceptorsPass;
+use Solido\Symfony\DependencyInjection\CompilerPass\ControllerCachePass;
 use Solido\Symfony\DependencyInjection\CompilerPass\PolicyCheckerCollectorTemplatePass;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterBodyConverterDecoders;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterDtoExtensionsPass;
@@ -26,6 +27,7 @@ class SolidoBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         $container
+            ->addCompilerPass(new ControllerCachePass())
             ->addCompilerPass(new RegisterDtoProxyCasterPass())
             ->addCompilerPass(new RegisterDtoExtensionsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 40)
             ->addCompilerPass(new RegisterBodyConverterDecoders())

@@ -1,5 +1,8 @@
 name: Code style check
-on: [push, pull_request]
+on:
+    push:
+    pull_request:
+        types: [opened]
 
 jobs:
     build:
