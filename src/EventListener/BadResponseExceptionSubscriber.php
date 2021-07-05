@@ -6,7 +6,7 @@ namespace Solido\Symfony\EventListener;
 
 use Solido\Atlante\Requester\Exception\BadRequestException;
 use Solido\Atlante\Requester\Response\BadResponse;
-use Solido\Symfony\Serialization\SerializerInterface;
+use Solido\Serialization\SerializerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
