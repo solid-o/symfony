@@ -7,6 +7,7 @@ namespace Solido\Symfony\EventListener;
 use Solido\BodyConverter\BodyConverterInterface as Converter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -24,14 +25,14 @@ class BodyConverter implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $parameterBag = $this->bodyConverter->decode($request);
+        $parameters = $this->bodyConverter->decode($request);
 
-        if ($parameterBag->count() === 0 && $request->request->count() !== 0) {
+        if (empty($parameters) && $request->request->count() !== 0) {
             return;
         }
 
         // @phpstan-ignore-next-line
-        $request->request = class_exists(InputBag::class) ? new InputBag($parameterBag->all()) : $parameterBag;
+        $request->request = class_exists(InputBag::class) ? new InputBag($parameters) : new ParameterBag($parameters);
     }
 
     /**
