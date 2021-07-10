@@ -8,10 +8,13 @@ use Solido\Cors\Exception\InvalidOriginException;
 use Solido\Symfony\Cors\HandlerFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+use function assert;
 
 class CorsListener implements EventSubscriberInterface
 {
@@ -51,7 +54,10 @@ class CorsListener implements EventSubscriberInterface
         }
 
         try {
-            $event->setResponse($handler->handleCorsRequest($request, $exception->getHeaders()['Allow'] ?? null));
+            $response = $handler->handleCorsRequest($request, $exception->getHeaders()['Allow'] ?? null);
+            assert($response instanceof Response);
+
+            $event->setResponse($response);
             $event->allowCustomResponseCode();
         } catch (InvalidOriginException $exception) {
             // @ignoreException

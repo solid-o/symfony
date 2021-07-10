@@ -7,11 +7,13 @@
         <service alias="Solido\Versioning\AcceptHeaderVersionGuesser" id="solido.versioning.version_guesser_accept" />
         <service class="Solido\Versioning\AcceptHeaderVersionGuesser" id="Solido\Versioning\AcceptHeaderVersionGuesser">
             <argument>%solido.format.priorities%</argument>
+            <argument type="service" id="Solido\Common\AdapterFactoryInterface" />
         </service>
 
         <service alias="Solido\Versioning\CustomHeaderVersionGuesser" id="solido.versioning.version_guesser_custom_header" />
         <service class="Solido\Versioning\CustomHeaderVersionGuesser" id="Solido\Versioning\CustomHeaderVersionGuesser">
             <argument>%solido.versioning.custom_header_name%</argument>
+            <argument type="service" id="Solido\Common\AdapterFactoryInterface" />
         </service>
     </services>
 </container>

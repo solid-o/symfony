@@ -18,6 +18,7 @@
         <service alias="Solido\BodyConverter\BodyConverterInterface" id="solido.body_converter" />
         <service class="Solido\BodyConverter\BodyConverter" id="Solido\BodyConverter\BodyConverter">
             <argument type="service" id="Solido\BodyConverter\Decoder\DecoderProviderInterface" />
+            <argument type="service" id="Solido\Common\AdapterFactoryInterface" />
         </service>
 
         <service class="Solido\Symfony\EventListener\BodyConverter" id="Solido\Symfony\EventListener\BodyConverter">

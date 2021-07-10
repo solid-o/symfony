@@ -7,6 +7,12 @@
         <service class="Solido\DataTransformers\Transformer\Base64UriFileTransformer" id="Solido\DataTransformers\Transformer\Base64UriFileTransformer" />
         <service alias="Solido\DataTransformers\Transformer\Base64UriFileTransformer" id="solido.data_transformer.base64_data_uri" />
 
+        <service class="Solido\DataTransformers\Transformer\Base64UriToPsr7FileTransformer" id="Solido\DataTransformers\Transformer\Base64UriToPsr7FileTransformer">
+            <argument type="service" id="Psr\Http\Message\UploadedFileFactoryInterface" on-invalid="ignore" />
+            <argument type="service" id="Psr\Http\Message\StreamFactoryInterface" on-invalid="ignore" />
+        </service>
+        <service alias="Solido\DataTransformers\Transformer\Base64UriToPsr7FileTransformer" id="solido.data_transformer.base64_data_uri_to_psr7" />
+
         <service class="Solido\DataTransformers\Transformer\BooleanTransformer" id="Solido\DataTransformers\Transformer\BooleanTransformer" />
         <service alias="Solido\DataTransformers\Transformer\BooleanTransformer" id="solido.data_transformer.boolean" />
 

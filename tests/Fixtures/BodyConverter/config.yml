@@ -1,5 +1,6 @@
 imports:
     - { resource: '../../../src/Resources/config/body_converter.xml' }
+    - { resource: '../../../src/Resources/config/solido.xml' }
 
 framework:
     test: ~

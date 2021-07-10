@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\DependencyInjection;
 
 use Solido\BodyConverter\Decoder\DecoderProviderInterface;
+use Solido\Common\AdapterFactoryInterface;
 use Solido\Common\Urn\UrnConverter;
 use Solido\Cors\RequestHandler;
 use Solido\Cors\RequestHandlerInterface;
@@ -51,6 +52,7 @@ class SolidoExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('solido.xml');
         $loader->load('compat_sensio_framework_extra.xml');
 
         if ($config['body_converter']['enabled'] && interface_exists(DecoderProviderInterface::class)) {
@@ -123,7 +125,8 @@ class SolidoExtension extends Extension
                         $pathConfig['allow_headers'] ?? $corsConfig['allow_headers'],
                         $pathConfig['expose_headers'] ?? $corsConfig['expose_headers'],
                         $pathConfig['max_age'] ?? $corsConfig['max_age'],
-                    ]);
+                    ])
+                    ->addMethodCall('setAdapterFactory', [new Reference(AdapterFactoryInterface::class)]);
 
                 $pathConfig = [
                     'paths' => $pathConfig['paths'],

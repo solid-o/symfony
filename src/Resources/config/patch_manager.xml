@@ -11,6 +11,9 @@
             <call method="setCache">
                 <argument type="service" id="cache.app" on-invalid="ignore" />
             </call>
+            <call method="setAdapterFactory">
+                <argument type="service" id="Solido\Common\AdapterFactoryInterface" />
+            </call>
         </service>
 
         <service alias="Solido\PatchManager\PatchManager" id="solido.patch_manager" public="true" />
