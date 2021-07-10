@@ -1,4 +1,5 @@
 name: PHPStan
+
 on:
     push:
     pull_request:
@@ -7,17 +8,30 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php_version:
-                    - '8.0'
-
-        name: PHP ${{ matrix.php_version }}
+        name: Static analysis
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP with pecl extension
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: ${{ matrix.php_version }}
-            - run: composer install
-            - run: composer phpstan
+            -   uses: actions/checkout@v2
+
+            -   name: Install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: none
+                    php-version: "8.0"
+                    tools: cs2pr
+
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v1
+                with:
+                    path: "~/.composer/cache"
+                    key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('composer.lock') }}
+                    restore-keys: php-${{ matrix.php-version }}-composer-locked-
+
+            -   name: Install dependencies with composer
+                run: composer update --no-progress --no-suggest --no-interaction --prefer-dist
+
+            -   if: ${{ github.base_ref == '' }}
+                run: composer phpstan
+
+            -   name: Run a static analysis with phpstan/phpstan
+                if: ${{ github.base_ref != '' }}
+                run: composer phpstan --error-format=checkstyle | cs2pr

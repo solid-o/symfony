@@ -1,4 +1,5 @@
-name: Code style check
+name: Check CS
+
 on:
     push:
     pull_request:
@@ -7,17 +8,40 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php_version:
-                    - '7.4'
-
-        name: PHP ${{ matrix.php_version }}
+        name: Check code style
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP with pecl extension
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: ${{ matrix.php_version }}
-            - run: composer install
-            - run: composer cscheck
+            -   uses: actions/checkout@v2
+                with:
+                    fetch-depth: 10
+
+            -   name: Install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: none
+                    php-version: "7.4"
+                    tools: cs2pr
+
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v1
+                with:
+                    path: "~/.composer/cache"
+                    key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('composer.lock') }}
+                    restore-keys: php-${{ matrix.php-version }}-composer-locked-
+
+            -   name: Install dependencies with composer
+                run: composer update --no-interaction --no-progress --no-suggest
+
+            -   if: ${{ github.base_ref == '' }}
+                run: composer cscheck
+
+            -   name: Install git-phpcs
+                if: ${{ github.base_ref != '' }}
+                run: wget https://github.com/diff-sniffer/diff-sniffer/releases/download/0.5.1/diff-sniffer.phar
+
+            -   name: Fetch head branch
+                if: ${{ github.base_ref != '' }}
+                run: git remote set-branches --add origin $GITHUB_BASE_REF && git fetch origin $GITHUB_BASE_REF
+
+            -   name: Run diff-sniffer
+                if: ${{ github.base_ref != '' }}
+                run: php diff-sniffer.phar origin/$GITHUB_BASE_REF...$GITHUB_SHA --report=checkstyle --standard=Solido src/ | cs2pr

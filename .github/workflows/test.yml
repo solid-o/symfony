@@ -16,6 +16,9 @@ jobs:
         name: PHP ${{ matrix.php_version }}
         steps:
             - uses: actions/checkout@v2
+              with:
+                fetch-depth: 0
+
             - name: Setup PHP with pecl extension
               uses: shivammathur/setup-php@v2
               with:
@@ -28,13 +31,13 @@ jobs:
             - name: Set repository name
               id: repository-name
               run: >
-                echo ::set-output name=REPOSITORY_NAME::$(echo $GITHUB_REPOSITORY | tr '/' '_') ;
-                echo ::set-output name=REPOSITORY_OWNER::$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+                  echo ::set-output name=REPOSITORY_NAME::$(echo $GITHUB_REPOSITORY | tr '/' '_') ;
+                  echo ::set-output name=REPOSITORY_OWNER::$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
             - name: fix code coverage paths
               working-directory: ./phpunit
               run: |
-                sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' phpunit.coverage.xml
-                sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' junit.xml
+                  sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' phpunit.coverage.xml
+                  sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' junit.xml
 
             - name: SonarCloud Scan
               uses: sonarsource/sonarcloud-github-action@v1.5
