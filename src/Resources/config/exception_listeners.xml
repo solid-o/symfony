@@ -5,6 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service class="Solido\Symfony\EventListener\BadResponseExceptionSubscriber" id="Solido\Symfony\EventListener\BadResponseExceptionSubscriber">
+            <tag name="kernel.event_subscriber" />
+        </service>
+
         <service class="Solido\Symfony\EventListener\FormInvalidExceptionSubscriber" id="Solido\Symfony\EventListener\FormInvalidExceptionSubscriber">
             <tag name="kernel.event_subscriber" />
         </service>
