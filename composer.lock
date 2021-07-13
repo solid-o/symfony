@@ -5095,12 +5095,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "1a08d0c7ab47e57fad0d254951a615f07445e91f"
+                "reference": "88c4d972f82b364386c98eebecf38512708a4de4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1a08d0c7ab47e57fad0d254951a615f07445e91f",
-                "reference": "1a08d0c7ab47e57fad0d254951a615f07445e91f",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/88c4d972f82b364386c98eebecf38512708a4de4",
+                "reference": "88c4d972f82b364386c98eebecf38512708a4de4",
                 "shasum": ""
             },
             "conflict": {
@@ -5158,6 +5158,7 @@
                 "endroid/qr-code-bundle": "<3.4.2",
                 "enshrined/svg-sanitize": "<0.13.1",
                 "erusev/parsedown": "<1.7.2",
+                "ether/logs": "<3.0.4",
                 "ezsystems/demobundle": ">=5.4,<5.4.6.1",
                 "ezsystems/ez-support-tools": ">=2.2,<2.2.3",
                 "ezsystems/ezdemo-ls-extension": ">=5.4,<5.4.2.1",
@@ -5462,7 +5463,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-02T20:02:51+00:00"
+            "time": "2021-07-12T17:14:45+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -6508,16 +6509,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "7.0.10",
+            "version": "7.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "4607562c9d217a1026c9effde4fc78065571fd19"
+                "reference": "7151ac79031549850c110815c5fabeccff952592"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/4607562c9d217a1026c9effde4fc78065571fd19",
-                "reference": "4607562c9d217a1026c9effde4fc78065571fd19",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/7151ac79031549850c110815c5fabeccff952592",
+                "reference": "7151ac79031549850c110815c5fabeccff952592",
                 "shasum": ""
             },
             "require": {
@@ -6553,7 +6554,7 @@
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/7.0.10"
+                "source": "https://github.com/slevomat/coding-standard/tree/7.0.11"
             },
             "funding": [
                 {
@@ -6565,7 +6566,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-09T09:07:10+00:00"
+            "time": "2021-07-12T17:14:11+00:00"
         },
         {
             "name": "solido/body-converter",
@@ -6573,17 +6574,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/body-converter.git",
-                "reference": "9785346ec8c088cd6bc3e766306477a6a66ca09b"
+                "reference": "86d28d7090ec0d10a6acd1de76f158e2d66ad287"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/body-converter/zipball/9785346ec8c088cd6bc3e766306477a6a66ca09b",
-                "reference": "9785346ec8c088cd6bc3e766306477a6a66ca09b",
+                "url": "https://api.github.com/repos/solid-o/body-converter/zipball/86d28d7090ec0d10a6acd1de76f158e2d66ad287",
+                "reference": "86d28d7090ec0d10a6acd1de76f158e2d66ad287",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.4 || ^8.0"
+                "php": "^7.4 || ^8.0",
+                "solido/common": "^0.2"
             },
             "require-dev": {
                 "nyholm/psr7": "^1.0",
@@ -6591,7 +6593,6 @@
                 "phpunit/phpunit": "^9.4",
                 "psr/http-message": "^1.0",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/http-foundation": "^4.4 || ^5.0"
             },
@@ -6624,9 +6625,9 @@
             "description": "Library to read request parameters encoded in request body and set them into correct parameter bags",
             "support": {
                 "issues": "https://github.com/solid-o/body-converter/issues",
-                "source": "https://github.com/solid-o/body-converter/tree/master"
+                "source": "https://github.com/solid-o/body-converter/tree/v0.2.0"
             },
-            "time": "2021-07-09T13:36:00+00:00"
+            "time": "2021-07-13T08:25:05+00:00"
         },
         {
             "name": "solido/common",
@@ -6634,12 +6635,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/common.git",
-                "reference": "aa740361be81825927ffc653661c8db8e94ee3dc"
+                "reference": "aa3a9a358a99127ad1696d125062050bf4188ac8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/common/zipball/aa740361be81825927ffc653661c8db8e94ee3dc",
-                "reference": "aa740361be81825927ffc653661c8db8e94ee3dc",
+                "url": "https://api.github.com/repos/solid-o/common/zipball/aa3a9a358a99127ad1696d125062050bf4188ac8",
+                "reference": "aa3a9a358a99127ad1696d125062050bf4188ac8",
                 "shasum": ""
             },
             "require": {
@@ -6657,7 +6658,7 @@
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0",
                 "roave/security-advisories": "dev-master",
-                "solido/body-converter": "^0.2@dev",
+                "solido/body-converter": "^0.2",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/config": "^4.4 || ^5.0",
                 "symfony/form": "^4.4 || ^5.0",
@@ -6667,7 +6668,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.1.x-dev"
+                    "dev-master": "0.2.x-dev"
                 }
             },
             "autoload": {
@@ -6694,7 +6695,7 @@
                 "issues": "https://github.com/solid-o/common/issues",
                 "source": "https://github.com/solid-o/common/tree/master"
             },
-            "time": "2021-07-10T21:19:02+00:00"
+            "time": "2021-07-13T08:26:08+00:00"
         },
         {
             "name": "solido/cors",
@@ -6702,12 +6703,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/cors.git",
-                "reference": "797603675e6ee897b6456f2bec2d9ac66fa89582"
+                "reference": "5a7536305441a30149874935505926d07dbcdde2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/cors/zipball/797603675e6ee897b6456f2bec2d9ac66fa89582",
-                "reference": "797603675e6ee897b6456f2bec2d9ac66fa89582",
+                "url": "https://api.github.com/repos/solid-o/cors/zipball/5a7536305441a30149874935505926d07dbcdde2",
+                "reference": "5a7536305441a30149874935505926d07dbcdde2",
                 "shasum": ""
             },
             "require": {
@@ -6722,7 +6723,7 @@
                 "psr/http-message": "^1.0",
                 "psr/http-server-middleware": "^1.0",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
+                "solido/common": "^0.2",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/http-foundation": "^4.4 || ^5.0"
             },
@@ -6755,9 +6756,9 @@
             "description": "Cross-Origin Resource Sharing (CORS) utilities",
             "support": {
                 "issues": "https://github.com/solid-o/cors/issues",
-                "source": "https://github.com/solid-o/cors/tree/master"
+                "source": "https://github.com/solid-o/cors/tree/v0.2.0"
             },
-            "time": "2021-07-09T14:31:17+00:00"
+            "time": "2021-07-13T09:48:52+00:00"
         },
         {
             "name": "solido/data-transformers",
@@ -6765,12 +6766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/data-transformers.git",
-                "reference": "c3e8eebd792e62362a2584dc64786d2e65ba5181"
+                "reference": "ac006fd9d5f7b5176252b68c9c6b74634e7e720c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/data-transformers/zipball/c3e8eebd792e62362a2584dc64786d2e65ba5181",
-                "reference": "c3e8eebd792e62362a2584dc64786d2e65ba5181",
+                "url": "https://api.github.com/repos/solid-o/data-transformers/zipball/ac006fd9d5f7b5176252b68c9c6b74634e7e720c",
+                "reference": "ac006fd9d5f7b5176252b68c9c6b74634e7e720c",
                 "shasum": ""
             },
             "require": {
@@ -6786,9 +6787,9 @@
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
-                "solido/dto-management": "dev-master",
-                "solido/pagination": "dev-master",
+                "solido/common": "^0.2",
+                "solido/dto-management": "^0.2",
+                "solido/pagination": "^0.2",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/http-foundation": "^4.4 || ^5.0",
                 "symfony/mime": "^4.4 || ^5.0"
@@ -6822,9 +6823,9 @@
             "description": "Common data transformers for usage in REST APIs",
             "support": {
                 "issues": "https://github.com/solid-o/data-transformers/issues",
-                "source": "https://github.com/solid-o/data-transformers/tree/master"
+                "source": "https://github.com/solid-o/data-transformers/tree/v0.2.0"
             },
-            "time": "2021-07-09T09:26:56+00:00"
+            "time": "2021-07-13T14:21:44+00:00"
         },
         {
             "name": "solido/dto-management",
@@ -6832,12 +6833,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/dto-management.git",
-                "reference": "379f1ab6418db18bcbf90b5d079ff5fe8fade3b2"
+                "reference": "52db03e612baca4c59769bfcd845682398437f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/dto-management/zipball/379f1ab6418db18bcbf90b5d079ff5fe8fade3b2",
-                "reference": "379f1ab6418db18bcbf90b5d079ff5fe8fade3b2",
+                "url": "https://api.github.com/repos/solid-o/dto-management/zipball/52db03e612baca4c59769bfcd845682398437f19",
+                "reference": "52db03e612baca4c59769bfcd845682398437f19",
                 "shasum": ""
             },
             "require": {
@@ -6885,9 +6886,9 @@
             "description": "Versioned DTO management library.",
             "support": {
                 "issues": "https://github.com/solid-o/dto-management/issues",
-                "source": "https://github.com/solid-o/dto-management/tree/master"
+                "source": "https://github.com/solid-o/dto-management/tree/v0.2.0"
             },
-            "time": "2021-07-09T14:39:55+00:00"
+            "time": "2021-07-13T14:20:18+00:00"
         },
         {
             "name": "solido/pagination",
@@ -6895,17 +6896,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/pagination.git",
-                "reference": "ee32ed9c176c622e4f3e2d925196332503709536"
+                "reference": "d4fae5ab0c1d49d6fe51f42146007d56bc5a7e9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/pagination/zipball/ee32ed9c176c622e4f3e2d925196332503709536",
-                "reference": "ee32ed9c176c622e4f3e2d925196332503709536",
+                "url": "https://api.github.com/repos/solid-o/pagination/zipball/d4fae5ab0c1d49d6fe51f42146007d56bc5a7e9a",
+                "reference": "d4fae5ab0c1d49d6fe51f42146007d56bc5a7e9a",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0",
-                "solido/common": "dev-master",
+                "solido/common": "^0.2",
                 "symfony/property-access": "^4.4 || ^5.0"
             },
             "require-dev": {
@@ -6921,7 +6922,7 @@
                 "refugis/elastica-odm": "2.x-dev",
                 "roave/security-advisories": "dev-master",
                 "solido/php-coding-standards": "dev-master",
-                "solido/test-utils": "dev-master",
+                "solido/test-utils": "^0.2",
                 "symfony/cache": "^4.4 || ^5.0",
                 "symfony/http-foundation": "^4.4 || ^5.0"
             },
@@ -6954,9 +6955,9 @@
             "description": "Pagination (and endless-pagination) utilities for REST apis",
             "support": {
                 "issues": "https://github.com/solid-o/pagination/issues",
-                "source": "https://github.com/solid-o/pagination/tree/master"
+                "source": "https://github.com/solid-o/pagination/tree/v0.2.0"
             },
-            "time": "2021-07-09T14:49:12+00:00"
+            "time": "2021-07-13T14:18:04+00:00"
         },
         {
             "name": "solido/patch-manager",
@@ -6964,19 +6965,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/patch-manager.git",
-                "reference": "8c2bfe9419b1b104d45bef642813a72e58dc298f"
+                "reference": "e12074c9e970de8ccd267e7c8582763e5ab9ee02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/patch-manager/zipball/8c2bfe9419b1b104d45bef642813a72e58dc298f",
-                "reference": "8c2bfe9419b1b104d45bef642813a72e58dc298f",
+                "url": "https://api.github.com/repos/solid-o/patch-manager/zipball/e12074c9e970de8ccd267e7c8582763e5ab9ee02",
+                "reference": "e12074c9e970de8ccd267e7c8582763e5ab9ee02",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "justinrainbow/json-schema": "^5.2",
                 "php": "^7.4 || ^8.0",
-                "solido/common": "*",
+                "solido/common": "^0.2",
                 "symfony/cache": "^4.4 || ^5.0",
                 "symfony/form": "^4.4 || ^5.0",
                 "symfony/http-foundation": "^4.4 || ^5.0",
@@ -6992,7 +6993,6 @@
                 "phpspec/prophecy-phpunit": "^2.0",
                 "phpunit/phpunit": "^9.4",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/inflector": "^4.4 || ^5.0",
                 "symfony/string": "^4.4 || ^5.0"
@@ -7026,9 +7026,9 @@
             "description": "Patch manager designed for handling PATCH requests on REST apis",
             "support": {
                 "issues": "https://github.com/solid-o/patch-manager/issues",
-                "source": "https://github.com/solid-o/patch-manager/tree/master"
+                "source": "https://github.com/solid-o/patch-manager/tree/v0.2.0"
             },
-            "time": "2021-07-10T08:46:44+00:00"
+            "time": "2021-07-13T14:28:42+00:00"
         },
         {
             "name": "solido/php-coding-standards",
@@ -7085,12 +7085,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/query-language.git",
-                "reference": "234ec3482ace9565adea8b9544cae04d7c8ca386"
+                "reference": "00e617289bf3242f2181e219f7ee80b7bb221a00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/query-language/zipball/234ec3482ace9565adea8b9544cae04d7c8ca386",
-                "reference": "234ec3482ace9565adea8b9544cae04d7c8ca386",
+                "url": "https://api.github.com/repos/solid-o/query-language/zipball/00e617289bf3242f2181e219f7ee80b7bb221a00",
+                "reference": "00e617289bf3242f2181e219f7ee80b7bb221a00",
                 "shasum": ""
             },
             "require": {
@@ -7115,8 +7115,7 @@
                 "phpunit/phpunit": "^9.4",
                 "refugis/doctrine-extra": "^2.1",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
-                "solido/dto-management": "dev-master",
+                "solido/dto-management": "^0.2",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/cache": "^4.4 || ^5.0",
                 "symfony/var-dumper": "^4.4 || ^5.0"
@@ -7125,7 +7124,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.1.x-dev"
+                    "dev-master": "0.2.x-dev"
                 }
             },
             "autoload": {
@@ -7150,9 +7149,9 @@
             "description": "Query language designed for REST apis",
             "support": {
                 "issues": "https://github.com/solid-o/query-language/issues",
-                "source": "https://github.com/solid-o/query-language/tree/master"
+                "source": "https://github.com/solid-o/query-language/tree/v0.2.0"
             },
-            "time": "2021-07-10T19:08:05+00:00"
+            "time": "2021-07-13T14:32:11+00:00"
         },
         {
             "name": "solido/security-policy-checker",
@@ -7160,16 +7159,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/security-policy-checker.git",
-                "reference": "1cef91edc6dbf308c7138709fe1dbaa12e6c2d50"
+                "reference": "5e49eb9b87030304bc912ae4cb82fb6455f4b79c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/security-policy-checker/zipball/1cef91edc6dbf308c7138709fe1dbaa12e6c2d50",
-                "reference": "1cef91edc6dbf308c7138709fe1dbaa12e6c2d50",
+                "url": "https://api.github.com/repos/solid-o/security-policy-checker/zipball/5e49eb9b87030304bc912ae4cb82fb6455f4b79c",
+                "reference": "5e49eb9b87030304bc912ae4cb82fb6455f4b79c",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4|^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "phpspec/prophecy-phpunit": "^2.0",
@@ -7211,9 +7210,9 @@
             "description": "Utilities to build policy-based security checks for REST APIs.",
             "support": {
                 "issues": "https://github.com/solid-o/security-policy-checker/issues",
-                "source": "https://github.com/solid-o/security-policy-checker/tree/master"
+                "source": "https://github.com/solid-o/security-policy-checker/tree/v0.2.0"
             },
-            "time": "2021-07-10T20:51:16+00:00"
+            "time": "2021-07-13T14:39:57+00:00"
         },
         {
             "name": "solido/serialization",
@@ -7221,12 +7220,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/serialization.git",
-                "reference": "c0612c91f4c5cd9949a03233eea1941c039f818e"
+                "reference": "936960a987d4351f2d83836b127d5b190d83fb9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/serialization/zipball/c0612c91f4c5cd9949a03233eea1941c039f818e",
-                "reference": "c0612c91f4c5cd9949a03233eea1941c039f818e",
+                "url": "https://api.github.com/repos/solid-o/serialization/zipball/936960a987d4351f2d83836b127d5b190d83fb9a",
+                "reference": "936960a987d4351f2d83836b127d5b190d83fb9a",
                 "shasum": ""
             },
             "require": {
@@ -7274,9 +7273,9 @@
             "description": "Serialization utilities for Solido suite",
             "support": {
                 "issues": "https://github.com/solid-o/serialization/issues",
-                "source": "https://github.com/solid-o/serialization/tree/master"
+                "source": "https://github.com/solid-o/serialization/tree/v0.2.0"
             },
-            "time": "2021-07-10T20:55:30+00:00"
+            "time": "2021-07-13T14:43:09+00:00"
         },
         {
             "name": "solido/versioning",
@@ -7284,12 +7283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-o/versioning.git",
-                "reference": "56784e2dc7b40f51c1a625155edce3256adb8b59"
+                "reference": "089f849bbd049c519913eb3bb3207e7ba8a60b92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-o/versioning/zipball/56784e2dc7b40f51c1a625155edce3256adb8b59",
-                "reference": "56784e2dc7b40f51c1a625155edce3256adb8b59",
+                "url": "https://api.github.com/repos/solid-o/versioning/zipball/089f849bbd049c519913eb3bb3207e7ba8a60b92",
+                "reference": "089f849bbd049c519913eb3bb3207e7ba8a60b92",
                 "shasum": ""
             },
             "require": {
@@ -7301,7 +7300,6 @@
                 "phpspec/prophecy-phpunit": "^2.0",
                 "phpunit/phpunit": "^9.4",
                 "roave/security-advisories": "dev-master",
-                "solido/common": "dev-master",
                 "solido/php-coding-standards": "dev-master",
                 "symfony/http-foundation": "^4.4 || ^5.0",
                 "willdurand/negotiation": "^2.3 || ^3.0"
@@ -7335,9 +7333,9 @@
             "description": "Versioning utilities for REST apis",
             "support": {
                 "issues": "https://github.com/solid-o/versioning/issues",
-                "source": "https://github.com/solid-o/versioning/tree/master"
+                "source": "https://github.com/solid-o/versioning/tree/v0.2.0"
             },
-            "time": "2021-07-10T22:06:59+00:00"
+            "time": "2021-07-13T14:45:19+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
