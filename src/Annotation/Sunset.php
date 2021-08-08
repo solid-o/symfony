@@ -42,6 +42,6 @@ class Sunset implements ConfigurationInterface
 
     public function getAliasName(): string
     {
-        return 'rest_sunset';
+        return 'solido_sunset';
     }
 }

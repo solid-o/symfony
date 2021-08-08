@@ -90,7 +90,7 @@ class ViewHandlerTest extends WebTestCase
         $tests[] = [new Request(), new Response()];
 
         $request = new Request();
-        $request->attributes->set('_rest_view', new \stdClass());
+        $request->attributes->set('_solido_view', new \stdClass());
         $tests[] = [$request, ['foo' => 'bar']];
 
         return $tests;
@@ -115,7 +115,7 @@ class ViewHandlerTest extends WebTestCase
         $annotation->statusCode = Response::HTTP_CREATED;
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annotation);
+        $request->attributes->set('_solido_view', $annotation);
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
 
@@ -131,7 +131,7 @@ class ViewHandlerTest extends WebTestCase
         $annotation->groups = ['group_foo', 'bar_bar'];
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annotation);
+        $request->attributes->set('_solido_view', $annotation);
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
 
@@ -148,7 +148,7 @@ class ViewHandlerTest extends WebTestCase
         $annotation->groupsProvider = 'testGroupProvider';
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annotation);
+        $request->attributes->set('_solido_view', $annotation);
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
         $this->serializer
@@ -162,7 +162,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldSetResponseCode405IfFormatIsNotSupported(): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new \stdClass());
 
@@ -179,7 +179,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldSerializeInvalidFormAndSetBadRequestStatus(): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $form = $this->prophesize(Form::class);
         $form->isSubmitted()->willReturn(true);
@@ -198,7 +198,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldCallSubmitOnUnsubmittedForms(): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $form = $this->prophesize(Form::class);
         $form->isSubmitted()->willReturn(false);
@@ -227,7 +227,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing(iterable $iterator): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $iterator);
         $this->serializer
@@ -240,7 +240,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldAddXTotalCountHeaderForEntityIterators(): ObjectProphecy
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $iterator = $this->prophesize(ObjectIteratorInterface::class);
         $iterator->count()->willReturn(42);
@@ -279,7 +279,7 @@ class ViewHandlerTest extends WebTestCase
         };
 
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $result);
 
@@ -294,7 +294,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldAddXContinuationTokenHeaderForPagerIterators(): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $iterator = $this->prophesize(PagerIterator::class);
         $iterator->getNextPageToken()->willReturn(new PageToken((new \DateTimeImmutable('1991-11-24 02:00:00'))->getTimestamp(), 1, 1275024653));
@@ -314,7 +314,7 @@ class ViewHandlerTest extends WebTestCase
     public function testViewObjectShouldBeCorrectlyHandled(): void
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new ViewAnnotation());
+        $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $result = new View(['foobar' => 'no no no'], Response::HTTP_PAYMENT_REQUIRED);
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $result);

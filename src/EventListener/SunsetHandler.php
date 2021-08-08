@@ -25,7 +25,7 @@ class SunsetHandler implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $annotation = $request->attributes->get('_rest_sunset');
+        $annotation = $request->attributes->get('_solido_sunset');
         if (! $annotation instanceof Sunset) {
             return;
         }

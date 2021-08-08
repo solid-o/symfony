@@ -52,6 +52,6 @@ class View implements ConfigurationInterface
 
     public function getAliasName(): string
     {
-        return 'rest_view';
+        return 'solido_view';
     }
 }

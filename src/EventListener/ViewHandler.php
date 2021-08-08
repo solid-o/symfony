@@ -56,7 +56,7 @@ class ViewHandler implements EventSubscriberInterface
             return;
         }
 
-        $annotation = $request->attributes->get('_rest_view', $request->attributes->get('_route_view') ? new ViewAnnotation() : null);
+        $annotation = $request->attributes->get('_solido_view', $request->attributes->get('_route_view') ? new ViewAnnotation() : null);
         if (! $annotation instanceof ViewAnnotation) {
             return;
         }

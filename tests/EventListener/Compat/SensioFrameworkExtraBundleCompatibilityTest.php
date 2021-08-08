@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class SensioFrameworkExtraBundleCompatibilityTest extends WebTestCase
 {
-
     /**
      * {@inheritdoc}
      */
@@ -28,7 +27,7 @@ class SensioFrameworkExtraBundleCompatibilityTest extends WebTestCase
         $fs->remove(__DIR__.'/../../var');
     }
 
-    public function testShouldXX(): void
+    public function testShouldBeCompatibleWithSensioFrameworkExtraAnnotations(): void
     {
         $client = self::createClient();
         $client->enableProfiler();
