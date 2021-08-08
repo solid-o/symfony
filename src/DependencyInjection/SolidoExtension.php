@@ -21,6 +21,7 @@ use Solido\PolicyChecker\Test\TestPolicyChecker;
 use Solido\PolicyChecker\Voter\VoterInterface;
 use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Serialization\SerializerInterface;
+use Solido\Symfony\ArgumentMetadata\ArgumentMetadataFactory;
 use Solido\Symfony\Cors\HandlerFactory;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Symfony\Security\ActionListener;
@@ -188,6 +189,9 @@ class SolidoExtension extends Extension
         if (interface_exists(ResolverInterface::class)) {
             $loader->load('dto.xml');
             $container->registerForAutoconfiguration(ExtensionInterface::class)->addTag('solido.dto_extension');
+            $container->register('solido.dto.argument_metadata_factory', ArgumentMetadataFactory::class)
+                ->setDecoratedService('argument_metadata_factory')
+                ->addArgument(new Reference('solido.dto.argument_metadata_factory.inner'));
 
             if ($config['dto']['routing']['loader']) {
                 $loader->load('dto_routing_loader.xml');

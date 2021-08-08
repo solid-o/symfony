@@ -16,9 +16,11 @@ use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceConta
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerWeakRefPass;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
 use function get_debug_type;
 use function Safe\tempnam;
 use function sys_get_temp_dir;
@@ -46,11 +48,23 @@ class SolidoExtensionTest extends TestCase
         $this->container->addCompilerPass(new TestServiceContainerWeakRefPass());
         $this->container->addCompilerPass(new TestServiceContainerRealRefPass());
 
+        $this->container->registerExtension(new class extends Extension {
+            public function load(array $configs, ContainerBuilder $container): void
+            {
+                $container->register('argument_metadata_factory', ArgumentMetadataFactory::class);
+            }
+
+            public function getAlias(): string
+            {
+                return 'framework';
+            }
+        });
         $this->container->registerExtension(new SerializerExtension());
         $this->container->registerExtension($this->extension);
 
         $this->container->register('event_dispatcher', EventDispatcher::class);
 
+        $this->container->loadFromExtension('framework', []);
         $this->container->loadFromExtension('kcs_serializer', []);
         $this->container->loadFromExtension($this->extension->getAlias(), [
             'serializer' => ['enabled' => true],
