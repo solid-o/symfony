@@ -32,8 +32,15 @@ use function trim;
 class ViewHandler implements EventSubscriberInterface
 {
     private SerializerInterface $serializer;
-    private ?TokenStorageInterface $tokenStorage;
     private string $responseCharset;
+
+    /**
+     * DO NOT add typehint here: this event listener will be added to the preloaded classes list
+     * and will break with a fatal error if the class is not found (security-core package not installed)
+     *
+     * @var TokenStorageInterface|null
+     */
+    private $tokenStorage; // phpcs:ignore
 
     public function __construct(
         SerializerInterface $serializer,
