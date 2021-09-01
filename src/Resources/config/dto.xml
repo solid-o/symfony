@@ -44,16 +44,5 @@
             <argument type="service" id="Solido\DtoManagement\InterfaceResolver\ResolverInterface" />
             <tag name="controller.argument_value_resolver" priority="35" />
         </service>
-
-        <service class="Solido\Symfony\DTO\Security\ExpressionLanguage" id="solido.dto.security_expression_language">
-            <argument>null</argument>
-            <argument type="collection" />
-        </service>
-
-        <service class="Solido\Symfony\DTO\Extension\SecurityExtension" id="Solido\Symfony\DTO\Extension\SecurityExtension">
-            <tag name="solido.dto_extension" priority="30" />
-            <argument type="service" id="annotations.reader" on-invalid="null" />
-            <argument type="service" id="solido.dto.security_expression_language" />
-        </service>
     </services>
 </container>

@@ -23,6 +23,7 @@ use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\ArgumentMetadata\ArgumentMetadataFactory;
 use Solido\Symfony\Cors\HandlerFactory;
+use Solido\Symfony\DTO\Extension\MissingSecurityExtension;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Symfony\Security\ActionListener;
 use Solido\Versioning\VersionGuesserInterface;
@@ -32,10 +33,12 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function assert;
 use function class_exists;
@@ -188,6 +191,14 @@ class SolidoExtension extends Extension
 
         if (interface_exists(ResolverInterface::class)) {
             $loader->load('dto.xml');
+            if (class_exists(ExpressionLanguage::class)) {
+                $loader->load('dto_security.xml');
+            } else {
+                $container->register(MissingSecurityExtension::class)
+                    ->addArgument(new Reference('annotations.reader', ContainerInterface::NULL_ON_INVALID_REFERENCE))
+                    ->addTag('solido.dto_extension', ['priority' => 30]);
+            }
+
             $container->registerForAutoconfiguration(ExtensionInterface::class)->addTag('solido.dto_extension');
             $container->register('solido.dto.argument_metadata_factory', ArgumentMetadataFactory::class)
                 ->setDecoratedService('argument_metadata_factory')

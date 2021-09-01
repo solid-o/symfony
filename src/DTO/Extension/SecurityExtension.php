@@ -7,10 +7,7 @@ namespace Solido\Symfony\DTO\Extension;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use ReflectionMethod;
 use ReflectionParameter;
-use ReflectionProperty;
-use Reflector;
 use Solido\DtoManagement\Proxy\Builder\Interceptor;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Solido\DtoManagement\Proxy\Extension\ExtensionInterface;
@@ -22,20 +19,17 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use function array_map;
 use function array_merge;
-use function assert;
 use function class_exists;
 use function count;
 use function implode;
 use function Safe\sprintf;
 use function var_export;
 
-use const PHP_VERSION_ID;
-
 class SecurityExtension implements ExtensionInterface
 {
+    use SecurityExtensionTrait;
     use SubscribedServicesGeneratorTrait;
 
-    private ?Reader $reader;
     private ?BaseExpressionLanguage $expressionLanguage;
 
     public function __construct(?Reader $reader = null, ?BaseExpressionLanguage $expressionLanguage = null)
@@ -125,33 +119,5 @@ if (! $%1$s()) {
     private function getExpressionLanguage(): BaseExpressionLanguage
     {
         return $this->expressionLanguage ?? new ExpressionLanguage();
-    }
-
-    /**
-     * @param ReflectionMethod|ReflectionProperty $reflector
-     */
-    private function getAttribute(Reflector $reflector): ?Security
-    {
-        if (PHP_VERSION_ID >= 80000) {
-            foreach ($reflector->getAttributes(Security::class) as $attribute) {
-                $instance = $attribute->newInstance();
-                assert($instance instanceof Security);
-
-                return $instance;
-            }
-        }
-
-        if ($this->reader === null) {
-            return null;
-        }
-
-        $annotation = null;
-        if ($reflector instanceof ReflectionProperty) {
-            $annotation = $this->reader->getPropertyAnnotation($reflector, Security::class);
-        } elseif ($reflector instanceof ReflectionMethod) {
-            $annotation = $this->reader->getMethodAnnotation($reflector, Security::class);
-        }
-
-        return $annotation;
     }
 }
