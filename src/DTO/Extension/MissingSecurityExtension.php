@@ -10,7 +10,10 @@ use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 
 use function class_exists;
 
-class MissingSecurityExtension extends MissingPackageExtension
+/**
+ * @internal
+ */
+final class MissingSecurityExtension extends MissingPackageExtension
 {
     use SecurityExtensionTrait;
 

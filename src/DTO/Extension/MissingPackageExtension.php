@@ -10,6 +10,9 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use function Safe\sprintf;
 
+/**
+ * @internal
+ */
 abstract class MissingPackageExtension implements ExtensionInterface
 {
     private string $packageName;

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\Annotation;
 
-// phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
-// phpcs:enable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Solido\Symfony\Configuration\ConfigurationInterface;
 use TypeError;
 
