@@ -233,6 +233,22 @@ DUMP
             , $dumper->dump($cloner->cloneVar($user), true));
     }
 
+    public function testShouldAcquireALock(): void
+    {
+        $client = self::createClient();
+        $client->catchExceptions(false);
+        $client->request('GET', '/routed-and-locked', [], [], [
+            'HTTP_ACCEPT' => 'application/json',
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'admin',
+            'HTTP_X_VERSION' => '1.0',
+        ]);
+
+        $response = $client->getResponse();
+        self::assertEquals(202, $response->getStatusCode());
+        self::assertEquals('{"id":"what_a_nice_id","locked":false}', $response->getContent());
+    }
+
     /**
      * {@inheritdoc}
      */

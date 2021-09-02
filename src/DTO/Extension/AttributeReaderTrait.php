@@ -8,27 +8,22 @@ use Doctrine\Common\Annotations\Reader;
 use ReflectionMethod;
 use ReflectionProperty;
 use Reflector;
-use Solido\Symfony\Annotation\Security;
-
-use function assert;
 
 use const PHP_VERSION_ID;
 
-trait SecurityExtensionTrait
+trait AttributeReaderTrait
 {
     private ?Reader $reader;
 
     /**
      * @param ReflectionMethod|ReflectionProperty $reflector
+     * @phpstan-param class-string $attributeClass
      */
-    private function getAttribute(Reflector $reflector): ?Security
+    private function getAttribute(Reflector $reflector, string $attributeClass): ?object
     {
         if (PHP_VERSION_ID >= 80000) {
-            foreach ($reflector->getAttributes(Security::class) as $attribute) {
-                $instance = $attribute->newInstance();
-                assert($instance instanceof Security);
-
-                return $instance;
+            foreach ($reflector->getAttributes($attributeClass) as $attribute) {
+                return $attribute->newInstance();
             }
         }
 
@@ -38,9 +33,9 @@ trait SecurityExtensionTrait
 
         $annotation = null;
         if ($reflector instanceof ReflectionProperty) {
-            $annotation = $this->reader->getPropertyAnnotation($reflector, Security::class);
+            $annotation = $this->reader->getPropertyAnnotation($reflector, $attributeClass);
         } elseif ($reflector instanceof ReflectionMethod) {
-            $annotation = $this->reader->getMethodAnnotation($reflector, Security::class);
+            $annotation = $this->reader->getMethodAnnotation($reflector, $attributeClass);
         }
 
         return $annotation;

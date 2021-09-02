@@ -23,6 +23,7 @@ use Solido\QueryLanguage\Processor\FieldInterface;
 use Solido\Serialization\SerializerInterface;
 use Solido\Symfony\ArgumentMetadata\ArgumentMetadataFactory;
 use Solido\Symfony\Cors\HandlerFactory;
+use Solido\Symfony\DTO\Extension\MissingLockExtension;
 use Solido\Symfony\DTO\Extension\MissingSecurityExtension;
 use Solido\Symfony\EventListener\ViewHandler;
 use Solido\Symfony\Security\ActionListener;
@@ -193,10 +194,14 @@ class SolidoExtension extends Extension
             $loader->load('dto.xml');
             if (class_exists(ExpressionLanguage::class)) {
                 $loader->load('dto_security.xml');
+                $loader->load('dto_lock.xml');
             } else {
                 $container->register(MissingSecurityExtension::class)
                     ->addArgument(new Reference('annotations.reader', ContainerInterface::NULL_ON_INVALID_REFERENCE))
                     ->addTag('solido.dto_extension', ['priority' => 30]);
+                $container->register(MissingLockExtension::class)
+                    ->addArgument(new Reference('annotations.reader', ContainerInterface::NULL_ON_INVALID_REFERENCE))
+                    ->addTag('solido.dto_extension', ['priority' => 25]);
             }
 
             $container->registerForAutoconfiguration(ExtensionInterface::class)->addTag('solido.dto_extension');

@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use function array_map;
 use function array_merge;
+use function assert;
 use function class_exists;
 use function count;
 use function implode;
@@ -27,7 +28,7 @@ use function var_export;
 
 class SecurityExtension implements ExtensionInterface
 {
-    use SecurityExtensionTrait;
+    use AttributeReaderTrait;
     use SubscribedServicesGeneratorTrait;
 
     private ?BaseExpressionLanguage $expressionLanguage;
@@ -47,11 +48,12 @@ class SecurityExtension implements ExtensionInterface
         $this->builder = $proxyBuilder;
 
         foreach ($proxyBuilder->properties->getAccessibleProperties() as $property) {
-            $annotation = $this->getAttribute($property);
+            $annotation = $this->getAttribute($property, Security::class);
             if ($annotation === null) {
                 continue;
             }
 
+            assert($annotation instanceof Security);
             $proxyBuilder->addPropertyInterceptor($property->getName(), new Interceptor($this->generateCode($annotation, ['value'])));
         }
 
@@ -60,11 +62,12 @@ class SecurityExtension implements ExtensionInterface
                 continue;
             }
 
-            $annotation = $this->getAttribute($reflectionMethod);
+            $annotation = $this->getAttribute($reflectionMethod, Security::class);
             if ($annotation === null) {
                 continue;
             }
 
+            assert($annotation instanceof Security);
             $code = $this->generateCode($annotation, array_map(static fn (ReflectionParameter $parameter) => $parameter->getName(), $reflectionMethod->getParameters()));
             $proxyBuilder->addMethodInterceptor($reflectionMethod->getName(), new Interceptor($code));
         }

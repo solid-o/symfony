@@ -2,6 +2,10 @@ dtos:
     resource: Solido\Symfony\Tests\Fixtures\Proxy\Model\
     type: dto_annotations
 
+lock_dtos:
+    resource: Solido\Symfony\Tests\Fixtures\Proxy\LockModel\
+    type: dto_annotations
+
 index:
     path: /
     defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:indexAction' }

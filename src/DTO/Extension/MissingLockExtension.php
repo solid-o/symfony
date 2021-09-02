@@ -7,20 +7,20 @@ namespace Solido\Symfony\DTO\Extension;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
-use Solido\Symfony\Annotation\Security;
+use Solido\Symfony\Annotation\Lock;
 
 use function class_exists;
 
 /**
  * @internal
  */
-final class MissingSecurityExtension extends MissingPackageExtension
+final class MissingLockExtension extends MissingPackageExtension
 {
     use AttributeReaderTrait;
 
     public function __construct(?Reader $reader = null)
     {
-        parent::__construct('symfony/expression-language', 'Security');
+        parent::__construct('symfony/expression-language', 'Lock');
 
         $this->reader = $reader;
         if ($reader !== null || ! class_exists(AnnotationReader::class)) {
@@ -32,21 +32,12 @@ final class MissingSecurityExtension extends MissingPackageExtension
 
     public function extend(ProxyBuilder $proxyBuilder): void
     {
-        foreach ($proxyBuilder->properties->getAccessibleProperties() as $property) {
-            $annotation = $this->getAttribute($property, Security::class);
-            if ($annotation === null) {
-                continue;
-            }
-
-            parent::extend($proxyBuilder);
-        }
-
         foreach ($proxyBuilder->class->getMethods() as $reflectionMethod) {
             if ($reflectionMethod->isPrivate() || $reflectionMethod->isFinal()) {
                 continue;
             }
 
-            $annotation = $this->getAttribute($reflectionMethod, Security::class);
+            $annotation = $this->getAttribute($reflectionMethod, Lock::class);
             if ($annotation === null) {
                 continue;
             }

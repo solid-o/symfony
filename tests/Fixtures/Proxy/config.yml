@@ -3,6 +3,7 @@ framework:
     secret: secret
     annotations: true
     property_access: true
+    lock: flock
     profiler:
         collect: true
     router:
@@ -13,6 +14,7 @@ solido:
         namespaces:
             - 'Solido\Symfony\Tests\Fixtures\Proxy\Model'
             - 'Solido\Symfony\Tests\Fixtures\Proxy\SemVerModel'
+            - 'Solido\Symfony\Tests\Fixtures\Proxy\LockModel'
         exclude:
             - 'Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface'
 
