@@ -20,10 +20,12 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+use function assert;
 use function class_exists;
 use function get_class;
 use function is_array;
 use function is_object;
+use function is_string;
 use function method_exists;
 use function Safe\preg_match;
 use function stripos;
@@ -86,7 +88,10 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $headers = $result->headers;
-        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format', 'html')) . '; charset=' . $this->responseCharset;
+        $requestFormat = $request->attributes->get('_format', 'html');
+        assert(is_string($requestFormat));
+
+        $headers['Content-Type'] = $request->getMimeType($requestFormat) . '; charset=' . $this->responseCharset;
 
         if ($request->attributes->has('_deprecated')) {
             $notice = $request->attributes->get('_deprecated');
@@ -138,12 +143,11 @@ class ViewHandler implements EventSubscriberInterface
     /**
      * Serializes the view with given serialization groups
      * and given type.
-     *
-     * @return mixed|string
      */
-    private function handle(View $view, Request $request)
+    private function handle(View $view, Request $request): ?string
     {
         $format = $request->attributes->get('_format') ?? 'json';
+        assert(is_string($format));
 
         $result = $view->result;
         $context = [
@@ -153,7 +157,10 @@ class ViewHandler implements EventSubscriberInterface
             'enable_max_depth' => $view->enableMaxDepthChecks,
         ];
 
-        return $this->serializer->serialize($result, $format, $context);
+        $serialized = $this->serializer->serialize($result, $format, $context);
+        assert($serialized === null || is_string($serialized));
+
+        return $serialized;
     }
 
     /**

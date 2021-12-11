@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+use function is_string;
 use function Safe\sort;
 use function Safe\substr;
 use function strpos;
@@ -46,7 +47,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
      */
     public function load($resource, ?string $type = null): RouteCollection
     {
-        if (substr($resource, -1) !== '\\') {
+        if (! is_string($resource) || substr($resource, -1) !== '\\') {
             throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
         }
 

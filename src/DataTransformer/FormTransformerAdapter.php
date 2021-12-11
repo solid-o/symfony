@@ -9,6 +9,8 @@ use Solido\DataTransformers\TransformerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
+use function is_int;
+
 class FormTransformerAdapter implements DataTransformerInterface
 {
     private TransformerInterface $transformer;
@@ -38,9 +40,14 @@ class FormTransformerAdapter implements DataTransformerInterface
         try {
             return $this->transformer->transform($value);
         } catch (SolidoTransformationFailedException $exception) {
+            $code = $exception->getCode();
+            if (! is_int($code)) {
+                $code = 0;
+            }
+
             throw new TransformationFailedException(
                 'Transformation failed: ' . $exception->getMessage(),
-                $exception->getCode(),
+                $code,
                 $exception,
                 $exception->getInvalidMessage(),
                 $exception->getInvalidMessageParameters()

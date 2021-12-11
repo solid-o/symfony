@@ -13,6 +13,8 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
+use function assert;
+use function is_string;
 use function method_exists;
 
 class SerializerErrorRenderer implements ErrorRendererInterface
@@ -64,7 +66,9 @@ class SerializerErrorRenderer implements ErrorRendererInterface
             return $this->fallbackErrorRenderer->render($exception);
         }
 
+        assert($data === null || is_string($data));
         $flatten->setAsString($data);
+
         $flatten->setHeaders([
             'Content-Type' => $request->getMimeType($format) ?? 'text/html',
             'Vary' => 'Accept',

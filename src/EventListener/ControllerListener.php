@@ -93,6 +93,8 @@ class ControllerListener implements EventSubscriberInterface
     public function onKernelController(ControllerEvent $event): void
     {
         $request = $event->getRequest();
+
+        /** @phpstan-var class-string<object> | null $className */
         $className = $request->attributes->get('_solido_dto_interface');
 
         /** @phpstan-var object|array{0: object, 1: string} $controller */

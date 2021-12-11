@@ -14,6 +14,7 @@ use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormError;
 
+use function assert;
 use function get_debug_type;
 use function is_array;
 use function is_object;
@@ -42,6 +43,8 @@ class OneWayDataMapper implements DataMapperInterface
         if (! $empty && ! is_array($data) && ! is_object($data)) {
             throw new UnexpectedTypeException($data, 'object, array or empty');
         }
+
+        assert(is_array($data) || is_object($data));
 
         foreach ($forms as $form) {
             $config = $form->getConfig();

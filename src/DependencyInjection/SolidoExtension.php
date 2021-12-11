@@ -117,12 +117,13 @@ class SolidoExtension extends Extension
             $loader->load('form_auto_submit.xml');
         }
 
+        /** @phpstan-var array{enabled: bool, allow_credentials: bool, allow_origin: string[], allow_headers: string[], expose_headers: string[], max_age: int, paths: array<string, array{paths: string, host: string, allow_credentials?: bool, allow_origin?: string[], allow_headers?: string[], expose_headers?: string[], max_age?: int}>} $corsConfig */
         $corsConfig = $container->resolveEnvPlaceholders($config['cors']);
         if ($corsConfig['enabled'] && interface_exists(RequestHandlerInterface::class)) {
             $loader->load('cors.xml');
 
             $i = 0;
-            foreach ($corsConfig['paths'] as $pathRegex => &$pathConfig) {
+            foreach ($corsConfig['paths'] as &$pathConfig) {
                 $container->register('.solido.symfony-bundle.cors.handler.' . ++$i, RequestHandler::class)
                     ->setArguments([
                         $pathConfig['allow_credentials'] ?? $corsConfig['allow_credentials'],

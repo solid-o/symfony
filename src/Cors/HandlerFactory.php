@@ -10,11 +10,15 @@ use function Safe\preg_match;
 
 class HandlerFactory
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     * @phpstan-var array{paths: array<array{host?: string, path: string, factory: callable(): RequestHandlerInterface}>, factory: callable(): RequestHandlerInterface}
+     */
     private array $configuration;
 
     /**
      * @param array<string, mixed> $configuration
+     * @phpstan-param array{paths: array<array{host?: string, path: string, factory: callable(): RequestHandlerInterface}>, factory: callable(): RequestHandlerInterface} $configuration
      */
     public function __construct(array $configuration)
     {

@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Solido\Symfony\EventListener;
 
 use Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface;
+use Stringable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+use function assert;
+use function is_string;
 
 class ControllerVersionValidatorListener implements EventSubscriberInterface
 {
@@ -29,7 +33,10 @@ class ControllerVersionValidatorListener implements EventSubscriberInterface
             return;
         }
 
-        $version = (string) $request->attributes->get('_version', 'latest');
+        $version = $request->attributes->get('_version', 'latest');
+        assert($version instanceof Stringable || is_string($version));
+
+        $version = (string) $version;
         if ($version === 'latest') {
             return;
         }

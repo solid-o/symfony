@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\ArgumentMetadata;
 
 use Solido\DtoManagement\Proxy\ProxyInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
 
 use function get_parent_class;
@@ -21,7 +22,10 @@ class ArgumentMetadataFactory implements ArgumentMetadataFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string|object|array<mixed> $controller The controller to resolve the arguments for
+     * @phpstan-param string|object|array{0: object, 1: string} $controller
+     *
+     * @return ArgumentMetadata[]
      */
     public function createArgumentMetadata($controller): array
     {

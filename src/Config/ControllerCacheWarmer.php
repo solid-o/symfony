@@ -63,6 +63,7 @@ class ControllerCacheWarmer implements CacheWarmerInterface
 
         $routes = $this->router->getRouteCollection();
         foreach ($routes as $route) {
+            /** @phpstan-var class-string<object> $className */
             $className = $route->getDefault('_solido_dto_interface');
             $routeController = $route->getDefault('_controller');
             if ($routeController === null) {

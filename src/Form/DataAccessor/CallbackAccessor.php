@@ -7,6 +7,9 @@ namespace Solido\Symfony\Form\DataAccessor;
 use Solido\Symfony\Form\Exception\AccessException;
 use Symfony\Component\Form\FormInterface;
 
+use function assert;
+use function is_callable;
+
 /**
  * Writes and reads values to/from an object or array using callback functions.
  */
@@ -22,6 +25,8 @@ class CallbackAccessor implements DataAccessorInterface
             throw new AccessException('Unable to read from the given form data as no getter is defined.');
         }
 
+        assert(is_callable($getter));
+
         return ($getter)($data, $form);
     }
 
@@ -35,6 +40,7 @@ class CallbackAccessor implements DataAccessorInterface
             throw new AccessException('Unable to write the given value as no setter is defined.');
         }
 
+        assert(is_callable($setter));
         ($setter)($data, $form->getData(), $form);
     }
 

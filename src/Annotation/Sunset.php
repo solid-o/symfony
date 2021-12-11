@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\Annotation;
 
 use Attribute;
+use InvalidArgumentException;
 use Solido\Symfony\Configuration\ConfigurationInterface;
 use TypeError;
 
@@ -24,6 +25,7 @@ class Sunset implements ConfigurationInterface
 
     /**
      * @param string|array<string, mixed> $date
+     * @phpstan-param string|array{date?: string, value?: string} $date
      */
     public function __construct($date)
     {
@@ -35,7 +37,12 @@ class Sunset implements ConfigurationInterface
             throw new TypeError(sprintf('Argument #1 passed to %s must be a string. %s passed', __METHOD__, get_debug_type($date)));
         }
 
-        $this->date = $data['date'] ?? $data['value'];
+        $date = $data['date'] ?? $data['value'] ?? null;
+        if ($date === null) {
+            throw new InvalidArgumentException('Date is required for Sunset annotation/attribute');
+        }
+
+        $this->date = $date;
     }
 
     public function getAliasName(): string

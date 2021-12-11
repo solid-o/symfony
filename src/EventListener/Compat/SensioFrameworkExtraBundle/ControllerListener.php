@@ -44,11 +44,14 @@ class ControllerListener implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        /** @phpstan-var class-string<object> | null $className */
         $className = $request->attributes->get('_solido_dto_interface');
         if ($className === null) {
             return;
         }
 
+        /** @phpstan-var array{0: object, 1: string}|object|string $controller */
         $controller = $event->getController();
         if ((is_object($controller) || is_string($controller)) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];

@@ -31,6 +31,7 @@ class Security
 
     /**
      * @param string|array<string, mixed> $expression
+     * @phpstan-param string|array{expression?: string, message?: string, onInvalid: ?string, value?: string} $expression
      */
     public function __construct($expression, ?string $message = null, ?string $onInvalid = null)
     {
@@ -42,7 +43,7 @@ class Security
             throw new TypeError(sprintf('Argument #1 passed to %s must be a string. %s passed', __METHOD__, get_debug_type($expression)));
         }
 
-        $this->expression = $data['expression'] ?? $data['value'];
+        $this->expression = $data['expression'] ?? $data['value'] ?? 'true';
         $this->message = $message ?? $data['message'] ?? null;
         $this->onInvalid = $onInvalid ?? $data['onInvalid'] ?? self::ACCESS_DENIED_EXCEPTION;
     }
