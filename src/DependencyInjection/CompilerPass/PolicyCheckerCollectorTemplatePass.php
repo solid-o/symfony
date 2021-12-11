@@ -17,9 +17,9 @@ class PolicyCheckerCollectorTemplatePass implements CompilerPassInterface
         }
 
         $definition = $container->findDefinition(PolicyCheckerDataCollector::class);
-        [$decorated] = $definition->getDecoratedService();
+        [$decorated] = $definition->getDecoratedService() ?? [null];
 
-        if (! $container->has($decorated)) {
+        if ($decorated === null || ! $container->has($decorated)) {
             return;
         }
 

@@ -124,7 +124,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
 
             try {
                 $proxyClass = $this->proxyFactory->generateProxy($className, ['throw_empty' => true]);
-            } catch (EmptyBuilderException $e) {
+            } catch (EmptyBuilderException $e) { /* @phpstan-ignore-line */
                 continue;
             }
 

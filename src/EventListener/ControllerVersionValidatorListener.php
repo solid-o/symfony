@@ -22,8 +22,9 @@ class ControllerVersionValidatorListener implements EventSubscriberInterface
     public function onRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $interface = $request->attributes->get('_solido_dto_interface');
 
+        /** @phpstan-var class-string<object> | null $interface */
+        $interface = $request->attributes->get('_solido_dto_interface');
         if ($interface === null) {
             return;
         }

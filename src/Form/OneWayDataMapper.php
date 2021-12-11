@@ -87,7 +87,7 @@ class OneWayDataMapper implements DataMapperInterface
 
             try {
                 $this->dataAccessor->setValue($data, $form->getData(), $form);
-            } catch (TransformationFailedException $e) {
+            } catch (TransformationFailedException $e) { /* @phpstan-ignore-line */
                 $viewData = $form->getViewData();
                 $dataAsString = is_scalar($viewData) ? (string) $viewData : get_debug_type($viewData);
 
