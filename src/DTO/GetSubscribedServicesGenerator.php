@@ -22,6 +22,7 @@ class GetSubscribedServicesGenerator extends MethodGenerator
     {
         parent::__construct('getSubscribedServices', [], MethodGenerator::FLAG_PUBLIC | MethodGenerator::FLAG_STATIC, null, '{@inheritDoc}');
 
+        $this->setReturnType('array');
         $this->callParent = $callParent;
         $this->containerName = $containerName;
     }
