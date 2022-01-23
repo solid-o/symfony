@@ -36,23 +36,22 @@ class OneWayDataMapper implements DataMapperInterface
     /**
      * {@inheritdoc}
      */
-    public function mapDataToForms($data, iterable $forms): void
+    public function mapDataToForms($viewData, iterable $forms): void
     {
-        $empty = $data === null || $data === [];
+        assert($viewData === null || is_array($viewData) || is_object($viewData));
 
-        if (! $empty && ! is_array($data) && ! is_object($data)) {
-            throw new UnexpectedTypeException($data, 'object, array or empty');
+        $empty = $viewData === null || $viewData === [];
+        if (! $empty && ! is_array($viewData) && ! is_object($viewData)) {
+            throw new UnexpectedTypeException($viewData, 'object, array or empty');
         }
-
-        assert(is_array($data) || is_object($data));
 
         foreach ($forms as $form) {
             $config = $form->getConfig();
 
-            if ($empty || ! $config->getMapped() || ! $this->dataAccessor->isReadable($data, $form)) {
+            if ($empty || ! $config->getMapped() || ! $this->dataAccessor->isReadable($viewData ?? [], $form)) {
                 $form->setData($config->getData());
             } elseif ($config->getCompound()) {
-                $form->setData($this->dataAccessor->getValue($data, $form));
+                $form->setData($this->dataAccessor->getValue($viewData ?? [], $form));
             }
         }
     }
