@@ -8,24 +8,16 @@ lock_dtos:
 
 index:
     path: /
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:indexAction' }
+    defaults: { _controller: [ Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController, indexAction ] }
 
 protected:
     path: /protected
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:protectedAction' }
+    defaults: { _controller: [ Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController, protectedAction ] }
 
 unavailable:
     path: /unavailable
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:unavailableAction' }
-
-underscored:
-    path: /underscored
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:underscoredAction' }
-
-camelized:
-    path: /camelized
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:camelizedAction' }
+    defaults: { _controller: [ Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController, unavailableAction ] }
 
 semver:
     path: /semver/{_version}
-    defaults: { _controller: 'Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController:semverAction' }
+    defaults: { _controller: [ Solido\Symfony\Tests\Fixtures\Proxy\Controller\TestController, semverAction ] }

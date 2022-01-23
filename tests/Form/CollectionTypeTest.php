@@ -40,6 +40,7 @@ class CollectionTypeTest extends TestCase
                 'error_bubbling' => false,
             ])
             ->shouldBeCalled()
+            ->willReturn($resolver)
         ;
 
         $this->type->configureOptions($resolver->reveal());
