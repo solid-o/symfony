@@ -204,7 +204,7 @@ class ViewHandlerTest extends WebTestCase
         $form->isSubmitted()->willReturn(false);
         $form->isValid()->willReturn(false);
 
-        $form->submit(null)->shouldBeCalled();
+        $form->submit(null)->shouldBeCalled()->willReturn($form);
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $form->reveal());
         $this->viewHandler->onView($event);

@@ -36,4 +36,12 @@ class User implements UserInterface, UrnGeneratorInterface
     {
         return new Urn('user-id', 'user');
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
 }

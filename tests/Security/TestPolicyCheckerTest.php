@@ -34,7 +34,7 @@ class TestPolicyCheckerTest extends WebTestCase
     public function testShouldRegisterTestPolicyChecker(): void
     {
         static::bootKernel();
-        $policyChecker = static::$container->get(PolicyCheckerInterface::class);
+        $policyChecker = static::getContainer()->get(PolicyCheckerInterface::class);
 
         self::assertInstanceOf(TestPolicyChecker::class, $policyChecker);
     }

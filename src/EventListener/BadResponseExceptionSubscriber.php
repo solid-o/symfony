@@ -54,7 +54,6 @@ class BadResponseExceptionSubscriber implements EventSubscriberInterface
      *
      * @View(Response::HTTP_BAD_REQUEST)
      */
-    #[View(Response::HTTP_BAD_REQUEST)]
     public function errorAction(BadResponsePropertyTree $errors): BadResponsePropertyTree
     {
         return $errors;

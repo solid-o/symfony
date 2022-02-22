@@ -7,13 +7,13 @@ framework:
         enable_annotations: true
     form: ~
     csrf_protection: false
-    session:
-        storage_id: session.storage.mock_file
+    session: { enabled: false }
     profiler: { collect: true }
     router:
         resource: "%kernel.root_dir%/routing.yml"
 
 security:
+    enable_authenticator_manager: true
     providers:
         in_memory:
             memory: ~
@@ -23,11 +23,9 @@ security:
             pattern: ^/(_(profiler|wdt))/
             security: false
         main:
-            anonymous: false
-            guard:
-                authenticators:
-                    - Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
-                entry_point: Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
+            custom_authenticators:
+                - Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
+            entry_point: Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
 
 sensio_framework_extra:
     router:      { annotations: false }

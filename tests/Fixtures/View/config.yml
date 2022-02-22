@@ -9,6 +9,7 @@ framework:
         resource: "%kernel.root_dir%/routing.yml"
 
 security:
+    enable_authenticator_manager: true
     providers:
         in_memory:
             memory: ~
@@ -17,8 +18,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt))/
             security: false
-        main:
-            anonymous: ~
+        main: ~
 
 sensio_framework_extra:
     router:      { annotations: false }
