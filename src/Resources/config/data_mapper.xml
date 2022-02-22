@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service class="Solido\DataMapper\Form\RequestHandler" id="Solido\DataMapper\Form\RequestHandler">
+            <argument id="form.server_params" on-invalid="ignore" />
+            <argument id="Solido\Common\AdapterFactoryInterface" />
+            <argument id="Solido\BodyConverter\BodyConverterInterface" on-invalid="ignore" />
+        </service>
+
+        <service class="Solido\DataMapper\DataMapperFactory" id="Solido\DataMapper\DataMapperFactory">
+            <call method="setFormRequestHandler">
+                <argument type="service" id="Solido\DataMapper\Form\RequestHandler" on-invalid="ignore" />
+            </call>
+            <call method="setFormFactory">
+                <argument type="service" id="form.factory" on-invalid="ignore" />
+            </call>
+            <call method="setTranslator">
+                <argument type="service" id="translator" on-invalid="ignore" />
+            </call>
+        </service>
+    </services>
+</container>

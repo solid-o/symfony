@@ -4,26 +4,23 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\EventListener;
 
-use Solido\PatchManager\Exception\FormNotSubmittedException;
+use Solido\ApiProblem\Http\DataInvalidProblem;
+use Solido\DataMapper\Exception\MappingErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class FormNotSubmittedExceptionSubscriber implements EventSubscriberInterface
+class MappingErrorExceptionSubscriber implements EventSubscriberInterface
 {
     public function onException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        if (! $exception instanceof FormNotSubmittedException) {
+        if (! $exception instanceof MappingErrorException) {
             return;
         }
 
-        $event->setResponse(new JsonResponse([
-            'error' => 'No data sent.',
-            'name' => $exception->getForm()->getName(),
-        ], Response::HTTP_BAD_REQUEST));
+        $problem = new DataInvalidProblem($exception->getResult());
+        $event->setResponse($problem->toResponse());
     }
 
     /**

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\EventListener;
 
+use Solido\ApiProblem\Http\ApiProblem;
 use Solido\PatchManager\Exception\UnmergeablePatchException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -20,9 +20,11 @@ class UnmergeablePatchExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->setResponse(new JsonResponse([
+        $problem = new ApiProblem(Response::HTTP_NOT_ACCEPTABLE, [
             'error' => $exception->getMessage() ?: 'Unmergeable resource.',
-        ], Response::HTTP_NOT_ACCEPTABLE));
+        ]);
+
+        $event->setResponse($problem->toResponse());
     }
 
     /**

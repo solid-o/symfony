@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\ErrorRenderer;
 
-use Solido\Serialization\Exception\UnsupportedFormatException;
-use Solido\Serialization\SerializerInterface;
+use Solido\ApiProblem\Http\ApiProblem;
 use Solido\Symfony\ErrorRenderer\Exception\DebugSerializableException;
 use Solido\Symfony\ErrorRenderer\Exception\SerializableException;
 use Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface;
@@ -14,32 +13,21 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
 use function assert;
-use function is_string;
+use function json_encode;
 use function method_exists;
+
+use const JSON_THROW_ON_ERROR;
 
 class SerializerErrorRenderer implements ErrorRendererInterface
 {
     private ErrorRendererInterface $fallbackErrorRenderer;
     private RequestStack $requestStack;
-    private SerializerInterface $serializer;
     private string $exceptionClass;
 
-    /**
-     * @var array<string, mixed>
-     * @phpstan-var array{groups?: string[]|null, type?: ?string, serialize_null?: bool}
-     */
-    private array $serializationContext;
-
-    /**
-     * @param array<string, mixed> $serializationContext
-     * @phpstan-param array{groups?: string[]|null, type?: ?string, serialize_null?: bool} $serializationContext
-     */
-    public function __construct(ErrorRendererInterface $fallbackErrorRenderer, RequestStack $requestStack, SerializerInterface $serializer, array $serializationContext, bool $debug = false)
+    public function __construct(ErrorRendererInterface $fallbackErrorRenderer, RequestStack $requestStack, bool $debug = false)
     {
         $this->fallbackErrorRenderer = $fallbackErrorRenderer;
         $this->requestStack = $requestStack;
-        $this->serializer = $serializer;
-        $this->serializationContext = $serializationContext;
         $this->exceptionClass = $debug ? DebugSerializableException::class : SerializableException::class;
     }
 
@@ -56,21 +44,13 @@ class SerializerErrorRenderer implements ErrorRendererInterface
         }
 
         $flatten = FlattenException::createFromThrowable($exception);
-
-        $format = $request->getRequestFormat() ?? 'json';
         $ex = new $this->exceptionClass($flatten);
+        assert($ex instanceof SerializableException);
 
-        try {
-            $data = $this->serializer->serialize($ex, $format, $this->serializationContext);
-        } catch (UnsupportedFormatException $e) {
-            return $this->fallbackErrorRenderer->render($exception);
-        }
-
-        assert($data === null || is_string($data));
-        $flatten->setAsString($data);
-
+        $problem = new ApiProblem($flatten->getStatusCode(), $ex->toArray());
+        $flatten->setAsString(json_encode($problem, JSON_THROW_ON_ERROR));
         $flatten->setHeaders([
-            'Content-Type' => $request->getMimeType($format) ?? 'text/html',
+            'Content-Type' => 'application/problem+json',
             'Vary' => 'Accept',
         ] + $flatten->getHeaders());
 

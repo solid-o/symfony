@@ -9,11 +9,7 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service class="Solido\Symfony\EventListener\FormInvalidExceptionSubscriber" id="Solido\Symfony\EventListener\FormInvalidExceptionSubscriber">
-            <tag name="kernel.event_subscriber" />
-        </service>
-
-        <service class="Solido\Symfony\EventListener\FormNotSubmittedExceptionSubscriber" id="Solido\Symfony\EventListener\FormNotSubmittedExceptionSubscriber">
+        <service class="Solido\Symfony\EventListener\MappingErrorExceptionSubscriber" id="Solido\Symfony\EventListener\MappingErrorExceptionSubscriber">
             <tag name="kernel.event_subscriber" />
         </service>
 

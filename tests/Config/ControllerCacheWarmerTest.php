@@ -10,15 +10,15 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Solido\Symfony\Annotation\Security;
 use Solido\Symfony\Annotation\View;
 use Solido\Symfony\Config\ControllerCacheWarmer;
+use Solido\Symfony\EventListener\BadResponseExceptionSubscriber;
 use Solido\Symfony\EventListener\ControllerListener;
-
-use Solido\Symfony\EventListener\FormInvalidExceptionSubscriber;
 use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+
 use function Safe\tempnam;
 use function sys_get_temp_dir;
 
@@ -85,9 +85,9 @@ class ControllerCacheWarmerTest extends TestCase
         $collection = new RouteCollection();
         $this->router->getRouteCollection()->willReturn($collection);
 
-        $this->warmer->addAdditionalController([FormInvalidExceptionSubscriber::class, 'formAction']);
+        $this->warmer->addAdditionalController([BadResponseExceptionSubscriber::class, 'errorAction']);
         self::assertEquals([
-            $this->cacheDir . '/solido_attributes/' . str_replace('\\', '', FormInvalidExceptionSubscriber::class) . '/formAction.php',
+            $this->cacheDir . '/solido_attributes/' . str_replace('\\', '', BadResponseExceptionSubscriber::class) . '/errorAction.php',
         ], $this->warmer->warmUp($this->cacheDir));
     }
 

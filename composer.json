@@ -21,7 +21,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "symfony/framework-bundle": "^4.4 || ^5.0",
+        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
         "willdurand/negotiation": "^2.3 || ^3.0"
     },
     "require-dev": {
@@ -35,30 +35,32 @@
         "refugis/doctrine-extra": "^2.0",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^5.0 || ^6.0",
+        "solido/api-problem": "^0.3@dev",
         "solido/atlante-php": "dev-master",
-        "solido/body-converter": "^0.2@dev",
-        "solido/common": "^0.2@dev",
-        "solido/cors": "^0.2@dev",
-        "solido/data-transformers": "^0.2@dev",
-        "solido/dto-management": "^0.2@dev",
-        "solido/pagination": "^0.2@dev",
-        "solido/patch-manager": "^0.2@dev",
+        "solido/body-converter": "^0.3@dev",
+        "solido/common": "^0.3@dev",
+        "solido/cors": "^0.3@dev",
+        "solido/data-mapper": "^0.3@dev",
+        "solido/data-transformers": "^0.3@dev",
+        "solido/dto-management": "^0.3@dev",
+        "solido/pagination": "^0.3@dev",
+        "solido/patch-manager": "^0.3@dev",
         "solido/php-coding-standards": "dev-master",
-        "solido/query-language": "^0.2@dev",
-        "solido/security-policy-checker": "^0.2@dev",
-        "solido/serialization": "^0.2@dev",
-        "solido/versioning": "^0.2@dev",
-        "symfony/browser-kit": "^4.4 || ^5.0",
-        "symfony/debug-bundle": "^4.4 || ^5.0",
-        "symfony/expression-language": "^4.4 || ^5.0",
-        "symfony/form": "^4.4 || ^5.0",
-        "symfony/http-foundation": "^4.4 || ^5.0",
-        "symfony/lock": "^4.4 || ^5.0",
-        "symfony/security-bundle": "^4.4 || ^5.0",
-        "symfony/serializer": "^4.4 || ^5.0",
-        "symfony/var-dumper": "^4.4 || ^5.0",
-        "symfony/web-profiler-bundle": "^4.4 || ^5.0",
-        "symfony/yaml": "^4.4 || ^5.0"
+        "solido/query-language": "^0.3@dev",
+        "solido/security-policy-checker": "^0.3@dev",
+        "solido/serialization": "^0.3@dev",
+        "solido/versioning": "^0.3@dev",
+        "symfony/browser-kit": "^4.4 || ^5.0 || ^6.0",
+        "symfony/debug-bundle": "^4.4 || ^5.0 || ^6.0",
+        "symfony/expression-language": "^4.4 || ^5.0 || ^6.0",
+        "symfony/form": "^4.4 || ^5.0 || ^6.0",
+        "symfony/http-foundation": "^4.4 || ^5.0 || ^6.0",
+        "symfony/lock": "^4.4 || ^5.0 || ^6.0",
+        "symfony/security-bundle": "^4.4 || ^5.0 || ^6.0",
+        "symfony/serializer": "^4.4 || ^5.0 || ^6.0",
+        "symfony/var-dumper": "^4.4 || ^5.0 || ^6.0",
+        "symfony/web-profiler-bundle": "^4.4 || ^5.0 || ^6.0",
+        "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -82,7 +84,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2.x-dev"
+            "dev-master": "0.3.x-dev"
         }
     }
 }

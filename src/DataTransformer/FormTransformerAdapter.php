@@ -48,9 +48,7 @@ class FormTransformerAdapter implements DataTransformerInterface
             throw new TransformationFailedException(
                 'Transformation failed: ' . $exception->getMessage(),
                 $code,
-                $exception,
-                $exception->getInvalidMessage(),
-                $exception->getInvalidMessageParameters()
+                $exception
             );
         }
     }

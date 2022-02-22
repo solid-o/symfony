@@ -7,6 +7,7 @@ namespace Solido\Symfony\Serialization\View;
 use Iterator;
 use IteratorAggregate;
 use Refugis\DoctrineExtra\ObjectIteratorInterface;
+use Solido\DataMapper\MappingResultInterface;
 use Solido\Pagination\PagerIterator;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +51,12 @@ final class View
             if (! $result->isValid()) {
                 $this->statusCode = Response::HTTP_BAD_REQUEST;
             }
+
+            return;
+        }
+
+        if ($result instanceof MappingResultInterface) {
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
 
             return;
         }

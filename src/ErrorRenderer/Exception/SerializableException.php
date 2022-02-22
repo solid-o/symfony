@@ -37,4 +37,15 @@ class SerializableException
     {
         return $this->errorCode;
     }
+
+    /**
+     * @return array<array-key, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'error_message' => $this->errorMessage,
+            'error_code' => $this->errorCode,
+        ];
+    }
 }

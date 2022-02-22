@@ -7,11 +7,6 @@
         <service id="Solido\Symfony\ErrorRenderer\SerializerErrorRenderer" decorates="error_renderer" decoration-on-invalid="ignore">
             <argument type="service" id="Solido\Symfony\ErrorRenderer\SerializerErrorRenderer.inner" />
             <argument type="service" id="request_stack" />
-            <argument type="service" id="solido.serializer" />
-            <argument type="collection">
-                <argument key="enable_max_depth">true</argument>
-                <argument key="serialize_null">true</argument>
-            </argument>
             <argument>%kernel.debug%</argument>
         </service>
     </services>

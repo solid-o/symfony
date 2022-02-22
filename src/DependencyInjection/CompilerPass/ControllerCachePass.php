@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DependencyInjection\CompilerPass;
 
-use Solido\Symfony\EventListener\FormInvalidExceptionSubscriber;
+use Solido\Symfony\EventListener\BadResponseExceptionSubscriber;
+use Solido\Symfony\EventListener\MappingErrorExceptionSubscriber;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -19,12 +20,12 @@ class ControllerCachePass implements CompilerPassInterface
             return;
         }
 
-        if (! $container->hasDefinition(FormInvalidExceptionSubscriber::class)) {
+        if (! $container->hasDefinition(MappingErrorExceptionSubscriber::class)) {
             return;
         }
 
         $def->addMethodCall('addAdditionalController', [
-            [FormInvalidExceptionSubscriber::class, 'formAction'],
+            [BadResponseExceptionSubscriber::class, 'errorAction'],
         ]);
     }
 }

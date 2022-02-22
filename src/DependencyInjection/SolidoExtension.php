@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DependencyInjection;
 
-use Solido\BodyConverter\Decoder\DecoderProviderInterface;
 use Solido\Common\AdapterFactoryInterface;
 use Solido\Common\Urn\UrnConverter;
 use Solido\Cors\RequestHandler;
@@ -60,8 +59,12 @@ class SolidoExtension extends Extension
         $loader->load('solido.xml');
         $loader->load('compat_sensio_framework_extra.xml');
 
-        if ($config['body_converter']['enabled'] && interface_exists(DecoderProviderInterface::class)) {
+        if ($config['body_converter']['enabled']) {
             $loader->load('body_converter.xml');
+        }
+
+        if ($config['data_mapper']['enabled']) {
+            $loader->load('data_mapper.xml');
         }
 
         if ($config['urn']['enabled']) {
@@ -103,18 +106,6 @@ class SolidoExtension extends Extension
                 $container->setAlias(PolicyCheckerInterface::class, $config['security']['policy_checker']['service'] ?? PolicyChecker::class);
                 $container->registerForAutoconfiguration(VoterInterface::class)->addTag('solido.security.policy_checker.voter');
             }
-        }
-
-        if ($config['form']['register_data_mapper']) {
-            $loader->load('form_data_mapper.xml');
-        }
-
-        if ($config['form']['auto_submit']) {
-            if (! $config['body_converter']['enabled']) {
-                throw new InvalidConfigurationException('Form auto submit needs body converter to be enabled');
-            }
-
-            $loader->load('form_auto_submit.xml');
         }
 
         /** @phpstan-var array{enabled: bool, allow_credentials: bool, allow_origin: string[], allow_headers: string[], expose_headers: string[], max_age: int, paths: array<string, array{paths: string, host: string, allow_credentials?: bool, allow_origin?: string[], allow_headers?: string[], expose_headers?: string[], max_age?: int}>} $corsConfig */

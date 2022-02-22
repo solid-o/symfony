@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Solido\BodyConverter\BodyConverterInterface;
 use Solido\Cors\Configuration as CorsConfiguration;
 use Solido\Cors\RequestHandlerInterface;
+use Solido\DataMapper\DataMapperInterface;
 use Solido\Versioning\VersionGuesserInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -32,19 +33,6 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike(true)
                     ->defaultFalse()
                     ->info('Whether to enable test features')
-                ->end()
-                ->arrayNode('form')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('register_data_mapper')
-                            ->info('Register form data mapper for all forms in the project')
-                            ->defaultFalse()
-                        ->end()
-                        ->booleanNode('auto_submit')
-                            ->info('Register the auto-submit extension for all forms')
-                            ->defaultFalse()
-                        ->end()
-                    ->end()
                 ->end()
                 ->arrayNode('request')
                     ->info('Enables the request processing features (Accept header parsing, versioning guessing)')
@@ -87,6 +75,10 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('body_converter')
                     ->info('Whether to enable or not the body converter component')
                     ->{interface_exists(BodyConverterInterface::class) ? 'canBeDisabled' : 'canBeEnabled'}()
+                ->end()
+                ->arrayNode('data_mapper')
+                    ->info('Whether to enable or not the data mapper component')
+                    ->{interface_exists(DataMapperInterface::class) ? 'canBeDisabled' : 'canBeEnabled'}()
                 ->end()
                 ->arrayNode('serializer')
                     ->info('Enables the automatic serialization of views and data returned from controllers')
