@@ -28,7 +28,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 {
     private ?ServiceLocatorRegistry $locator;
 
-    public function __construct(ServiceLocatorRegistryInterface $locator, Reader $reader)
+    public function __construct(ServiceLocatorRegistryInterface $locator, ?Reader $reader = null)
     {
         $this->locator = $locator instanceof ServiceLocatorRegistry ? $locator : null;
         parent::__construct($reader);
@@ -36,6 +36,8 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $resource
      */
     public function supports($resource, ?string $type = null): bool
     {
@@ -44,10 +46,12 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $class
      */
-    public function load($resource, ?string $type = null): RouteCollection
+    public function load($class, ?string $type = null): RouteCollection
     {
-        if (! is_string($resource) || substr($resource, -1) !== '\\') {
+        if (! is_string($class) || substr($class, -1) !== '\\') {
             throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
         }
 
@@ -60,42 +64,42 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
         sort($interfaces);
 
         foreach ($interfaces as $interface) {
-            if (strpos($interface, $resource) !== 0) {
+            if (strpos($interface, $class) !== 0) {
                 continue;
             }
 
             $collection = new RouteCollection();
-            $class = new ReflectionClass($interface);
-            $globals = $this->getGlobals($class);
+            $reflectionClass = new ReflectionClass($interface);
+            $globals = $this->getGlobals($reflectionClass);
 
-            $filename = $class->getFileName();
+            $filename = $reflectionClass->getFileName();
             if ($filename !== false) {
                 $collection->addResource(new FileResource($filename));
             }
 
-            foreach ($class->getMethods() as $method) {
+            foreach ($reflectionClass->getMethods() as $method) {
                 $this->defaultRouteIndex = 0;
                 foreach ($this->getAnnotations($method) as $annot) {
                     if (! $annot instanceof RouteAnnotation) {
                         continue;
                     }
 
-                    $this->addRoute($collection, $annot, $globals, $class, $method);
+                    $this->addRoute($collection, $annot, $globals, $reflectionClass, $method);
                 }
             }
 
-            if ($collection->count() !== 0 || ! $class->hasMethod('__invoke')) {
+            if ($collection->count() !== 0 || ! $reflectionClass->hasMethod('__invoke')) {
                 $routeCollection->addCollection($collection);
                 continue;
             }
 
             $globals = $this->resetGlobals();
-            foreach ($this->getAnnotations($class) as $annot) {
+            foreach ($this->getAnnotations($reflectionClass) as $annot) {
                 if (! $annot instanceof RouteAnnotation) {
                     continue;
                 }
 
-                $this->addRoute($collection, $annot, $globals, $class, $class->getMethod('__invoke'));
+                $this->addRoute($collection, $annot, $globals, $reflectionClass, $reflectionClass->getMethod('__invoke'));
             }
 
             $routeCollection->addCollection($collection);
@@ -139,7 +143,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
             }
         }
 
-        if (! $this->reader) {
+        if ($this->reader === null) {
             return;
         }
 

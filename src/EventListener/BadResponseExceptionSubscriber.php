@@ -4,18 +4,30 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\EventListener;
 
+use Solido\ApiProblem\Http\ApiProblem;
 use Solido\Atlante\Requester\Exception\BadRequestException;
-use Solido\Atlante\Requester\Response\BadResponsePropertyTree;
-use Solido\Symfony\Annotation\View;
+use Solido\Serialization\SerializerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+use function assert;
+use function is_array;
+use function is_string;
+use function json_decode;
+
+use const JSON_THROW_ON_ERROR;
 
 class BadResponseExceptionSubscriber implements EventSubscriberInterface
 {
+    private SerializerInterface $serializer;
+
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     public function onException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
@@ -23,40 +35,15 @@ class BadResponseExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $request = $this->duplicateRequest($exception->getResponse()->getErrors(), $event->getRequest());
-        $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, false);
+        $data = $this->serializer->serialize($exception->getResponse()->getErrors(), 'json');
+        assert(is_string($data));
 
-        $event->setResponse($response);
-    }
+        $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+        assert(is_array($data));
 
-    /**
-     * Clones the request for the exception.
-     */
-    protected function duplicateRequest(BadResponsePropertyTree $errors, Request $request): Request
-    {
-        $attributes = [
-            '_controller' => [$this, 'errorAction'],
-            '_security' => false,
-            'errors' => $errors,
-        ];
+        $problem = new ApiProblem(Response::HTTP_BAD_REQUEST, $data);
 
-        $request = $request->duplicate(null, null, $attributes);
-        $request->setMethod(Request::METHOD_GET);
-
-        return $request;
-    }
-
-    /**
-     * This is public to be callable. DO NOT USE IT!
-     * This method should be considered as private.
-     *
-     * @internal
-     *
-     * @View(Response::HTTP_BAD_REQUEST)
-     */
-    public function errorAction(BadResponsePropertyTree $errors): BadResponsePropertyTree
-    {
-        return $errors;
+        $event->setResponse($problem->toResponse());
     }
 
     /**

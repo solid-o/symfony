@@ -85,9 +85,9 @@ class ControllerCacheWarmerTest extends TestCase
         $collection = new RouteCollection();
         $this->router->getRouteCollection()->willReturn($collection);
 
-        $this->warmer->addAdditionalController([BadResponseExceptionSubscriber::class, 'errorAction']);
+        $this->warmer->addAdditionalController([TestControllerForControllerCacheWarmer::class, 'testAction']);
         self::assertEquals([
-            $this->cacheDir . '/solido_attributes/' . str_replace('\\', '', BadResponseExceptionSubscriber::class) . '/errorAction.php',
+            $this->cacheDir . '/solido_attributes/' . str_replace('\\', '', TestControllerForControllerCacheWarmer::class) . '/testAction.php',
         ], $this->warmer->warmUp($this->cacheDir));
     }
 

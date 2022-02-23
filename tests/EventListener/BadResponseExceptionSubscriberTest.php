@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\Tests\EventListener;
 
+use Kcs\Serializer\SerializerBuilder;
 use Solido\Atlante\Http\HeaderBag;
 use Solido\Atlante\Requester\Exception\BadRequestException;
 use Solido\Atlante\Requester\Response\BadResponse;
+use Solido\Serialization\Adapter\KcsSerializerAdapter;
 use Solido\Symfony\EventListener\BadResponseExceptionSubscriber;
 use PHPUnit\Framework\TestCase;
 use Solido\Symfony\Tests\Fixtures\View\AppKernel;
@@ -21,7 +23,8 @@ class BadResponseExceptionSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->listener = new BadResponseExceptionSubscriber();
+        $serializer = SerializerBuilder::create()->build();
+        $this->listener = new BadResponseExceptionSubscriber(new KcsSerializerAdapter($serializer));
     }
 
     public function testShouldListenOnExceptionEvent(): void
@@ -68,6 +71,6 @@ class BadResponseExceptionSubscriberTest extends TestCase
         self::assertTrue($event->isPropagationStopped());
 
         $response = $event->getResponse();
-        self::assertJsonStringEqualsJsonString('{"errors":["Invalid form"],"name":"","children":[{"errors":["Bad bad value"],"name":"field_1","children":[]}]}', $response->getContent());
+        self::assertJsonStringEqualsJsonString('{"detail": "","errors":["Invalid form"],"name":"","children":[{"errors":["Bad bad value"],"name":"field_1","children":[]}],"status":400,"title":"Bad Request","type":"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"}', $response->getContent());
     }
 }

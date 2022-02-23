@@ -36,7 +36,7 @@ class SerializerErrorRenderer implements ErrorRendererInterface
         if (method_exists($this->requestStack, 'getMainRequest')) {
             $request = $this->requestStack->getMainRequest();
         } else {
-            $request = $this->requestStack->getMasterRequest();
+            $request = $this->requestStack->getMasterRequest(); /* @phpstan-ignore-line */
         }
 
         if ($request === null) {
