@@ -21,6 +21,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
+        "ext-json": "*",
         "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
         "willdurand/negotiation": "^2.3 || ^3.0"
     },

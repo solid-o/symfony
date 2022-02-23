@@ -7,7 +7,7 @@
     <services>
         <service class="Solido\Symfony\EventListener\BadResponseExceptionSubscriber" id="Solido\Symfony\EventListener\BadResponseExceptionSubscriber">
             <tag name="kernel.event_subscriber" />
-            <argument type="service" id="solido.serializer" />
+            <argument type="service" id="solido.serializer" on-invalid="ignore" />
         </service>
 
         <service class="Solido\Symfony\EventListener\MappingErrorExceptionSubscriber" id="Solido\Symfony\EventListener\MappingErrorExceptionSubscriber">
