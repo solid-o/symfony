@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service class="Solido\DataMapper\Form\RequestHandler" id="Solido\DataMapper\Form\RequestHandler">
-            <argument id="form.server_params" on-invalid="ignore" />
-            <argument id="Solido\Common\AdapterFactoryInterface" />
-            <argument id="Solido\BodyConverter\BodyConverterInterface" on-invalid="ignore" />
+            <argument type="service" id="form.server_params" on-invalid="null" />
+            <argument type="service" id="Solido\Common\AdapterFactoryInterface" />
+            <argument type="service" id="Solido\BodyConverter\BodyConverterInterface" on-invalid="ignore" />
         </service>
 
         <service class="Solido\DataMapper\DataMapperFactory" id="Solido\DataMapper\DataMapperFactory">
