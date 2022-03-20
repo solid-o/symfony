@@ -66,7 +66,10 @@ final class View
         }
 
         if ($result instanceof ObjectIteratorInterface) {
-            $this->headers['X-Total-Count'] = $result->count();
+            $count = $result->count();
+            if ($count !== null) {
+                $this->headers['X-Total-Count'] = (string) $count;
+            }
         }
 
         if ($result instanceof PagerIterator) {
