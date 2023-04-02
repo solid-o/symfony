@@ -33,9 +33,7 @@ class Processor implements IteratorAggregate
     private array $versions;
     private ContainerBuilder $container;
 
-    /**
-     * @param string[] $namespaces
-     */
+    /** @param string[] $namespaces */
     public function __construct(ContainerBuilder $container, array $namespaces)
     {
         $this->container = $container;

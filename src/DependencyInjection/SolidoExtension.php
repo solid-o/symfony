@@ -46,9 +46,7 @@ use function interface_exists;
 
 class SolidoExtension extends Extension
 {
-    /**
-     * @param array<array<string, mixed>> $configs
-     */
+    /** @param array<array<string, mixed>> $configs */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);

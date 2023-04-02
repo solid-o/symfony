@@ -44,9 +44,7 @@ class PolicyVoter implements VoterInterface
             VoterInterface::ACCESS_DENIED;
     }
 
-    /**
-     * @return array<string, string|string[]>
-     */
+    /** @return array<string, string|string[]> */
     protected function getContext(): array
     {
         if (method_exists($this->requestStack, 'getMainRequest')) {

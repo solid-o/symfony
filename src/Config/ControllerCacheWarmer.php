@@ -54,9 +54,7 @@ class ControllerCacheWarmer implements CacheWarmerInterface
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function warmUp(string $cacheDir): array
     {
         $files = [];

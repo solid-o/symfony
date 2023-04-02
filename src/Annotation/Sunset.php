@@ -14,9 +14,7 @@ use function is_array;
 use function is_string;
 use function Safe\sprintf;
 
-/**
- * @Annotation()
- */
+/** @Annotation() */
 #[Attribute]
 class Sunset implements ConfigurationInterface
 {

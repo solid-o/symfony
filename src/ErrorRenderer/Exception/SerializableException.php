@@ -38,9 +38,7 @@ class SerializableException
         return $this->errorCode;
     }
 
-    /**
-     * @return array<array-key, mixed>
-     */
+    /** @return array<array-key, mixed> */
     public function toArray(): array
     {
         return [

@@ -19,9 +19,7 @@ class FormatGuesser implements FormatGuesserInterface
     private array $priorities;
     private ?string $defaultType;
 
-    /**
-     * @param string[] $priorities
-     */
+    /** @param string[] $priorities */
     public function __construct(array $priorities, ?string $defaultType)
     {
         $this->priorities = (static fn (string ...$v) => $v)(...$priorities);

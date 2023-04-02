@@ -46,7 +46,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $cacheDir = $container->getParameterBag()->resolveValue(
-            $container->getParameter('solido.dto-management.proxy_cache_dir')
+            $container->getParameter('solido.dto-management.proxy_cache_dir'),
         );
 
         // @phpstan-ignore-next-line

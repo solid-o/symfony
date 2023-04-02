@@ -11,9 +11,7 @@ use Solido\Symfony\Annotation\Security;
 
 use function class_exists;
 
-/**
- * @internal
- */
+/** @internal */
 final class MissingSecurityExtension extends MissingPackageExtension
 {
     use AttributeReaderTrait;

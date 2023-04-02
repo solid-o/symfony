@@ -28,17 +28,13 @@ class DebugSerializableException extends SerializableException
         $this->errorMessage = $exception->getMessage();
     }
 
-    /**
-     * @return array<array-key, mixed>
-     */
+    /** @return array<array-key, mixed> */
     public function getException(): array
     {
         return $this->exception;
     }
 
-    /**
-     * @return array<array-key, mixed>
-     */
+    /** @return array<array-key, mixed> */
     public function toArray(): array
     {
         return parent::toArray() + [

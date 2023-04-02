@@ -11,9 +11,7 @@ use Solido\Symfony\Annotation\Lock;
 
 use function class_exists;
 
-/**
- * @internal
- */
+/** @internal */
 final class MissingLockExtension extends MissingPackageExtension
 {
     use AttributeReaderTrait;

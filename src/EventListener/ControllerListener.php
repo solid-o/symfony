@@ -221,9 +221,7 @@ class ControllerListener implements EventSubscriberInterface
         return $configurations;
     }
 
-    /**
-     * @return object[]
-     */
+    /** @return object[] */
     private function getClassAttributes(ReflectionClass $object): array
     {
         $annotations = $this->reader !== null ? $this->reader->getClassAnnotations($object) : [];
@@ -231,16 +229,14 @@ class ControllerListener implements EventSubscriberInterface
             $attributes = $object->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             array_push(
                 $annotations,
-                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes)
+                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes),
             );
         }
 
         return $annotations;
     }
 
-    /**
-     * @return object[]
-     */
+    /** @return object[] */
     private function getMethodAttributes(ReflectionMethod $method): array
     {
         $annotations = $this->reader !== null ? $this->reader->getMethodAnnotations($method) : [];
@@ -248,7 +244,7 @@ class ControllerListener implements EventSubscriberInterface
             $attributes = $method->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             array_push(
                 $annotations,
-                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes)
+                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes),
             );
         }
 

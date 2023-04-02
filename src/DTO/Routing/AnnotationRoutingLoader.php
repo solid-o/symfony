@@ -31,6 +31,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
     public function __construct(ServiceLocatorRegistryInterface $locator, ?Reader $reader = null)
     {
         $this->locator = $locator instanceof ServiceLocatorRegistry ? $locator : null;
+
         parent::__construct($reader);
     }
 
@@ -161,9 +162,7 @@ class AnnotationRoutingLoader extends AnnotationClassLoader
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     private function resetGlobals(): array
     {
         return [

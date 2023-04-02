@@ -32,9 +32,7 @@ final class View
     public bool $serializeNull = true;
     public bool $enableMaxDepthChecks = false;
 
-    /**
-     * @param mixed $result
-     */
+    /** @param mixed $result */
     public function __construct($result, int $statusCode = Response::HTTP_OK)
     {
         $this->statusCode = $statusCode;

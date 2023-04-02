@@ -75,13 +75,13 @@ class ControllerListener implements EventSubscriberInterface
         if (80000 <= PHP_VERSION_ID) {
             $classAttributes = array_map(
                 static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
-                $object->getAttributes(ConfigurationAnnotation::class, ReflectionAttribute::IS_INSTANCEOF)
+                $object->getAttributes(ConfigurationAnnotation::class, ReflectionAttribute::IS_INSTANCEOF),
             );
             $classConfigurations = array_merge($classConfigurations, $this->getConfigurations($classAttributes));
 
             $methodAttributes = array_map(
                 static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
-                $method->getAttributes(ConfigurationAnnotation::class, ReflectionAttribute::IS_INSTANCEOF)
+                $method->getAttributes(ConfigurationAnnotation::class, ReflectionAttribute::IS_INSTANCEOF),
             );
             $methodConfigurations = array_merge($methodConfigurations, $this->getConfigurations($methodAttributes));
         }

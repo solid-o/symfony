@@ -22,9 +22,7 @@ trait SubscribedServicesGeneratorTrait
 {
     private ProxyBuilder $builder;
 
-    /**
-     * @param array<string, string> $services
-     */
+    /** @param array<string, string> $services */
     private function addServices(array $services): void
     {
         $methods = $this->builder->getExtraMethods();
@@ -57,9 +55,7 @@ trait SubscribedServicesGeneratorTrait
         }
     }
 
-    /**
-     * @internal
-     */
+    /** @internal */
     public function getContainerName(): string
     {
         $methods = $this->builder->getExtraMethods();

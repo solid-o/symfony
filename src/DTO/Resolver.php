@@ -15,6 +15,7 @@ class Resolver extends BaseResolver
     public function __construct(ServiceLocatorRegistryInterface $registry, ?RequestStack $requestStack = null)
     {
         parent::__construct($registry);
+
         $this->requestStack = $requestStack;
     }
 

@@ -75,9 +75,7 @@ class SecurityExtension implements ExtensionInterface
         unset($this->builder);
     }
 
-    /**
-     * @param string[] $parameters
-     */
+    /** @param string[] $parameters */
     protected function generateCode(Security $annotation, array $parameters): string
     {
         $this->addServices([

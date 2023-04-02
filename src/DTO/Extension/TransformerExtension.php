@@ -27,6 +27,7 @@ class TransformerExtension extends BaseExtension
     public function extend(ProxyBuilder $proxyBuilder): void
     {
         $this->builder = $proxyBuilder;
+
         parent::extend($proxyBuilder);
 
         unset($this->builder);
