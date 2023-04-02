@@ -12,6 +12,7 @@ jobs:
                 php_version:
                     - '7.4'
                     - '8.0'
+                    - '8.1'
 
         name: PHP ${{ matrix.php_version }}
         steps:
