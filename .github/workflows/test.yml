@@ -17,7 +17,7 @@ jobs:
 
         name: PHP ${{ matrix.php_version }}
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
                 fetch-depth: 0
 
@@ -41,7 +41,7 @@ jobs:
                   sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' junit.xml
 
             - name: SonarCloud Scan
-              uses: sonarsource/sonarcloud-github-action@v1.5
+              uses: sonarsource/sonarcloud-github-action@master
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
