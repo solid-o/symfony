@@ -27,6 +27,7 @@
     },
     "require-dev": {
         "doctrine/annotations": "^1.10 || ^2.0",
+        "friendsofphp/proxy-manager-lts": "^1.0",
         "giggsey/libphonenumber-for-php": "^8.10",
         "jms/serializer": "^3.6",
         "kcs/serializer": "^3.3 || ^4.0",
