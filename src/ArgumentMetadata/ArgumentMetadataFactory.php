@@ -33,12 +33,15 @@ class ArgumentMetadataFactory implements ArgumentMetadataFactoryInterface
     {
         if (is_array($controller) && is_subclass_of($controller[0], ProxyInterface::class)) {
             $controller[0] = get_parent_class($controller[0]);
+            // @phpstan-ignore-next-line
             $reflector = new ReflectionMethod(...$controller);
         } elseif ($controller instanceof ProxyInterface) {
             $controller = [get_parent_class($controller), '__invoke'];
+            // @phpstan-ignore-next-line
             $reflector = new ReflectionMethod(...$controller);
         }
 
+        // @phpstan-ignore-next-line
         return $this->decorated->createArgumentMetadata($controller, $reflector);
     }
 }

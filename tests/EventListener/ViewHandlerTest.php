@@ -244,7 +244,7 @@ class ViewHandlerTest extends WebTestCase
 
         $iterator = $this->prophesize(ObjectIteratorInterface::class);
         $iterator->count()->willReturn(42);
-        $iterator->rewind()->willReturn();
+        $iterator->rewind()->shouldBeCalled();
         $iterator->valid()->willReturn(false);
 
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $iterator->reveal());

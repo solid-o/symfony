@@ -32,7 +32,6 @@ use function is_dir;
 use function is_string;
 use function is_subclass_of;
 use function mkdir;
-use function Safe\array_combine;
 use function Safe\file_put_contents;
 use function Safe\sprintf;
 use function str_replace;
@@ -59,6 +58,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
 
         $this->proxyFactory = $factory;
         if (function_exists(AnnotationRegistry::class . '::registerUniqueLoader')) {
+            // @phpstan-ignore-next-line
             AnnotationRegistry::registerUniqueLoader('class_exists');
         }
 
@@ -72,19 +72,32 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
             $exclude[] = $tag['value'];
         }
 
+        /** @var array<string, ServiceClosureArgument> $locators */
         $locators = [];
         $iterator = new Processor($container, $namespaces);
-        foreach ($iterator as $interface => $interfaceDefinition) {
+
+        foreach ($iterator as $interface => $interfaceArg) {
+            assert(is_string($interface));
+            assert($interfaceArg instanceof ServiceClosureArgument);
             if (in_array($interface, $exclude, true)) {
                 continue;
             }
 
             if (isset($locators[$interface])) {
                 // How can this case be possible?!
-                $arguments = array_merge($locators[$interface]->getArgument(0), $interfaceDefinition->getArgument(0));
-                $locators[$interface]->setArguments([array_values(array_combine($arguments, $arguments))]);
+                $ref = $locators[$interface]->getValues()[0];
+                assert($ref instanceof Reference);
+                $def = $container->findDefinition((string) $ref);
+
+                $argRef = $interfaceArg->getValues()[0];
+                assert($argRef instanceof Reference);
+                $argDef = $container->findDefinition((string) $argRef);
+
+                // @phpstan-ignore-next-line
+                $arguments = array_merge($def->getArgument(0), $argDef->getArgument(0));
+                $def->setArguments([array_values($arguments)]);
             } else {
-                $locators[$interface] = $interfaceDefinition;
+                $locators[$interface] = $interfaceArg;
             }
         }
 

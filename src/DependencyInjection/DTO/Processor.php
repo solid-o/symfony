@@ -25,6 +25,7 @@ use function Safe\preg_match;
 use function Safe\preg_replace;
 use function str_replace;
 
+/** @template-implements IteratorAggregate<string, ServiceClosureArgument> */
 class Processor implements IteratorAggregate
 {
     /** @var string[] */
