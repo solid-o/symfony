@@ -37,6 +37,7 @@ class SolidoBundle extends Bundle
 
     public function boot(): void
     {
+        assert($this->container !== null);
         if ($this->container->hasParameter('solido.urn.urn_default_domain')) {
             $defaultDomain = $this->container->getParameter('solido.urn.urn_default_domain');
             assert(is_string($defaultDomain));

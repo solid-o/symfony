@@ -21,6 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\VarExporter\VarExporter;
+use Throwable;
 use UnexpectedValueException;
 
 use function array_key_exists;
@@ -160,13 +161,17 @@ class ControllerListener implements EventSubscriberInterface
 
         $request->attributes->set('_controller', $controllerName);
 
-        if (PHP_VERSION_ID <= 80000) {
+        if (PHP_VERSION_ID <= 80000 || ! method_exists($event, 'getAttributes')) {
             return;
         }
 
         $attributes = $event->getAttributes();
         foreach ($method->getAttributes() as $attribute) {
-            $attributes[$attribute->getName()][] = $attribute->newInstance();
+            try {
+                $attributes[$attribute->getName()][] = $attribute->newInstance();
+            } catch (Throwable) { // @phpstan-ignore-line
+                // @ignoreException
+            }
         }
 
         $event->setController($event->getController(), $attributes);

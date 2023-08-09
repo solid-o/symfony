@@ -28,7 +28,7 @@ class SymfonyIsGrantedCompatibilityTest extends WebTestCase
     }
 
     /**
-     * @requires PHP >= 8.0
+     * @requires PHP >= 8.1
      */
     public function testShouldBeCompatibleWithSensioFrameworkExtraAnnotations(): void
     {

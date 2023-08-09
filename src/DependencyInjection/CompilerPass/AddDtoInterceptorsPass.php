@@ -47,6 +47,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $cacheDir = $container->getParameterBag()->resolveValue(
             $container->getParameter('solido.dto-management.proxy_cache_dir'),
         );
+        assert(is_string($cacheDir));
 
         // @phpstan-ignore-next-line
         if (! @mkdir($cacheDir, 0777, true) && ! is_dir($cacheDir)) {
@@ -158,6 +159,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $finder = new RecursiveFinder($cacheDir);
 
         foreach ($finder as $class => $reflector) {
+            assert(is_string($class));
             assert($reflector instanceof ReflectionClass);
             if (strpos($class, "class@anonymous\x00") === 0) {
                 continue;
