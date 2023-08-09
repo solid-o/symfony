@@ -52,8 +52,11 @@ class ControllerListener implements EventSubscriberInterface
     private string $cacheDir;
     private ?Reader $reader;
 
-    public function __construct(ConfigCacheFactoryInterface $cacheFactory, string $cacheDir, ?Reader $reader = null)
-    {
+    public function __construct(
+        ConfigCacheFactoryInterface $cacheFactory,
+        string $cacheDir,
+        ?Reader $reader = null
+    ) {
         $this->cacheFactory = $cacheFactory;
         $this->cacheDir = $cacheDir;
         $this->reader = $reader;
@@ -156,6 +159,17 @@ class ControllerListener implements EventSubscriberInterface
         );
 
         $request->attributes->set('_controller', $controllerName);
+
+        if (PHP_VERSION_ID <= 80000) {
+            return;
+        }
+
+        $attributes = $event->getAttributes();
+        foreach ($method->getAttributes() as $attribute) {
+            $attributes[$attribute->getName()][] = $attribute->newInstance();
+        }
+
+        $event->setController($event->getController(), $attributes);
     }
 
     /**
