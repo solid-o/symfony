@@ -169,7 +169,7 @@ class ControllerListener implements EventSubscriberInterface
         foreach ($method->getAttributes() as $attribute) {
             try {
                 $attributes[$attribute->getName()][] = $attribute->newInstance();
-            } catch (Throwable) { // @phpstan-ignore-line
+            } catch (Throwable $e) { // @phpstan-ignore-line
                 // @ignoreException
             }
         }
