@@ -11,22 +11,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 use function assert;
 use function is_string;
-use function Safe\preg_replace;
+use function preg_replace;
 
 class FormatGuesser implements FormatGuesserInterface
 {
     /** @var string[] */
     private array $priorities;
-    private ?string $defaultType;
 
     /** @param string[] $priorities */
-    public function __construct(array $priorities, ?string $defaultType)
+    public function __construct(array $priorities, private string|null $defaultType)
     {
         $this->priorities = (static fn (string ...$v) => $v)(...$priorities);
-        $this->defaultType = $defaultType;
     }
 
-    public function guess(Request $request): ?string
+    public function guess(Request $request): string|null
     {
         if ($this->defaultType === null && ! $request->headers->has('Accept')) {
             return null;
@@ -35,10 +33,13 @@ class FormatGuesser implements FormatGuesserInterface
         $requestHeader = $request->headers->get('Accept', $this->defaultType);
         assert(is_string($requestHeader), 'Accept header is not a string');
 
+        $requestHeader = preg_replace('/;\s*version=.+?(?=;|$)/', '', $requestHeader);
+        assert($requestHeader !== null);
+
         $negotiator = new Negotiator();
         try {
-            $header = $negotiator->getBest(preg_replace('/;\s*version=.+?(?=;|$)/', '', $requestHeader), $this->priorities);
-        } catch (InvalidMediaType $exception) {
+            $header = $negotiator->getBest($requestHeader, $this->priorities);
+        } catch (InvalidMediaType) {
             return null;
         }
 

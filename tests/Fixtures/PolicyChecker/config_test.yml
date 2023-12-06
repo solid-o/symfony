@@ -1,10 +1,8 @@
 framework:
     test: ~
     secret: secret
-    annotations: true
     property_access: true
-    serializer:
-        enable_annotations: true
+    serializer: ~
     form: ~
     csrf_protection: false
     session: { enabled: false }
@@ -13,7 +11,6 @@ framework:
         resource: "%kernel.root_dir%/routing.yml"
 
 security:
-    enable_authenticator_manager: true
     providers:
         in_memory:
             memory: ~
@@ -26,13 +23,6 @@ security:
             custom_authenticators:
                 - Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
             entry_point: Solido\Symfony\Tests\Fixtures\PolicyChecker\User\UserAuthenticator
-
-sensio_framework_extra:
-    router:      { annotations: false }
-    request:     { converters: true, auto_convert: true }
-    view:        { annotations: false }
-    cache:       { annotations: true }
-    security:    { annotations: true }
 
 solido:
     test: ~

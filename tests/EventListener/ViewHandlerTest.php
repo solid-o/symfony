@@ -101,7 +101,7 @@ class ViewHandlerTest extends WebTestCase
      */
     public function testSkip(Request $request, $result): void
     {
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $result);
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $result);
 
         $this->serializer->serialize(Argument::cetera())->shouldNotBeCalled();
         $this->viewHandler->onView($event);
@@ -111,15 +111,13 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSetStatusCode(): void
     {
-        $annotation = new ViewAnnotation();
-        $annotation->statusCode = Response::HTTP_CREATED;
-
+        $annotation = new ViewAnnotation(Response::HTTP_CREATED);
         $request = new Request();
         $request->attributes->set('_solido_view', $annotation);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, new TestObject());
 
-        $this->serializer->serialize(Argument::type(TestObject::class), Argument::cetera())->shouldBeCalled();
+        $this->serializer->serialize(Argument::type(TestObject::class), Argument::cetera())->shouldBeCalled()->willReturn('{}');
         $this->viewHandler->onView($event);
 
         self::assertEquals(Response::HTTP_CREATED, $event->getResponse()->getStatusCode());
@@ -127,34 +125,31 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSerializeWithCorrectGroups(): void
     {
-        $annotation = new ViewAnnotation();
-        $annotation->groups = ['group_foo', 'bar_bar'];
-
+        $annotation = new ViewAnnotation(groups: ['group_foo', 'bar_bar']);
         $request = new Request();
         $request->attributes->set('_solido_view', $annotation);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, new TestObject());
 
         $this->serializer
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::withEntry('groups', ['group_foo', 'bar_bar']))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
     }
 
     public function testShouldCallSerializationGroupProvider(): void
     {
-        $annotation = new ViewAnnotation();
-        $annotation->groupsProvider = 'testGroupProvider';
-
+        $annotation = new ViewAnnotation(groupsProvider: 'testGroupProvider');
         $request = new Request();
         $request->attributes->set('_solido_view', $annotation);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new TestObject());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, new TestObject());
         $this->serializer
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::withEntry('groups', ['foobar']))
             ->shouldBeCalled()
-        ;
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
     }
@@ -164,7 +159,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_solido_view', new ViewAnnotation());
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, new \stdClass());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, new \stdClass());
 
         $this->serializer
             ->serialize(Argument::any(), Argument::any(), Argument::type('array'))
@@ -185,11 +180,12 @@ class ViewHandlerTest extends WebTestCase
         $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $form->reveal());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $form->reveal());
 
         $this->serializer
             ->serialize($form->reveal(), Argument::any(), Argument::type('array'))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
         self::assertEquals(Response::HTTP_BAD_REQUEST, $event->getResponse()->getStatusCode());
@@ -206,7 +202,7 @@ class ViewHandlerTest extends WebTestCase
 
         $form->submit(null)->shouldBeCalled()->willReturn($form);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $form->reveal());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $form->reveal());
         $this->viewHandler->onView($event);
     }
 
@@ -229,10 +225,11 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_solido_view', new ViewAnnotation());
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $iterator);
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $iterator);
         $this->serializer
             ->serialize(['foo' => 'bar'], Argument::any(), Argument::type('array'))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
     }
@@ -247,11 +244,12 @@ class ViewHandlerTest extends WebTestCase
         $iterator->rewind()->shouldBeCalled();
         $iterator->valid()->willReturn(false);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $iterator->reveal());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $iterator->reveal());
 
         $this->serializer
             ->serialize(Argument::type('array'), Argument::any(), Argument::type('array'))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
         self::assertEquals(42, $event->getResponse()->headers->get('X-Total-Count'));
@@ -281,11 +279,12 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_solido_view', new ViewAnnotation());
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $result);
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $result);
 
         $this->serializer
             ->serialize(Argument::type('array'), Argument::any(), Argument::type('array'))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
         self::assertEquals(42, $event->getResponse()->headers->get('X-Total-Count'));
@@ -301,11 +300,12 @@ class ViewHandlerTest extends WebTestCase
         $iterator->rewind()->shouldBeCalled();
         $iterator->valid()->willReturn(false);
 
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $iterator->reveal());
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $iterator->reveal());
 
         $this->serializer
             ->serialize(Argument::type('array'), Argument::any(), Argument::type('array'))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('{}');
 
         $this->viewHandler->onView($event);
         self::assertEquals('bfdew0_1_l347bh', $event->getResponse()->headers->get('X-Continuation-Token'));
@@ -317,7 +317,7 @@ class ViewHandlerTest extends WebTestCase
         $request->attributes->set('_solido_view', new ViewAnnotation());
 
         $result = new View(['foobar' => 'no no no'], Response::HTTP_PAYMENT_REQUIRED);
-        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MASTER_REQUEST, $result);
+        $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $result);
 
         $this->serializer
             ->serialize(Argument::type('array'), Argument::any(), Argument::type('array'))
@@ -337,7 +337,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_controller', [$controller, 'deprecatedAction']);
 
-        $event = new ControllerEvent($this->httpKernel->reveal(), $request->attributes->get('_controller'), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->httpKernel->reveal(), $request->attributes->get('_controller'), $request, HttpKernelInterface::MAIN_REQUEST);
         $this->viewHandler->onController($event);
 
         self::assertTrue($request->attributes->has('_deprecated'));
@@ -350,7 +350,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_controller', [$controller, 'deprecatedWithNoticeAction']);
 
-        $event = new ControllerEvent($this->httpKernel->reveal(), $request->attributes->get('_controller'), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->httpKernel->reveal(), $request->attributes->get('_controller'), $request, HttpKernelInterface::MAIN_REQUEST);
         $this->viewHandler->onController($event);
 
         self::assertEquals('With Notice', $request->attributes->get('_deprecated'));

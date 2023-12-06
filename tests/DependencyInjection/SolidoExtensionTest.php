@@ -19,10 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
+
 use function get_debug_type;
-use function Safe\tempnam;
+use function tempnam;
 use function sys_get_temp_dir;
 
 class SolidoExtensionTest extends TestCase

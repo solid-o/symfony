@@ -7,43 +7,17 @@ namespace Solido\Symfony\Annotation;
 use Attribute;
 use Solido\Symfony\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Response;
-use TypeError;
 
-use function get_debug_type;
-use function is_array;
-use function is_int;
-use function Safe\sprintf;
-
-/** @Annotation() */
 #[Attribute]
 class View implements ConfigurationInterface
 {
-    public int $statusCode = Response::HTTP_OK;
-    public ?string $groupsProvider = null;
-    public ?string $serializationType = null;
-
-    /** @var string[] */
-    public array $groups = [];
-
-    /**
-     * @param int|array<string, mixed>|null $statusCode
-     * @param string[]|array<string|int, mixed> $groups
-     * @phpstan-param mixed $statusCode
-     */
-    public function __construct($statusCode = null, ?string $groupsProvider = null, ?string $serializationType = null, ?array $groups = null)
-    {
-        if (is_int($statusCode)) {
-            $data = ['statusCode' => $statusCode];
-        } elseif (is_array($statusCode)) {
-            $data = $statusCode;
-        } elseif ($statusCode !== null) {
-            throw new TypeError(sprintf('Argument #1 passed to %s must be an int. %s passed', __METHOD__, get_debug_type($statusCode)));
-        }
-
-        $this->statusCode = $data['statusCode'] ?? $data['value'] ?? Response::HTTP_OK;
-        $this->groupsProvider = $groupsProvider ?? $data['groupsProvider'] ?? null;
-        $this->serializationType = $serializationType ?? $data['serializationType'] ?? null;
-        $this->groups = $groups ?? $data['groups'] ?? [];
+    /** @param string[] $groups */
+    public function __construct(
+        public int $statusCode = Response::HTTP_OK,
+        public string|null $groupsProvider = null,
+        public string|null $serializationType = null,
+        public array|null $groups = null,
+    ) {
     }
 
     public function getAliasName(): string

@@ -25,6 +25,7 @@ use function array_values;
 use function assert;
 use function class_exists;
 use function dirname;
+use function file_put_contents;
 use function function_exists;
 use function in_array;
 use function interface_exists;
@@ -32,8 +33,7 @@ use function is_dir;
 use function is_string;
 use function is_subclass_of;
 use function mkdir;
-use function Safe\file_put_contents;
-use function Safe\sprintf;
+use function sprintf;
 use function str_replace;
 use function strpos;
 use function var_export;
@@ -49,7 +49,6 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         );
         assert(is_string($cacheDir));
 
-        // @phpstan-ignore-next-line
         if (! @mkdir($cacheDir, 0777, true) && ! is_dir($cacheDir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $cacheDir));
         }
@@ -125,7 +124,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
     {
         $locator = $container->getDefinition((string) $argument->getValues()[0]);
         /** @var ServiceClosureArgument[] $versions */
-        $versions = $locator->getArgument(0);
+        $versions = $locator->getArgument(1);
 
         foreach ($versions as &$version) {
             $definition = $container->findDefinition((string) $version->getValues()[0]);
@@ -138,7 +137,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
 
             try {
                 $proxyClass = $this->proxyFactory->generateProxy($className, ['throw_empty' => true]);
-            } catch (EmptyBuilderException $e) { /* @phpstan-ignore-line */
+            } catch (EmptyBuilderException) { /* @phpstan-ignore-line */
                 continue;
             }
 

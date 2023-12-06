@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 class UserAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
         // TODO: Implement start() method.
     }

@@ -18,15 +18,12 @@ use function assert;
 
 class CorsListener implements EventSubscriberInterface
 {
-    private HandlerFactory $factory;
-
-    public function __construct(HandlerFactory $factory)
+    public function __construct(private HandlerFactory $factory)
     {
-        $this->factory = $factory;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {
@@ -59,7 +56,7 @@ class CorsListener implements EventSubscriberInterface
 
             $event->setResponse($response);
             $event->allowCustomResponseCode();
-        } catch (InvalidOriginException $exception) {
+        } catch (InvalidOriginException) {
             // @ignoreException
         }
     }

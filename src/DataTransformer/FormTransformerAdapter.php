@@ -13,29 +13,19 @@ use function is_int;
 
 class FormTransformerAdapter implements DataTransformerInterface
 {
-    private TransformerInterface $transformer;
-
-    public function __construct(TransformerInterface $transformer)
+    public function __construct(private TransformerInterface $transformer)
     {
-        $this->transformer = $transformer;
     }
 
     /**
      * Always return null, solido transformers are one-way.
-     *
-     * @param mixed $value
-     *
-     * @return null
      */
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): mixed
     {
         try {
             return $this->transformer->transform($value);

@@ -15,11 +15,8 @@ use function class_exists;
 
 class BodyConverter implements EventSubscriberInterface
 {
-    private Converter $bodyConverter;
-
-    public function __construct(Converter $bodyConverter)
+    public function __construct(private Converter $bodyConverter)
     {
-        $this->bodyConverter = $bodyConverter;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -36,7 +33,7 @@ class BodyConverter implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

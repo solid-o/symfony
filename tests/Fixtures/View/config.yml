@@ -1,7 +1,6 @@
 framework:
     test: ~
     secret: secret
-    annotations: true
     property_access: true
     form: ~
     csrf_protection: false
@@ -9,7 +8,6 @@ framework:
         resource: "%kernel.root_dir%/routing.yml"
 
 security:
-    enable_authenticator_manager: true
     providers:
         in_memory:
             memory: ~
@@ -19,13 +17,6 @@ security:
             pattern: ^/(_(profiler|wdt))/
             security: false
         main: ~
-
-sensio_framework_extra:
-    router:      { annotations: false }
-    request:     { converters: true, auto_convert: true }
-    view:        { annotations: false }
-    cache:       { annotations: true }
-    security:    { annotations: true }
 
 services:
     Solido\Symfony\Tests\Fixtures\View\Controller\TestController:

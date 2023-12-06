@@ -24,20 +24,19 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use function is_array;
 use function is_callable;
 use function is_object;
-use function Safe\preg_replace;
-use function Safe\sprintf;
+use function preg_replace;
+use function sprintf;
 use function ucfirst;
 
 class ActionListener implements EventSubscriberInterface
 {
-    private TokenStorageInterface $tokenStorage;
-    private AuthorizationCheckerInterface $authorizationChecker;
     private string $prefix;
 
-    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker, ?string $prefix)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->authorizationChecker = $authorizationChecker;
+    public function __construct(
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        string|null $prefix,
+    ) {
         $this->prefix = $prefix ? $prefix . ':' : '';
     }
 
@@ -94,7 +93,7 @@ class ActionListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): iterable
     {

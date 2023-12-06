@@ -33,7 +33,6 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Parameter;
@@ -55,7 +54,6 @@ class SolidoExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('solido.xml');
-        $loader->load('compat_sensio_framework_extra.xml');
 
         if ($config['body_converter']['enabled']) {
             $loader->load('body_converter.xml');
@@ -187,10 +185,8 @@ class SolidoExtension extends Extension
                 $loader->load('dto_lock.xml');
             } else {
                 $container->register(MissingSecurityExtension::class)
-                    ->addArgument(new Reference('annotations.reader', ContainerInterface::NULL_ON_INVALID_REFERENCE))
                     ->addTag('solido.dto_extension', ['priority' => 30]);
                 $container->register(MissingLockExtension::class)
-                    ->addArgument(new Reference('annotations.reader', ContainerInterface::NULL_ON_INVALID_REFERENCE))
                     ->addTag('solido.dto_extension', ['priority' => 25]);
             }
 

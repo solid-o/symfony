@@ -10,13 +10,13 @@ jobs:
         runs-on: ubuntu-latest
         name: Static analysis
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Install PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: none
-                    php-version: "8.1"
+                    php-version: "8.2"
                     tools: cs2pr
 
             -   name: Cache dependencies installed with composer

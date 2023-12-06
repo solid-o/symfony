@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Solido\Symfony\EventListener;
 
 use Closure;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\Proxy;
 use LogicException;
 use ReflectionAttribute;
@@ -28,16 +27,15 @@ use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function array_merge;
-use function array_push;
 use function class_exists;
 use function get_class;
 use function get_parent_class;
 use function is_array;
 use function method_exists;
-use function Safe\sprintf;
-use function Safe\substr;
+use function sprintf;
 use function strrpos;
 use function strtr;
+use function substr;
 
 use const PHP_VERSION_ID;
 
@@ -49,22 +47,14 @@ use const PHP_VERSION_ID;
  */
 class ControllerListener implements EventSubscriberInterface
 {
-    private ConfigCacheFactoryInterface $cacheFactory;
-    private string $cacheDir;
-    private ?Reader $reader;
-
     public function __construct(
-        ConfigCacheFactoryInterface $cacheFactory,
-        string $cacheDir,
-        ?Reader $reader = null
+        private readonly ConfigCacheFactoryInterface $cacheFactory,
+        private readonly string $cacheDir,
     ) {
-        $this->cacheFactory = $cacheFactory;
-        $this->cacheDir = $cacheDir;
-        $this->reader = $reader;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {
@@ -169,7 +159,7 @@ class ControllerListener implements EventSubscriberInterface
         foreach ($method->getAttributes() as $attribute) {
             try {
                 $attributes[$attribute->getName()][] = $attribute->newInstance();
-            } catch (Throwable $e) { // @phpstan-ignore-line
+            } catch (Throwable) { // @phpstan-ignore-line
                 // @ignoreException
             }
         }
@@ -243,30 +233,18 @@ class ControllerListener implements EventSubscriberInterface
     /** @return object[] */
     private function getClassAttributes(ReflectionClass $object): array
     {
-        $annotations = $this->reader !== null ? $this->reader->getClassAnnotations($object) : [];
-        if (PHP_VERSION_ID >= 80000) {
-            $attributes = $object->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            array_push(
-                $annotations,
-                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes),
-            );
-        }
-
-        return $annotations;
+        return array_map(
+            static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
+            $object->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF),
+        );
     }
 
     /** @return object[] */
     private function getMethodAttributes(ReflectionMethod $method): array
     {
-        $annotations = $this->reader !== null ? $this->reader->getMethodAnnotations($method) : [];
-        if (PHP_VERSION_ID >= 80000) {
-            $attributes = $method->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            array_push(
-                $annotations,
-                ...array_map(static fn (ReflectionAttribute $attribute) => $attribute->newInstance(), $attributes),
-            );
-        }
-
-        return $annotations;
+        return array_map(
+            static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
+            $method->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF),
+        );
     }
 }

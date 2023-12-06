@@ -22,9 +22,7 @@ class Routed implements RoutedInterface
      */
     public $locked;
 
-    /**
-     * @Exclude()
-     */
+    #[Exclude]
     private LockFactory $lockFactory;
 
     public function __construct(LockFactory $lockFactory)
@@ -32,9 +30,7 @@ class Routed implements RoutedInterface
         $this->lockFactory = $lockFactory;
     }
 
-    /**
-     * @Lock("'lock_' ~ request.getClientIp()")
-     */
+    #[Lock("'lock_' ~ request.getClientIp()")]
     public function routed(Request $request): self
     {
         $this->id = 'what_a_nice_id';

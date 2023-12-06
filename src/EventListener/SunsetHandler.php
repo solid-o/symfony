@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Solido\Symfony\EventListener;
 
 use DateTime;
-use Safe\DateTimeImmutable;
+use DateTimeImmutable;
 use Solido\Symfony\Annotation\Sunset;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -37,7 +37,7 @@ class SunsetHandler implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

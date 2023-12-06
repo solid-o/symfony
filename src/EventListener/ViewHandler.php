@@ -27,15 +27,12 @@ use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
-use function Safe\preg_match;
+use function preg_match;
 use function stripos;
 use function trim;
 
 class ViewHandler implements EventSubscriberInterface
 {
-    private SerializerInterface $serializer;
-    private string $responseCharset;
-
     /**
      * DO NOT add typehint here: this event listener will be added to the preloaded classes list
      * and will break with a fatal error if the class is not found (security-core package not installed)
@@ -45,13 +42,11 @@ class ViewHandler implements EventSubscriberInterface
     private $tokenStorage; // phpcs:ignore
 
     public function __construct(
-        SerializerInterface $serializer,
-        ?TokenStorageInterface $tokenStorage,
-        string $responseCharset
+        private readonly SerializerInterface $serializer,
+        TokenStorageInterface|null $tokenStorage,
+        private readonly string $responseCharset,
     ) {
-        $this->serializer = $serializer;
         $this->tokenStorage = $tokenStorage;
-        $this->responseCharset = $responseCharset;
     }
 
     /**
@@ -102,7 +97,7 @@ class ViewHandler implements EventSubscriberInterface
             $content = $this->handle($result, $request);
             $response = new Response($content, $result->statusCode, $headers);
             $response->headers->set('Vary', 'Accept', false);
-        } catch (UnsupportedFormatException $e) {
+        } catch (UnsupportedFormatException) {
             $response = new Response(null, Response::HTTP_NOT_ACCEPTABLE);
         }
 
@@ -144,7 +139,7 @@ class ViewHandler implements EventSubscriberInterface
      * Serializes the view with given serialization groups
      * and given type.
      */
-    private function handle(View $view, Request $request): ?string
+    private function handle(View $view, Request $request): string|null
     {
         $format = $request->attributes->get('_format') ?? 'json';
         assert(is_string($format));
@@ -164,7 +159,7 @@ class ViewHandler implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

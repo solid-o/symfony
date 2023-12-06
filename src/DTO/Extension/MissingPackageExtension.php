@@ -8,18 +8,13 @@ use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Solido\DtoManagement\Proxy\Extension\ExtensionInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use function Safe\sprintf;
+use function sprintf;
 
 /** @internal */
 abstract class MissingPackageExtension implements ExtensionInterface
 {
-    private string $packageName;
-    private string $extensionName;
-
-    public function __construct(string $packageName, string $extensionName)
+    public function __construct(private readonly string $packageName, private readonly string $extensionName)
     {
-        $this->packageName = $packageName;
-        $this->extensionName = $extensionName;
     }
 
     public function extend(ProxyBuilder $proxyBuilder): void

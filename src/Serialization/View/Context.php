@@ -13,13 +13,11 @@ use function is_object;
 
 class Context
 {
-    private Request $request;
-    private ?UserInterface $user;
+    private UserInterface|null $user;
 
-    public function __construct(Request $request, ?TokenStorageInterface $tokenStorage = null)
+    public function __construct(private Request $request, TokenStorageInterface|null $tokenStorage = null)
     {
-        $this->request = $request;
-        $token = $tokenStorage !== null ? $tokenStorage->getToken() : null;
+        $token = $tokenStorage?->getToken();
 
         if ($token === null || ! is_object($token->getUser()) || $token->getUser() instanceof Stringable) {
             $this->user = null;
@@ -28,7 +26,7 @@ class Context
         }
     }
 
-    public static function create(Request $request, ?TokenStorageInterface $tokenStorage = null): self
+    public static function create(Request $request, TokenStorageInterface|null $tokenStorage = null): self
     {
         return new self($request, $tokenStorage);
     }
@@ -38,7 +36,7 @@ class Context
         return $this->request;
     }
 
-    public function getUser(): ?UserInterface
+    public function getUser(): UserInterface|null
     {
         return $this->user;
     }

@@ -1,0 +1,6 @@
+includes:
+    - vendor/solido/php-coding-standards/phpstan.neon
+
+parameters:
+    bootstrapFiles:
+        - compat/argument_value_resolver_interfaces.php

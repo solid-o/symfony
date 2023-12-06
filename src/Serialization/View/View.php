@@ -21,23 +21,16 @@ final class View
 {
     /** @var array<string, string|int> */
     public array $headers;
-    public int $statusCode;
-    public ?string $serializationType;
-
-    /** @var mixed */
-    public $result;
+    public string|null $serializationType;
 
     /** @var string[]|null */
-    public ?array $serializationGroups;
+    public array|null $serializationGroups;
     public bool $serializeNull = true;
     public bool $enableMaxDepthChecks = false;
 
-    /** @param mixed $result */
-    public function __construct($result, int $statusCode = Response::HTTP_OK)
+    public function __construct(public mixed $result, public int $statusCode = Response::HTTP_OK)
     {
-        $this->statusCode = $statusCode;
         $this->headers = [];
-        $this->result = $result;
         $this->serializationGroups = null;
         $this->serializationType = null;
 

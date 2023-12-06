@@ -21,24 +21,19 @@ use function array_values;
 use function assert;
 use function is_string;
 use function iterator_to_array;
-use function Safe\preg_match;
-use function Safe\preg_replace;
+use function preg_match;
+use function preg_replace;
 use function str_replace;
 
 /** @template-implements IteratorAggregate<string, ServiceClosureArgument> */
 class Processor implements IteratorAggregate
 {
-    /** @var string[] */
-    private array $namespaces;
     /** @var array<string, string> */
     private array $versions;
-    private ContainerBuilder $container;
 
     /** @param string[] $namespaces */
-    public function __construct(ContainerBuilder $container, array $namespaces)
+    public function __construct(private ContainerBuilder $container, private array $namespaces)
     {
-        $this->container = $container;
-        $this->namespaces = $namespaces;
         $this->versions = [];
     }
 
@@ -82,7 +77,10 @@ class Processor implements IteratorAggregate
         $locators = [];
         foreach ($modelsByInterface as $interface => $versions) {
             $id = '.solido.dto.service_locator.' . $interface;
-            $container->register($id, ServiceLocator::class)->addArgument($versions);
+            $container->register($id, ServiceLocator::class)
+                ->addArgument($interface)
+                ->addArgument($versions)
+                ->addArgument(new Reference('cache.system'));
             $locators[$interface] = new ServiceClosureArgument(new Reference($id));
         }
 
@@ -116,7 +114,7 @@ class Processor implements IteratorAggregate
             try {
                 $definition = $container->findDefinition($reflector->getName());
                 $definition = clone $definition;
-            } catch (ServiceNotFoundException $e) {
+            } catch (ServiceNotFoundException) {
                 $definition = null;
             }
 
@@ -132,7 +130,7 @@ class Processor implements IteratorAggregate
             $container->setDefinition($id = '.solido.dto.' . $interface . '.' . $class, $definition);
 
             $models[$version] = new ServiceClosureArgument(new Reference($id));
-            $this->versions[$version] = preg_replace('/(?<=\d)\.(?=[a-z])/i', '-', $version);
+            $this->versions[$version] = preg_replace('/(?<=\d)\.(?=[a-z])/i', '-', $version); // @phpstan-ignore-line
         }
 
         return $models;

@@ -6,7 +6,7 @@ use Solido\DataTransformers\TransformerInterface;
 
 class TestTransform implements TransformerInterface
 {
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         return \strtoupper($value);
     }

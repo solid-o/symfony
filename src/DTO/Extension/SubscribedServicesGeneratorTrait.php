@@ -14,8 +14,8 @@ use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Solido\Symfony\DTO\GetSubscribedServicesGenerator;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-use function Safe\sprintf;
 use function sha1;
+use function sprintf;
 use function uniqid;
 
 trait SubscribedServicesGeneratorTrait
@@ -42,9 +42,16 @@ trait SubscribedServicesGeneratorTrait
             $this->builder->addProperty(new PropertyGenerator($containerName, new PropertyValueGenerator(null, ContainerInterface::class), PropertyGenerator::FLAG_PRIVATE), '');
 
             $setContainerBody = sprintf('%s$this->%s = $container;', $this->builder->hasMethod('setContainer') ? 'parent::setContainer($container); ' : '', $containerName);
-            $this->builder->addMethod(new MethodGenerator('setContainer', [
+            $this->builder->addMethod(new class ('setContainer', [
                 new ParameterGenerator('container', ContainerInterface::class),
-            ], MethodGenerator::FLAG_PUBLIC, $setContainerBody, '@required'));
+            ], MethodGenerator::FLAG_PUBLIC, $setContainerBody, '@required') extends MethodGenerator {
+                public function generate(): string
+                {
+                    $indent = $this->getIndentation();
+
+                    return $indent . '#[\Symfony\Contracts\Service\Attribute\Required]' . "\n" . parent::generate();
+                }
+            });
 
             $method = new GetSubscribedServicesGenerator($this->builder->hasMethod('getSubscribedServices'), $containerName);
             $this->builder->addMethod($method);

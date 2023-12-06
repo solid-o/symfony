@@ -16,11 +16,8 @@ use function is_string;
 
 class ControllerVersionValidatorListener implements EventSubscriberInterface
 {
-    private ServiceLocatorRegistryInterface $registry;
-
-    public function __construct(ServiceLocatorRegistryInterface $registry)
+    public function __construct(private ServiceLocatorRegistryInterface $registry)
     {
-        $this->registry = $registry;
     }
 
     public function onRequest(RequestEvent $event): void
@@ -52,7 +49,7 @@ class ControllerVersionValidatorListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): iterable
     {

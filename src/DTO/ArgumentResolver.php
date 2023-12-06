@@ -9,18 +9,16 @@ use Solido\DtoManagement\InterfaceResolver\ResolverInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use function Safe\sprintf;
+use function sprintf;
 
-class ArgumentResolver implements ArgumentValueResolverInterface
+class ArgumentResolver implements ArgumentValueResolverInterface, ValueResolverInterface
 {
-    private ResolverInterface $resolver;
-
-    public function __construct(ResolverInterface $resolver)
+    public function __construct(private readonly ResolverInterface $resolver)
     {
-        $this->resolver = $resolver;
     }
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
@@ -33,8 +31,11 @@ class ArgumentResolver implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        /** @phpstan-var class-string $class */
+        /** @phpstan-var class-string|null $class */
         $class = $argument->getType();
+        if ($class === null || ! $this->resolver->has($class)) {
+            return;
+        }
 
         try {
             yield $this->resolver->resolve($class, $request->attributes->get('_version'));

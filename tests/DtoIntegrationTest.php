@@ -225,9 +225,7 @@ class DtoIntegrationTest extends WebTestCase
         self::assertStringMatchesFormat(<<<DUMP
 Solido\\Symfony\\Tests\\Fixtures\\Proxy\\Model\\v2017\\v20171215\\User (proxy) {#%d
   +barPublic: "pubb"
-  +barBar: "test"
-  +foobar: "ciao"
-  +bazbar: "ciao"
+%a
 }
 DUMP
             , $dumper->dump($cloner->cloneVar($user), true));

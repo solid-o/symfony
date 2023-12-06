@@ -10,7 +10,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Solido\Symfony\Annotation\Security;
 use Solido\Symfony\Annotation\View;
 use Solido\Symfony\Config\ControllerCacheWarmer;
-use Solido\Symfony\EventListener\BadResponseExceptionSubscriber;
 use Solido\Symfony\EventListener\ControllerListener;
 use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +18,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
-use function Safe\tempnam;
+use function tempnam;
 use function sys_get_temp_dir;
 
 class ControllerCacheWarmerTest extends TestCase
@@ -171,24 +170,18 @@ class ControllerCacheWarmerTest extends TestCase
 
 interface TestControllerForControllerCacheWarmerInterface
 {
-    /**
-     * @Security("testable()")
-     */
+    #[Security("testable()")]
     public function testAction(Request $request);
 }
 
 class TestControllerForControllerCacheWarmer implements TestControllerForControllerCacheWarmerInterface
 {
-    /**
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function __invoke(Request $request)
     {
     }
 
-    /**
-     * @View()
-     */
+    #[View]
     public function testAction(Request $request)
     {
     }

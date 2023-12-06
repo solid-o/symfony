@@ -10,19 +10,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class Resolver extends BaseResolver
 {
-    private ?RequestStack $requestStack;
-
-    public function __construct(ServiceLocatorRegistryInterface $registry, ?RequestStack $requestStack = null)
+    public function __construct(ServiceLocatorRegistryInterface $registry, private RequestStack|null $requestStack = null)
     {
         parent::__construct($registry);
-
-        $this->requestStack = $requestStack;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function resolve(string $interface, $version = null)
+    public function resolve(string $interface, mixed $version = null)
     {
         if ($version === null && $this->requestStack !== null) {
             $version = $this->requestStack->getCurrentRequest();

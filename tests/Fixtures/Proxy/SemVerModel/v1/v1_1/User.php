@@ -11,20 +11,16 @@ class User implements UserInterface
 {
     public $barBar = 'test';
 
-    /**
-     * @Transform(TestTransform::class)
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[Transform(TestTransform::class)]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public $foobar = 'ciao';
 
     public function __construct()
     {
     }
 
-    /**
-     * @Transform(TestTransform::class)
-     * @Security("value == 'ciao'")
-     */
+    #[Transform(TestTransform::class)]
+    #[Security("value == 'ciao'")]
     public function setFoo(?string $value)
     {
         $this->foo = $value;
@@ -45,9 +41,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @Security("is_granted('ROLE_DENY')", onInvalid="null")
-     */
+    #[Security("is_granted('ROLE_DENY')", onInvalid: Security::RETURN_NULL)]
     public function getTest(): ?string
     {
         return 'unavailable_test';

@@ -47,7 +47,6 @@
 
         <service class="Solido\Symfony\DTO\Extension\TransformerExtension" id="Solido\Symfony\DTO\Extension\TransformerExtension">
             <argument type="service" id="service_container" />
-            <argument type="service" id="annotations.reader" on-invalid="null" />
             <tag name="solido.dto_extension" priority="40" />
         </service>
     </services>

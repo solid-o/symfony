@@ -12,5 +12,5 @@ interface FormatGuesserInterface
      * Guess the best response format from Accept header.
      * Returns the mime type of the resulting format.
      */
-    public function guess(Request $request): ?string;
+    public function guess(Request $request): string|null;
 }

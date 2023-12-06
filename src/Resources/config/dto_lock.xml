@@ -6,7 +6,6 @@
     <services>
         <service class="Solido\Symfony\DTO\Extension\LockExtension" id="Solido\Symfony\DTO\Extension\LockExtension">
             <tag name="solido.dto_extension" priority="25" />
-            <argument type="service" id="annotations.reader" on-invalid="null" />
         </service>
     </services>
 </container>

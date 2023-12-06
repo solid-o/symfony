@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DTO\Extension;
 
-use Doctrine\Common\Annotations\Reader;
 use Solido\DataTransformers\TransformerExtension as BaseExtension;
 use Solido\DtoManagement\Proxy\Builder\ProxyBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use function Safe\sprintf;
+use function sprintf;
 
 class TransformerExtension extends BaseExtension
 {
     use SubscribedServicesGeneratorTrait;
 
-    private ContainerBuilder $container;
-
-    public function __construct(ContainerBuilder $container, ?Reader $reader = null)
+    public function __construct(private readonly ContainerBuilder $container)
     {
-        parent::__construct($reader);
-
-        $this->container = $container;
     }
 
     public function extend(ProxyBuilder $proxyBuilder): void

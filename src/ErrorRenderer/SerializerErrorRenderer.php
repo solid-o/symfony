@@ -20,14 +20,10 @@ use const JSON_THROW_ON_ERROR;
 
 class SerializerErrorRenderer implements ErrorRendererInterface
 {
-    private ErrorRendererInterface $fallbackErrorRenderer;
-    private RequestStack $requestStack;
     private string $exceptionClass;
 
-    public function __construct(ErrorRendererInterface $fallbackErrorRenderer, RequestStack $requestStack, bool $debug = false)
+    public function __construct(private ErrorRendererInterface $fallbackErrorRenderer, private RequestStack $requestStack, bool $debug = false)
     {
-        $this->fallbackErrorRenderer = $fallbackErrorRenderer;
-        $this->requestStack = $requestStack;
         $this->exceptionClass = $debug ? DebugSerializableException::class : SerializableException::class;
     }
 

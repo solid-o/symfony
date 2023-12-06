@@ -27,9 +27,6 @@ class SymfonyIsGrantedCompatibilityTest extends WebTestCase
         $fs->remove(__DIR__.'/../../var');
     }
 
-    /**
-     * @requires PHP >= 8.1
-     */
     public function testShouldBeCompatibleWithSensioFrameworkExtraAnnotations(): void
     {
         $client = self::createClient();

@@ -21,11 +21,8 @@ use const JSON_THROW_ON_ERROR;
 
 class BadResponseExceptionSubscriber implements EventSubscriberInterface
 {
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
-        $this->serializer = $serializer;
     }
 
     public function onException(ExceptionEvent $event): void
@@ -47,7 +44,7 @@ class BadResponseExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

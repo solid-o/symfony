@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use function get_debug_type;
 use function interface_exists;
 use function is_array;
-use function Safe\sprintf;
+use function sprintf;
 
 class Configuration implements ConfigurationInterface
 {

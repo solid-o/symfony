@@ -16,17 +16,12 @@ use function method_exists;
 
 class PolicyVoter implements VoterInterface
 {
-    private PolicyCheckerInterface $policyChecker;
-    private RequestStack $requestStack;
-
-    public function __construct(PolicyCheckerInterface $policyChecker, RequestStack $requestStack)
+    public function __construct(private PolicyCheckerInterface $policyChecker, private RequestStack $requestStack)
     {
-        $this->policyChecker = $policyChecker;
-        $this->requestStack = $requestStack;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function vote(TokenInterface $token, $subject, array $attributes): int
     {
@@ -36,7 +31,7 @@ class PolicyVoter implements VoterInterface
         }
 
         // Subject could be null (in case of collection add operation)
-        $resource = $subject !== null ? $subject->getUrn() : null;
+        $resource = $subject?->getUrn();
         $action = count($attributes) > 0 ? $attributes[array_key_first($attributes)] : '';
 
         return $this->policyChecker->check($user->getUrn(), $action, $resource, $this->getContext()) ?
@@ -62,7 +57,7 @@ class PolicyVoter implements VoterInterface
         return $context;
     }
 
-    private function getUser(TokenInterface $token): ?UrnGeneratorInterface
+    private function getUser(TokenInterface $token): UrnGeneratorInterface|null
     {
         $user = $token->getUser();
         if (! $user instanceof UrnGeneratorInterface) {

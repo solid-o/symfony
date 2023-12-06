@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\DTO\Extension;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\Reader;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use ReflectionParameter;
 use Solido\DtoManagement\Proxy\Builder\Interceptor;
@@ -20,10 +18,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use function array_map;
 use function array_merge;
 use function assert;
-use function class_exists;
 use function count;
 use function implode;
-use function Safe\sprintf;
+use function sprintf;
 use function var_export;
 
 class SecurityExtension implements ExtensionInterface
@@ -31,16 +28,8 @@ class SecurityExtension implements ExtensionInterface
     use AttributeReaderTrait;
     use SubscribedServicesGeneratorTrait;
 
-    private ?BaseExpressionLanguage $expressionLanguage;
-
-    public function __construct(?Reader $reader = null, ?BaseExpressionLanguage $expressionLanguage = null)
+    public function __construct(private readonly BaseExpressionLanguage|null $expressionLanguage = null)
     {
-        $this->reader = $reader;
-        if ($reader === null && class_exists(AnnotationReader::class)) {
-            $this->reader = new AnnotationReader();
-        }
-
-        $this->expressionLanguage = $expressionLanguage;
     }
 
     public function extend(ProxyBuilder $proxyBuilder): void

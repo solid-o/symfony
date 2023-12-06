@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use function assert;
 use function file_exists;
 use function is_string;
-use function Safe\spl_autoload_register;
+use function spl_autoload_register;
 
 class SolidoBundle extends Bundle
 {

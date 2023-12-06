@@ -23,21 +23,14 @@ use function method_exists;
  */
 class ControllerCacheWarmer implements CacheWarmerInterface
 {
-    private ControllerListener $listener;
-    private RouterInterface $router;
-    private ControllerResolverInterface $controllerResolver;
-
     /**
      * @var string[][]
      * @phpstan-var array{0: class-string, 1: string}[]
      */
     private array $additionalControllers = [];
 
-    public function __construct(ControllerListener $listener, RouterInterface $router, ControllerResolverInterface $controllerResolver)
+    public function __construct(private ControllerListener $listener, private RouterInterface $router, private ControllerResolverInterface $controllerResolver)
     {
-        $this->listener = $listener;
-        $this->router = $router;
-        $this->controllerResolver = $controllerResolver;
     }
 
     /**
@@ -55,7 +48,7 @@ class ControllerCacheWarmer implements CacheWarmerInterface
     }
 
     /** @inheritDoc */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, string|null $buildDir = null): array
     {
         $files = [];
 
@@ -72,12 +65,12 @@ class ControllerCacheWarmer implements CacheWarmerInterface
             $request->attributes->set('_controller', $routeController);
             try {
                 $controller = $this->controllerResolver->getController($request);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 continue;
             }
 
             /** @phpstan-var object|array{0: object, 1: string} $controller */
-            $cache = $this->processController($controller, $className, $cacheDir);
+            $cache = $this->processController($controller, $className, $buildDir ?? $cacheDir);
             if ($cache === null) {
                 continue;
             }
@@ -86,7 +79,7 @@ class ControllerCacheWarmer implements CacheWarmerInterface
         }
 
         foreach ($this->additionalControllers as $controller) {
-            $cache = $this->processController($controller, null, $cacheDir);
+            $cache = $this->processController($controller, null, $buildDir ?? $cacheDir);
             if ($cache === null) {
                 continue;
             }
@@ -98,11 +91,10 @@ class ControllerCacheWarmer implements CacheWarmerInterface
     }
 
     /**
-     * @param array|object|callable $controller
      * @phpstan-param Closure|object|array{0: object|class-string, 1: string} $controller
      * @phpstan-param class-string|null $className
      */
-    private function processController($controller, ?string $className, string $cacheDir): ?ConfigCacheInterface
+    private function processController(array|object|callable $controller, string|null $className, string $cacheDir): ConfigCacheInterface|null
     {
         if ($controller instanceof Closure) {
             return null;

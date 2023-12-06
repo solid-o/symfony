@@ -11,7 +11,6 @@
 
         <service class="Solido\Symfony\DTO\Extension\SecurityExtension" id="Solido\Symfony\DTO\Extension\SecurityExtension">
             <tag name="solido.dto_extension" priority="30" />
-            <argument type="service" id="annotations.reader" on-invalid="null" />
             <argument type="service" id="solido.dto.security_expression_language" />
         </service>
     </services>

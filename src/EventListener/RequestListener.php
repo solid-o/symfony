@@ -16,18 +16,11 @@ use Symfony\Component\Routing\Exception\NoConfigurationException;
 
 class RequestListener implements EventSubscriberInterface
 {
-    private FormatGuesserInterface $formatGuesser;
-    private ?VersionGuesserInterface $versionGuesser;
-    private bool $debug;
-
     public function __construct(
-        FormatGuesserInterface $formatGuesser,
-        ?VersionGuesserInterface $versionGuesser,
-        bool $debug = false
+        private FormatGuesserInterface $formatGuesser,
+        private VersionGuesserInterface|null $versionGuesser,
+        private bool $debug = false,
     ) {
-        $this->formatGuesser = $formatGuesser;
-        $this->versionGuesser = $versionGuesser;
-        $this->debug = $debug;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -70,7 +63,7 @@ class RequestListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

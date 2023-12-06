@@ -16,11 +16,8 @@ use function is_subclass_of;
 
 class ArgumentMetadataFactory implements ArgumentMetadataFactoryInterface
 {
-    private ArgumentMetadataFactoryInterface $decorated;
-
-    public function __construct(ArgumentMetadataFactoryInterface $decorated)
+    public function __construct(private readonly ArgumentMetadataFactoryInterface $decorated)
     {
-        $this->decorated = $decorated;
     }
 
     /**
@@ -29,7 +26,7 @@ class ArgumentMetadataFactory implements ArgumentMetadataFactoryInterface
      *
      * @return ArgumentMetadata[]
      */
-    public function createArgumentMetadata($controller, ?ReflectionFunctionAbstract $reflector = null): array
+    public function createArgumentMetadata(string|object|array $controller, ReflectionFunctionAbstract|null $reflector = null): array
     {
         if (is_array($controller) && is_subclass_of($controller[0], ProxyInterface::class)) {
             $controller[0] = get_parent_class($controller[0]);
@@ -41,7 +38,6 @@ class ArgumentMetadataFactory implements ArgumentMetadataFactoryInterface
             $reflector = new ReflectionMethod(...$controller);
         }
 
-        // @phpstan-ignore-next-line
         return $this->decorated->createArgumentMetadata($controller, $reflector);
     }
 }

@@ -9,11 +9,7 @@ use Symfony\Component\Form\FormInterface;
 
 class TestController extends AbstractController
 {
-    /**
-     * @return mixed
-     *
-     * @View()
-     */
+    #[View]
     public function indexAction(): array
     {
         return [
@@ -21,9 +17,7 @@ class TestController extends AbstractController
         ];
     }
 
-    /**
-     * @View()
-     */
+    #[View]
     public function formInvalidExceptionAction(): void
     {
         /** @var FormInterface $form */
@@ -38,9 +32,7 @@ class TestController extends AbstractController
         throw new FormInvalidException($form);
     }
 
-    /**
-     * @View()
-     */
+    #[View]
     public function formNotSubmittedExceptionAction(): void
     {
         $form = $this->createFormBuilder()
@@ -52,17 +44,13 @@ class TestController extends AbstractController
         throw new FormNotSubmittedException($form);
     }
 
-    /**
-     * @View(serializationType="stdClass")
-     */
+    #[View(serializationType: "stdClass")]
     public function invalidJsonExceptionAction(): void
     {
         throw new InvalidJSONException('Invalid.');
     }
 
-    /**
-     * @View(serializationType="array<FooObject>")
-     */
+    #[View(serializationType: "array<FooObject>")]
     public function customSerializationTypeAction(): array
     {
         return [
@@ -71,9 +59,7 @@ class TestController extends AbstractController
         ];
     }
 
-    /**
-     * @View(serializationType="array<FooObject>")
-     */
+    #[View(serializationType: "array<FooObject>")]
     public function customSerializationTypeWithIteratorAction(): iterable
     {
         return new \ArrayIterator([
@@ -84,8 +70,8 @@ class TestController extends AbstractController
 
     /**
      * @deprecated
-     * @View()
      */
+    #[View]
     public function deprecatedAction(): array
     {
         return ['foo' => 'bar'];
@@ -93,8 +79,8 @@ class TestController extends AbstractController
 
     /**
      * @deprecated With Notice
-     * @View()
      */
+    #[View]
     public function deprecatedWithNoticeAction(): array
     {
         return ['foo' => 'bar'];

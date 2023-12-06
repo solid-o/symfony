@@ -5,7 +5,6 @@ imports:
 framework:
     test: ~
     secret: 'secret'
-    annotations: true
     property_access: true
     router:
         resource: '%kernel.root_dir%/routing.yml'

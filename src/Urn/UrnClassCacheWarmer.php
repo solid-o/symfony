@@ -10,13 +10,10 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmer;
 
 class UrnClassCacheWarmer extends CacheWarmer
 {
-    private UrnConverterInterface $urnConverter;
-    private ?string $buildDir;
-
-    public function __construct(UrnConverterInterface $urnConverter, ?string $buildDir)
-    {
-        $this->urnConverter = $urnConverter;
-        $this->buildDir = $buildDir;
+    public function __construct(
+        private readonly UrnConverterInterface $urnConverter,
+        private readonly string|null $buildDir,
+    ) {
     }
 
     public function isOptional(): bool
@@ -25,15 +22,15 @@ class UrnClassCacheWarmer extends CacheWarmer
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, string|null $buildDir = null): array
     {
         if (! $this->urnConverter instanceof UrnConverter) {
             return [];
         }
 
-        $this->urnConverter->getUrnClassMap($this->buildDir ?? $cacheDir);
+        $this->urnConverter->getUrnClassMap($buildDir ?? $this->buildDir ?? $cacheDir);
 
         return [
             $cacheDir . '/urn/class_to_object.php',

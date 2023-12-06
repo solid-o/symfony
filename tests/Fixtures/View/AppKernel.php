@@ -3,7 +3,6 @@
 namespace Solido\Symfony\Tests\Fixtures\View;
 
 use Kcs\Serializer\Bundle\SerializerBundle;
-use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Solido\Symfony\SolidoBundle;
 use Solido\Symfony\Tests\Fixtures\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -19,7 +18,6 @@ class AppKernel extends TestKernel
     {
         return [
             new FrameworkBundle(),
-            new SensioFrameworkExtraBundle(),
             new SecurityBundle(),
             new SerializerBundle(),
             new SolidoBundle(),

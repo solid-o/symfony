@@ -9,22 +9,20 @@ use Laminas\Code\Generator\MethodGenerator;
 use function array_keys;
 use function array_map;
 use function implode;
-use function Safe\sprintf;
+use function sprintf;
 
 class GetSubscribedServicesGenerator extends MethodGenerator
 {
     /** @var array<string, string> */
     private array $services = [];
-    private bool $callParent;
-    private string $containerName;
 
-    public function __construct(bool $callParent, string $containerName)
-    {
+    public function __construct(
+        private readonly bool $callParent,
+        private readonly string $containerName,
+    ) {
         parent::__construct('getSubscribedServices', [], MethodGenerator::FLAG_PUBLIC | MethodGenerator::FLAG_STATIC, null, '{@inheritDoc}');
 
         $this->setReturnType('array');
-        $this->callParent = $callParent;
-        $this->containerName = $containerName;
     }
 
     public function addService(string $name, string $class): void

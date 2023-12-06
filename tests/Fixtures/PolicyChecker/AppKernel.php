@@ -2,7 +2,6 @@
 
 namespace Solido\Symfony\Tests\Fixtures\PolicyChecker;
 
-use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Solido\Symfony\SolidoBundle;
 use Solido\Symfony\Tests\Fixtures\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -18,7 +17,6 @@ class AppKernel extends TestKernel
     {
         return [
             new FrameworkBundle(),
-            new SensioFrameworkExtraBundle(),
             new SecurityBundle(),
             new SolidoBundle(),
             new AppBundle(),
