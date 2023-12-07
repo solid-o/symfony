@@ -14,11 +14,23 @@
             <call method="setFormRequestHandler">
                 <argument type="service" id="Solido\DataMapper\Form\RequestHandler" on-invalid="ignore" />
             </call>
-            <call method="setFormFactory">
-                <argument type="service" id="form.factory" on-invalid="ignore" />
+            <call method="setFormRegistry">
+                <argument type="service" id="form.registry" on-invalid="ignore" />
             </call>
             <call method="setTranslator">
                 <argument type="service" id="translator" on-invalid="ignore" />
+            </call>
+            <call method="setAdapterFactory">
+                <argument type="service" id="Solido\Common\AdapterFactoryInterface" on-invalid="ignore" />
+            </call>
+            <call method="setBodyConverter">
+                <argument type="service" id="Solido\BodyConverter\BodyConverterInterface" on-invalid="ignore" />
+            </call>
+            <call method="setPropertyAccessor">
+                <argument type="service" id="property_accessor" on-invalid="ignore" />
+            </call>
+            <call method="setValidator">
+                <argument type="service" id="validator" on-invalid="ignore" />
             </call>
         </service>
     </services>
