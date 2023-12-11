@@ -67,7 +67,8 @@
             "Solido\\Symfony\\": "src/"
         },
         "files": [
-            "compat/argument_value_resolver_interfaces.php"
+            "compat/argument_value_resolver_interfaces.php",
+            "compat/routing_class_loader.php"
         ]
     },
     "autoload-dev": {
