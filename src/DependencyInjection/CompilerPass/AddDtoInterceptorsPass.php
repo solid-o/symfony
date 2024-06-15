@@ -57,7 +57,6 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         assert($factory instanceof AccessInterceptorFactory);
 
         $this->proxyFactory = $factory;
-        // @phpstan-ignore-next-line
         if (function_exists(AnnotationRegistry::class . '::registerUniqueLoader')) {
             // @phpstan-ignore-next-line
             AnnotationRegistry::registerUniqueLoader('class_exists');
