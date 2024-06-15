@@ -44,7 +44,6 @@ class AnnotationRoutingLoader extends AttributeClassLoader
             return $routeCollection;
         }
 
-        // @phpstan-ignore-next-line
         $interfaces = $this->locator->getInterfaces();
         sort($interfaces);
 
