@@ -43,7 +43,10 @@ class SerializerErrorRenderer implements ErrorRendererInterface
         $ex = new $this->exceptionClass($flatten);
         assert($ex instanceof SerializableException);
 
-        $problem = new ApiProblem($flatten->getStatusCode(), $ex->toArray());
+        $data = $ex->toArray();
+        $data['instance'] = $request->getPathInfo();
+
+        $problem = new ApiProblem($flatten->getStatusCode(), $data);
         $flatten->setAsString(json_encode($problem, JSON_THROW_ON_ERROR));
         $flatten->setHeaders([
             'Content-Type' => 'application/problem+json',
