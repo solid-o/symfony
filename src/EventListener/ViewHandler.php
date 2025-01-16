@@ -132,7 +132,7 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $request->attributes->set('_deprecated', isset($matches[1]) && $matches[1] ? trim($matches[1]) : true);
+        $request->attributes->set('_deprecated', $matches[1] ? trim($matches[1]) : true);
     }
 
     /**

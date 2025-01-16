@@ -62,12 +62,18 @@ class Processor implements IteratorAggregate
      */
     private function processNamespace(ContainerBuilder $container, string $namespace): array
     {
+        $projectDir = $container->getParameter('kernel.project_dir');
+        $buildDir = $container->getParameter('kernel.build_dir');
+        $cacheDir = $container->getParameter('kernel.cache_dir');
+
+        assert(is_string($projectDir) && is_string($buildDir) && is_string($cacheDir));
+
         $finder = new ComposerFinder();
         $finder
             ->inNamespace($namespace)
-            ->in($container->getParameter('kernel.root_dir'))
-            ->notPath($container->getParameter('kernel.build_dir'))
-            ->notPath($container->getParameter('kernel.cache_dir'));
+            ->in($projectDir)
+            ->notPath($buildDir)
+            ->notPath($cacheDir);
 
         /** @phpstan-var array<class-string, ReflectionClass> $classes */
         $classes = iterator_to_array($finder);
