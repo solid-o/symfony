@@ -63,7 +63,11 @@ class Processor implements IteratorAggregate
     private function processNamespace(ContainerBuilder $container, string $namespace): array
     {
         $finder = new ComposerFinder();
-        $finder->inNamespace($namespace);
+        $finder
+            ->inNamespace($namespace)
+            ->in($container->getParameter('kernel.root_dir'))
+            ->notPath($container->getParameter('kernel.build_dir'))
+            ->notPath($container->getParameter('kernel.cache_dir'));
 
         /** @phpstan-var array<class-string, ReflectionClass> $classes */
         $classes = iterator_to_array($finder);

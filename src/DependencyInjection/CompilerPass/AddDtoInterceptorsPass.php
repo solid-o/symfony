@@ -44,6 +44,12 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
+        if ($container->getParameter('kernel.build_dir')) {
+            $container->setParameter('solido.dto-management.proxy_cache_dir', '%kernel.build_dir%/dto-proxies');
+        } else {
+            $container->setParameter('solido.dto-management.proxy_cache_dir', '%kernel.cache_dir%/dto-proxies');
+        }
+
         $cacheDir = $container->getParameterBag()->resolveValue(
             $container->getParameter('solido.dto-management.proxy_cache_dir'),
         );
@@ -115,7 +121,9 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $definition->setArgument(0, $locators);
         $container->setParameter('solido.dto-management.versions', $iterator->getVersions());
 
-        $kernelCacheDir = $container->getParameter('kernel.cache_dir');
+        $kernelCacheDir = $container->hasParameter('kernel.build_dir') ?
+            $container->getParameter('kernel.build_dir') :
+            $container->getParameter('kernel.cache_dir');
         assert(is_string($kernelCacheDir));
 
         $this->generateClassMap($cacheDir, $kernelCacheDir . '/dto-proxies-map.php');

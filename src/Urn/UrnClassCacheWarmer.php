@@ -30,10 +30,11 @@ class UrnClassCacheWarmer extends CacheWarmer
             return [];
         }
 
-        $this->urnConverter->getUrnClassMap($buildDir ?? $this->buildDir ?? $cacheDir);
+        $targetDir = $buildDir ?? $this->buildDir ?? $cacheDir;
+        $this->urnConverter->getUrnClassMap($targetDir);
 
         return [
-            $cacheDir . '/urn/class_to_object.php',
+            $targetDir . '/urn/class_to_object.php',
         ];
     }
 }

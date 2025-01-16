@@ -71,6 +71,6 @@ class BadResponseExceptionSubscriberTest extends TestCase
         self::assertTrue($event->isPropagationStopped());
 
         $response = $event->getResponse();
-        self::assertJsonStringEqualsJsonString('{"detail": "","errors":["Invalid form"],"name":"","children":[{"errors":["Bad bad value"],"name":"field_1","children":[]}],"status":400,"title":"Bad Request","type":"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"}', $response->getContent());
+        self::assertJsonStringEqualsJsonString('{"detail": "","errors":["Invalid form"],"instance":null,"name":"","children":[{"errors":["Bad bad value"],"name":"field_1","children":[]}],"status":400,"title":"Bad Request","type":"https://solid-o.io/api-problem/bad-request.html"}', $response->getContent());
     }
 }

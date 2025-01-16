@@ -45,9 +45,11 @@ class SolidoBundle extends Bundle
             Urn::$defaultDomain = $defaultDomain;
         }
 
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
-        assert(is_string($cacheDir));
+        $cacheDir = $this->container->hasParameter('kernel.build_dir') ?
+            $this->container->getParameter('kernel.build_dir') :
+            $this->container->getParameter('kernel.cache_dir');
 
+        assert(is_string($cacheDir));
         $dtoMapFile = $cacheDir . '/dto-proxies-map.php';
         if (! file_exists($dtoMapFile)) {
             return;

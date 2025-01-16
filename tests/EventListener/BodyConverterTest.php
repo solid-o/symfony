@@ -3,27 +3,20 @@
 namespace Solido\Symfony\Tests\EventListener;
 
 use Solido\Symfony\Tests\Fixtures\BodyConverter\AppKernel;
+use Solido\Symfony\Tests\WebTestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class BodyConverterTest extends WebTestCase
 {
+    use WebTestCaseTrait;
+
     /**
      * {@inheritdoc}
      */
     protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass(): void
-    {
-        $fs = new Filesystem();
-        $fs->remove(__DIR__.'/../../var');
     }
 
     public function testShouldDecodeContentCorrectly(): void

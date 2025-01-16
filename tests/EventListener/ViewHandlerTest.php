@@ -16,8 +16,8 @@ use Solido\Symfony\Serialization\View\View;
 use Solido\Symfony\Tests\Fixtures\TestObject;
 use Solido\Symfony\Tests\Fixtures\View\AppKernel;
 use Solido\Symfony\Tests\Fixtures\View\Controller\TestController;
+use Solido\Symfony\Tests\WebTestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,39 +30,25 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ViewHandlerTest extends WebTestCase
 {
     use ProphecyTrait;
+    use WebTestCaseTrait;
 
-    /**
-     * @var SerializerInterface|ObjectProphecy
-     */
-    private ObjectProphecy $serializer;
-
-    /**
-     * @var HttpKernelInterface|ObjectProphecy
-     */
-    private ObjectProphecy $httpKernel;
-
-    /**
-     * @var TokenStorageInterface|ObjectProphecy
-     */
-    private ObjectProphecy $tokenStorage;
-
+    private ObjectProphecy|SerializerInterface $serializer;
+    private ObjectProphecy|HttpKernelInterface $httpKernel;
     private ViewHandler $viewHandler;
-    private string $defaultResponseCharset;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->serializer = $this->prophesize(SerializerInterface::class);
         $this->httpKernel = $this->prophesize(HttpKernelInterface::class);
-        $this->tokenStorage = $this->prophesize(TokenStorageInterface::class);
-        $this->defaultResponseCharset = 'UTF-8';
-
         $this->viewHandler = new ViewHandler(
             $this->serializer->reveal(),
-            $this->tokenStorage->reveal(),
-            $this->defaultResponseCharset
+            $this->prophesize(TokenStorageInterface::class)->reveal(),
+            'UTF-8'
         );
     }
 
@@ -72,15 +58,6 @@ class ViewHandlerTest extends WebTestCase
     protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass(): void
-    {
-        $fs = new Filesystem();
-        $fs->remove(__DIR__.'/../../var');
     }
 
     public function skipProvider(): array

@@ -2,7 +2,6 @@
 
 namespace Solido\Symfony\Tests\Config;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -25,19 +24,9 @@ class ControllerCacheWarmerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy|RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var ObjectProphecy|ControllerResolverInterface
-     */
-    private $controllerResolver;
-
+    private RouterInterface|ObjectProphecy $router;
+    private ObjectProphecy|ControllerResolverInterface $controllerResolver;
     private string $cacheDir;
-    private ConfigCacheFactory $cacheFactory;
-    private ControllerListener $listener;
     private ControllerCacheWarmer $warmer;
 
     protected function setUp(): void
@@ -49,10 +38,9 @@ class ControllerCacheWarmerTest extends TestCase
         unlink($this->cacheDir);
         mkdir($this->cacheDir, 0777, true);
 
-        $this->cacheFactory = new ConfigCacheFactory(true);
-        $this->listener = new ControllerListener($this->cacheFactory, $this->cacheDir, new AnnotationReader());
+        $cacheFactory = new ConfigCacheFactory(true);
         $this->warmer = new ControllerCacheWarmer(
-            $this->listener,
+            new ControllerListener($cacheFactory, $this->cacheDir),
             $this->router->reveal(),
             $this->controllerResolver->reveal()
         );

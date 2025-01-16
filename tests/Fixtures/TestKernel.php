@@ -3,31 +3,17 @@
 namespace Solido\Symfony\Tests\Fixtures;
 
 use Psr\Log\NullLogger;
+use ReflectionClass;
 use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use function dirname;
 
 abstract class TestKernel extends Kernel
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeContainer(): void
+    protected function build(ContainerBuilder $container): void
     {
-        $class = $this->getContainerClass();
-        $cache = new ConfigCache($this->getCacheDir().'/'.$class.'.php', $this->debug);
-
-        $container = $this->buildContainer();
         $container->register('logger', NullLogger::class);
-        $container->compile();
-        $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
-
-        $this->container = require $cache->getPath();
-
-        $this->container->set('kernel', $this);
-
-        if ($this->container->has('cache_warmer')) {
-            $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir'));
-        }
     }
 
     /**
@@ -48,6 +34,11 @@ abstract class TestKernel extends Kernel
         return $this->getRootDir().'/var/cache/'.$this->environment;
     }
 
+    public function getBuildDir(): string
+    {
+        return $this->getRootDir().'/var/build/'.$this->environment;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -56,11 +47,8 @@ abstract class TestKernel extends Kernel
         return $this->getRootDir().'/logs/'.$this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function getRootDir(): string
     {
-        return \dirname((new \ReflectionClass($this))->getFileName());
+        return dirname((new ReflectionClass(static::class))->getFileName());
     }
 }

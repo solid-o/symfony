@@ -7,13 +7,13 @@ use Solido\Symfony\Tests\Fixtures\Proxy\AppKernel;
 use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\ExcludedInterface;
 use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 class DtoIntegrationTest extends WebTestCase
 {
+    use WebTestCaseTrait;
+
     public function testShouldReturn401IfNotLoggedIn(): void
     {
         $client = self::createClient();
@@ -253,18 +253,5 @@ DUMP
     protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function tearDownAfterClass(): void
-    {
-        self::bootKernel();
-        self::ensureKernelShutdown();
-
-        $fs = new Filesystem();
-        $fs->remove(static::$kernel->getCacheDir());
-        $fs->remove(static::$kernel->getLogDir());
     }
 }

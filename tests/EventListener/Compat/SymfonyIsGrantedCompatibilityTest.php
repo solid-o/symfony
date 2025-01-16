@@ -3,28 +3,21 @@
 namespace Solido\Symfony\Tests\EventListener\Compat;
 
 use Solido\Symfony\Tests\Fixtures\Proxy\AppKernel;
+use Solido\Symfony\Tests\WebTestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class SymfonyIsGrantedCompatibilityTest extends WebTestCase
 {
+    use WebTestCaseTrait;
+
     /**
      * {@inheritdoc}
      */
     protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass(): void
-    {
-        $fs = new Filesystem();
-        $fs->remove(__DIR__.'/../../var');
     }
 
     public function testShouldBeCompatibleWithSensioFrameworkExtraAnnotations(): void
