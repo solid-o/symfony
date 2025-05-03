@@ -15,13 +15,19 @@ use function class_exists;
 
 class BodyConverter implements EventSubscriberInterface
 {
-    public function __construct(private Converter $bodyConverter)
+    use RequestMatcherTrait;
+
+    public function __construct(private readonly Converter $bodyConverter)
     {
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        if (! $this->requestMatches($request)) {
+            return;
+        }
+
         $parameters = $this->bodyConverter->decode($request);
 
         if (empty($parameters) && $request->request->count() !== 0) {

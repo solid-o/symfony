@@ -23,6 +23,9 @@
 
         <service class="Solido\Symfony\EventListener\BodyConverter" id="Solido\Symfony\EventListener\BodyConverter">
             <argument type="service" id="solido.body_converter" />
+            <call method="setRequestMatcher">
+                <argument type="service" id="solido.request_matcher" on-invalid="null" />
+            </call>
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

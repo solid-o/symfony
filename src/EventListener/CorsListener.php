@@ -18,7 +18,7 @@ use function assert;
 
 class CorsListener implements EventSubscriberInterface
 {
-    public function __construct(private HandlerFactory $factory)
+    public function __construct(private readonly HandlerFactory $factory)
     {
     }
 

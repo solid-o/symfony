@@ -16,16 +16,21 @@ use Symfony\Component\Routing\Exception\NoConfigurationException;
 
 class RequestListener implements EventSubscriberInterface
 {
+    use RequestMatcherTrait;
+
     public function __construct(
-        private FormatGuesserInterface $formatGuesser,
-        private VersionGuesserInterface|null $versionGuesser,
-        private bool $debug = false,
+        private readonly FormatGuesserInterface $formatGuesser,
+        private readonly VersionGuesserInterface|null $versionGuesser,
+        private readonly bool $debug = false,
     ) {
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        if (! $this->requestMatches($request)) {
+            return;
+        }
 
         $version = 'latest';
         $format = $this->formatGuesser->guess($request);

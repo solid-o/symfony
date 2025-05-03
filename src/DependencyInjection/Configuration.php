@@ -16,6 +16,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use function get_debug_type;
 use function interface_exists;
 use function is_array;
+use function is_string;
+use function parse_url;
 use function sprintf;
 
 class Configuration implements ConfigurationInterface
@@ -28,11 +30,50 @@ class Configuration implements ConfigurationInterface
         // @phpstan-ignore-next-line
         $rootNode
             ->addDefaultsIfNotSet()
+            ->beforeNormalization()
+                ->always(static function ($v) {
+                    if (! isset($v['filter']) || ! is_string($v['filter'])) {
+                        return $v;
+                    }
+
+                    $parsed = parse_url($v['filter']);
+                    if ($parsed === false) {
+                        return $v;
+                    }
+
+                    $filter = [];
+                    if ($parsed['host']) {
+                        $filter['host'] = $parsed['host'];
+                    }
+
+                    if ($parsed['port']) {
+                        $filter['port'] = (int) $parsed['port'];
+                    }
+
+                    if ($parsed['path']) {
+                        $filter['path'] = $parsed['path'];
+                    }
+
+                    $v['filter'] = $filter;
+
+                    return $v;
+                })
+            ->end()
             ->children()
                 ->booleanNode('test')
                     ->treatNullLike(true)
                     ->defaultFalse()
                     ->info('Whether to enable test features')
+                ->end()
+                ->arrayNode('filter')
+                    ->addDefaultsIfNotSet()
+                    ->info('Enable request/response processing only if request matches some criteria')
+                    ->children()
+                        ->scalarNode('host')->defaultNull()->end()
+                        ->scalarNode('port')->defaultNull()->end()
+                        ->scalarNode('path')->defaultNull()->end()
+                        ->scalarNode('matcher')->defaultNull()->info('The service id of the request matcher')->end()
+                    ->end()
                 ->end()
                 ->arrayNode('request')
                     ->info('Enables the request processing features (Accept header parsing, versioning guessing)')

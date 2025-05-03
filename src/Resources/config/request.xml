@@ -15,6 +15,9 @@
             <argument type="service" id="Solido\Symfony\Request\FormatGuesserInterface" />
             <argument type="service" id="Solido\Versioning\VersionGuesserInterface" on-invalid="null" />
             <argument>%kernel.debug%</argument>
+            <call method="setRequestMatcher">
+                <argument type="service" id="solido.request_matcher" on-invalid="null" />
+            </call>
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

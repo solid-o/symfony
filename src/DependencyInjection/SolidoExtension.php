@@ -33,14 +33,20 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\HttpFoundation\ChainRequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcher\HostRequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcher\PortRequestMatcher;
 
 use function assert;
 use function class_exists;
+use function count;
 use function interface_exists;
 
 class SolidoExtension extends Extension
@@ -54,6 +60,31 @@ class SolidoExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('solido.xml');
+
+        if ($config['filter']['matcher']) {
+            $container->setAlias('solido.request_matcher', $config['filter']['matcher']);
+        } elseif ($config['filter']['host'] || $config['filter']['port'] || $config['filter']['path']) {
+            $matcher = [];
+            if ($config['filter']['host']) {
+                $matcher[] = new Definition(HostRequestMatcher::class, [$config['filter']['host']]);
+            }
+
+            if ($config['filter']['port']) {
+                $matcher[] = new Definition(PortRequestMatcher::class, [$config['filter']['port']]);
+            }
+
+            if ($config['filter']['path']) {
+                $matcher[] = new Definition(PathRequestMatcher::class, [$config['filter']['path']]);
+            }
+
+            if (count($matcher) > 1) {
+                $container
+                    ->register('solido.request_matcher', ChainRequestMatcher::class)
+                    ->addArgument($matcher);
+            } else {
+                $container->setDefinition('solido.request_matcher', $matcher[0]);
+            }
+        }
 
         if ($config['body_converter']['enabled']) {
             $loader->load('body_converter.xml');
