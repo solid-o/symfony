@@ -37,8 +37,6 @@ use function strrpos;
 use function strtr;
 use function substr;
 
-use const PHP_VERSION_ID;
-
 /**
  * The ControllerListener class parses annotation blocks located in
  * controller classes.
@@ -92,7 +90,7 @@ class ControllerListener implements EventSubscriberInterface
         $className = $request->attributes->get('_solido_dto_interface');
 
         /** @phpstan-var object|array{0: object, 1: string} $controller */
-        $controller = $event->getController();
+        $controller = $event->getController(); // @phpstan-ignore-line
         if ($controller instanceof Closure) {
             return;
         }
@@ -151,7 +149,7 @@ class ControllerListener implements EventSubscriberInterface
 
         $request->attributes->set('_controller', $controllerName);
 
-        if (PHP_VERSION_ID <= 80000 || ! method_exists($event, 'getAttributes')) {
+        if (! method_exists($event, 'getAttributes')) { // @phpstan-ignore-line
             return;
         }
 

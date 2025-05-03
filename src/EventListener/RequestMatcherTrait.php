@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 trait RequestMatcherTrait
 {
-    private readonly RequestMatcherInterface|null $requestMatcher;
+    private RequestMatcherInterface|null $requestMatcher;
 
     public function setRequestMatcher(RequestMatcherInterface|null $requestMatcher): void
     {

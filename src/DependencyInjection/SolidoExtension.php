@@ -82,7 +82,7 @@ class SolidoExtension extends Extension
                     ->register('solido.request_matcher', ChainRequestMatcher::class)
                     ->addArgument($matcher);
             } else {
-                $container->setDefinition('solido.request_matcher', $matcher[0]);
+                $container->setDefinition('solido.request_matcher', $matcher[0]); // @phpstan-ignore-line
             }
         }
 

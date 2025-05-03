@@ -52,10 +52,9 @@ class ActionListener implements EventSubscriberInterface
             return;
         }
 
-        $object = null;
         if (is_array($controller)) {
-            $reflClass = new ReflectionClass($controller[0]);
-            $r = new ReflectionMethod($controller[0], $controller[1]);
+            $reflClass = new ReflectionClass($controller[0]); // @phpstan-ignore-line
+            $r = new ReflectionMethod($controller[0], $controller[1]); // @phpstan-ignore-line
             $shortName = (
                 $reflClass->isSubclassOf(ProxyInterface::class) ||
                 $reflClass->isSubclassOf(ProxyManagerProxyInterface::class)

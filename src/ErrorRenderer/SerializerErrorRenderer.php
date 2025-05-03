@@ -29,7 +29,7 @@ class SerializerErrorRenderer implements ErrorRendererInterface
 
     public function render(Throwable $exception): FlattenException
     {
-        if (method_exists($this->requestStack, 'getMainRequest')) {
+        if (method_exists($this->requestStack, 'getMainRequest')) { // @phpstan-ignore-line
             $request = $this->requestStack->getMainRequest();
         } else {
             $request = $this->requestStack->getMasterRequest(); /* @phpstan-ignore-line */

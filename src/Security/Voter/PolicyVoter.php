@@ -16,8 +16,10 @@ use function method_exists;
 
 class PolicyVoter implements VoterInterface
 {
-    public function __construct(private PolicyCheckerInterface $policyChecker, private RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly PolicyCheckerInterface $policyChecker,
+        private readonly RequestStack $requestStack,
+    ) {
     }
 
     /**
@@ -42,7 +44,7 @@ class PolicyVoter implements VoterInterface
     /** @return array<string, string|string[]> */
     protected function getContext(): array
     {
-        if (method_exists($this->requestStack, 'getMainRequest')) {
+        if (method_exists($this->requestStack, 'getMainRequest')) { /* @phpstan-ignore-line */
             $request = $this->requestStack->getMainRequest();
         } else {
             $request = $this->requestStack->getMasterRequest(); /* @phpstan-ignore-line */

@@ -112,7 +112,7 @@ class ViewHandler implements EventSubscriberInterface
     public function onController(ControllerEvent $event): void
     {
         /** @phpstan-var string|object|array{0: object, 1: string} $controller */
-        $controller = $event->getController();
+        $controller = $event->getController(); // @phpstan-ignore-line
         if (is_object($controller) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
         }

@@ -70,7 +70,7 @@ class ControllerCacheWarmer implements CacheWarmerInterface
             }
 
             /** @phpstan-var object|array{0: object, 1: string} $controller */
-            $cache = $this->processController($controller, $className, $buildDir ?? $cacheDir);
+            $cache = $this->processController($controller, $className, $buildDir ?? $cacheDir); // @phpstan-ignore-line
             if ($cache === null) {
                 continue;
             }

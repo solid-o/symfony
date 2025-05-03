@@ -7,7 +7,6 @@ namespace Solido\Symfony\DependencyInjection\CompilerPass;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Error;
 use Kcs\ClassFinder\Finder\RecursiveFinder;
-use ReflectionClass;
 use RuntimeException;
 use Solido\DtoManagement\Exception\EmptyBuilderException;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
@@ -35,7 +34,7 @@ use function is_subclass_of;
 use function mkdir;
 use function sprintf;
 use function str_replace;
-use function strpos;
+use function str_starts_with;
 use function var_export;
 
 class AddDtoInterceptorsPass implements CompilerPassInterface
@@ -167,9 +166,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         $finder = new RecursiveFinder($cacheDir);
 
         foreach ($finder as $class => $reflector) {
-            assert(is_string($class));
-            assert($reflector instanceof ReflectionClass);
-            if (strpos($class, "class@anonymous\x00") === 0) {
+            if (str_starts_with($class, "class@anonymous\x00")) {
                 continue;
             }
 
@@ -177,8 +174,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         }
 
         $exportedMap = var_export($map, true);
-        $exportedMap = str_replace(dirname($outFile), "' . __DIR__ . '", $exportedMap);
-        $exportedMap = str_replace("'' . ", '', $exportedMap);
+        $exportedMap = str_replace([dirname($outFile), "'' . "], ["' . __DIR__ . '", ''], $exportedMap);
 
         file_put_contents($outFile, '<?php return ' . $exportedMap . ';');
     }

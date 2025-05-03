@@ -38,7 +38,7 @@ class BadResponseExceptionSubscriber implements EventSubscriberInterface
         $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
         assert(is_array($data));
 
-        $problem = new ApiProblem(Response::HTTP_BAD_REQUEST, $data);
+        $problem = new ApiProblem(Response::HTTP_BAD_REQUEST, $data); // @phpstan-ignore-line
 
         $event->setResponse($problem->toResponse());
     }

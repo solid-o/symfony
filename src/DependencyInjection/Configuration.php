@@ -19,6 +19,7 @@ use function is_array;
 use function is_string;
 use function parse_url;
 use function sprintf;
+use function substr;
 
 class Configuration implements ConfigurationInterface
 {
@@ -36,22 +37,26 @@ class Configuration implements ConfigurationInterface
                         return $v;
                     }
 
-                    $parsed = parse_url($v['filter']);
-                    if ($parsed === false) {
-                        return $v;
-                    }
+                    if ($v['filter'][0] === '@') {
+                        $filter = ['matcher' => substr($v['filter'], 1)];
+                    } else {
+                        $parsed = parse_url($v['filter']);
+                        if ($parsed === false) {
+                            return $v;
+                        }
 
-                    $filter = [];
-                    if ($parsed['host']) {
-                        $filter['host'] = $parsed['host'];
-                    }
+                        $filter = [];
+                        if ($parsed['host'] ?? false) {
+                            $filter['host'] = $parsed['host'];
+                        }
 
-                    if ($parsed['port']) {
-                        $filter['port'] = (int) $parsed['port'];
-                    }
+                        if ($parsed['port'] ?? false) {
+                            $filter['port'] = (int) $parsed['port'];
+                        }
 
-                    if ($parsed['path']) {
-                        $filter['path'] = $parsed['path'];
+                        if ($parsed['path'] ?? false) {
+                            $filter['path'] = $parsed['path'];
+                        }
                     }
 
                     $v['filter'] = $filter;
