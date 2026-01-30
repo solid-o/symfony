@@ -51,7 +51,7 @@ class ControllerVersionValidatorListener implements EventSubscriberInterface
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedEvents(): iterable
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['onRequest', 20],

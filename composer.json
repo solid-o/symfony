@@ -34,6 +34,7 @@
         "moneyphp/money": "^4.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.4",
+        "psr/http-factory": "^1.0",
         "refugis/doctrine-extra": "^3.0",
         "roave/security-advisories": "dev-master",
         "solido/api-problem": "^0.4@dev",

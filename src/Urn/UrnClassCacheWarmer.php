@@ -18,7 +18,7 @@ class UrnClassCacheWarmer extends CacheWarmer
 
     public function isOptional(): bool
     {
-        return false;
+        return true;
     }
 
     /**

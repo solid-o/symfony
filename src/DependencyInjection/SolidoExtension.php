@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -58,8 +58,8 @@ class SolidoExtension extends Extension
         assert($configuration !== null, 'Configuration is not null');
 
         $config = $this->processConfiguration($configuration, $configs);
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('solido.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('solido.php');
 
         if ($config['filter']['matcher']) {
             $container->setAlias('solido.request_matcher', $config['filter']['matcher']);
@@ -87,15 +87,15 @@ class SolidoExtension extends Extension
         }
 
         if ($config['body_converter']['enabled']) {
-            $loader->load('body_converter.xml');
+            $loader->load('body_converter.php');
         }
 
         if ($config['data_mapper']['enabled']) {
-            $loader->load('data_mapper.xml');
+            $loader->load('data_mapper.php');
         }
 
         if ($config['urn']['enabled']) {
-            $loader->load('urn.xml');
+            $loader->load('urn.php');
             $container->setParameter('solido.urn.urn_default_domain', $config['urn']['default_domain'] ?? '');
 
             if ($container->hasParameter('kernel.build_dir')) {
@@ -108,7 +108,7 @@ class SolidoExtension extends Extension
         }
 
         if ($config['test']) {
-            $loader->load('test.xml');
+            $loader->load('test.php');
 
             if ($config['security']['policy_checker']['enabled'] && ! isset($config['security']['policy_checker']['service'])) {
                 $config['security']['policy_checker']['service'] = TestPolicyChecker::class;
@@ -125,9 +125,9 @@ class SolidoExtension extends Extension
             }
 
             if ($config['security']['policy_checker']['enabled']) {
-                $loader->load('security_policy_checker.xml');
+                $loader->load('security_policy_checker.php');
                 if ($container->getParameter('kernel.debug')) {
-                    $loader->load('security_policy_checker_debug.xml');
+                    $loader->load('security_policy_checker_debug.php');
                 }
 
                 $container->setAlias(PolicyCheckerInterface::class, $config['security']['policy_checker']['service'] ?? PolicyChecker::class);
@@ -138,7 +138,7 @@ class SolidoExtension extends Extension
         /** @phpstan-var array{enabled: bool, allow_credentials: bool, allow_origin: string[], allow_headers: string[], expose_headers: string[], max_age: int, paths: array<string, array{paths: string, host: string, allow_credentials?: bool, allow_origin?: string[], allow_headers?: string[], expose_headers?: string[], max_age?: int}>} $corsConfig */
         $corsConfig = $container->resolveEnvPlaceholders($config['cors']);
         if ($corsConfig['enabled'] && interface_exists(RequestHandlerInterface::class)) {
-            $loader->load('cors.xml');
+            $loader->load('cors.php');
 
             $i = 0;
             foreach ($corsConfig['paths'] as &$pathConfig) {
@@ -177,11 +177,11 @@ class SolidoExtension extends Extension
         if ($config['request']['enabled']) {
             $container->setParameter('solido.format.priorities', $config['request']['priorities']);
             $container->setParameter('solido.format.default_type', $config['request']['default_mime_type']);
-            $loader->load('request.xml');
+            $loader->load('request.php');
 
             if (interface_exists(VersionGuesserInterface::class)) {
                 $container->setParameter('solido.versioning.custom_header_name', $config['request']['versioning']['custom_header_name']);
-                $loader->load('versioning.xml');
+                $loader->load('versioning.php');
 
                 if ($container->has('solido.versioning.version_guesser_' . $config['request']['versioning']['guesser'])) {
                     $container->setAlias('solido.versioning.version_guesser', new Alias('solido.versioning.version_guesser_' . $config['request']['versioning']['guesser']));
@@ -198,11 +198,11 @@ class SolidoExtension extends Extension
                 throw new InvalidConfigurationException('Solido serialization component is not installed. Run composer require solido/serialization to install it.');
             }
 
-            $loader->load('view.xml');
-            $loader->load('serializer.xml');
+            $loader->load('view.php');
+            $loader->load('serializer.php');
             if ($config['serializer']['catch_exceptions']) {
-                $loader->load('exception_listeners.xml');
-                $loader->load('serializer_error_renderer.xml');
+                $loader->load('exception_listeners.php');
+                $loader->load('serializer_error_renderer.php');
             }
 
             $container->findDefinition(ViewHandler::class)->replaceArgument(2, $config['serializer']['charset']);
@@ -210,10 +210,10 @@ class SolidoExtension extends Extension
         }
 
         if (interface_exists(ResolverInterface::class)) {
-            $loader->load('dto.xml');
+            $loader->load('dto.php');
             if (class_exists(ExpressionLanguage::class)) {
-                $loader->load('dto_security.xml');
-                $loader->load('dto_lock.xml');
+                $loader->load('dto_security.php');
+                $loader->load('dto_lock.php');
             } else {
                 $container->register(MissingSecurityExtension::class)
                     ->addTag('solido.dto_extension', ['priority' => 30]);
@@ -227,7 +227,7 @@ class SolidoExtension extends Extension
                 ->addArgument(new Reference('solido.dto.argument_metadata_factory.inner'));
 
             if ($config['dto']['routing']['loader']) {
-                $loader->load('dto_routing_loader.xml');
+                $loader->load('dto_routing_loader.php');
             }
 
             $definition = $container->findDefinition(ServiceLocatorRegistry::class);
@@ -240,12 +240,12 @@ class SolidoExtension extends Extension
             }
         }
 
-        $this->loadIfExists($loader, 'data_transformers.xml', TransformerInterface::class);
+        $this->loadIfExists($loader, 'data_transformers.php', TransformerInterface::class);
         $dateTimeTransformerDefinition = $container->getDefinition(DateTimeTransformer::class);
         $dateTimeTransformerDefinition->replaceArgument(0, $config['data_transformers']['date_time']['timezone']);
 
-        $this->loadIfExists($loader, 'patch_manager.xml', PatchManagerInterface::class);
-        $this->loadIfExists($loader, 'query_language.xml', FieldInterface::class);
+        $this->loadIfExists($loader, 'patch_manager.php', PatchManagerInterface::class);
+        $this->loadIfExists($loader, 'query_language.php', FieldInterface::class);
     }
 
     private function loadIfExists(FileLoader $loader, string $filename, string $className): void

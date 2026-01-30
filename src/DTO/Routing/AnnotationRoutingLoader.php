@@ -18,8 +18,8 @@ use Symfony\Component\Routing\RouteCollection;
 
 use function is_string;
 use function sort;
+use function str_ends_with;
 use function str_starts_with;
-use function substr;
 
 class AnnotationRoutingLoader extends AttributeClassLoader
 {
@@ -35,7 +35,7 @@ class AnnotationRoutingLoader extends AttributeClassLoader
 
     public function load(mixed $class, string|null $type = null): RouteCollection
     {
-        if (! is_string($class) || substr($class, -1) !== '\\') {
+        if (! is_string($class) || ! str_ends_with($class, '\\')) {
             throw new InvalidConfigurationException('DTO annotations route must define a namespace ending in "\\"');
         }
 

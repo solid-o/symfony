@@ -94,8 +94,10 @@ class ActionListener implements EventSubscriberInterface
     /**
      * {@inheritDoc}
      */
-    public static function getSubscribedEvents(): iterable
+    public static function getSubscribedEvents(): array
     {
-        yield KernelEvents::CONTROLLER_ARGUMENTS => ['onKernelControllerArguments', 2];
+        return [
+            KernelEvents::CONTROLLER_ARGUMENTS => ['onKernelControllerArguments', 2],
+        ];
     }
 }

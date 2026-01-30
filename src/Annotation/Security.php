@@ -9,8 +9,8 @@ use Attribute;
 #[Attribute]
 class Security
 {
-    public const ACCESS_DENIED_EXCEPTION = 'access_denied';
-    public const RETURN_NULL = 'null';
+    public const string ACCESS_DENIED_EXCEPTION = 'access_denied';
+    public const string RETURN_NULL = 'null';
 
     public function __construct(
         public string $expression = 'true',

@@ -28,7 +28,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('solido');
         $rootNode = $treeBuilder->getRootNode();
 
-        // @phpstan-ignore-next-line
         $rootNode
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
@@ -219,7 +218,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
-        // @phpstan-ignore-next-line
         $node = $rootNode->children()->arrayNode('cors');
         if (interface_exists(RequestHandlerInterface::class)) {
             $node->canBeDisabled();

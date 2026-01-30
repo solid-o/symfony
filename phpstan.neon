@@ -5,3 +5,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     bootstrapFiles:
         - compat/argument_value_resolver_interfaces.php
+
+    ignoreErrors:
+        - message: '#Symfony\\Component\\Routing\\Annotation\\Route#'
+          path: DTO/Routing/AnnotationRoutingLoader.php
