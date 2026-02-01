@@ -2,10 +2,11 @@ includes:
     - vendor/solido/php-coding-standards/phpstan.neon
 
 parameters:
+    reportUnmatchedIgnoredErrors: false
     treatPhpDocTypesAsCertain: false
     bootstrapFiles:
         - compat/argument_value_resolver_interfaces.php
 
     ignoreErrors:
         - message: '#Symfony\\Component\\Routing\\Annotation\\Route#'
-          path: DTO/Routing/AnnotationRoutingLoader.php
+          path: src/DTO/Routing/AnnotationRoutingLoader.php
