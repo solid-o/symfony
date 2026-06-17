@@ -9,6 +9,7 @@ use Solido\Symfony\Tests\Fixtures\Proxy\Model\Interfaces\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
+use function restore_exception_handler;
 
 class DtoIntegrationTest extends WebTestCase
 {
@@ -245,6 +246,13 @@ DUMP
         $response = $client->getResponse();
         self::assertEquals(202, $response->getStatusCode());
         self::assertEquals('{"id":"what_a_nice_id","locked":false}', $response->getContent());
+    }
+
+    protected function tearDown(): void
+    {
+        restore_exception_handler();
+
+        parent::tearDown();
     }
 
     /**
