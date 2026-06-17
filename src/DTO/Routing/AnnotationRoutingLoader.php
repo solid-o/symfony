@@ -124,10 +124,12 @@ class AnnotationRoutingLoader extends AttributeClassLoader
             yield $attribute->newInstance();
         }
 
-        if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
-            foreach ($reflection->getAttributes('Symfony\Component\Routing\Annotation\Route') as $attribute) {
-                yield $attribute->newInstance();
-            }
+        if (! class_exists('Symfony\Component\Routing\Annotation\Route')) {
+            return;
+        }
+
+        foreach ($reflection->getAttributes('Symfony\Component\Routing\Annotation\Route') as $attribute) {
+            yield $attribute->newInstance();
         }
     }
 

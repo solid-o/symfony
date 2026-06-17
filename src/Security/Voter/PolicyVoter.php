@@ -12,8 +12,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use function array_key_first;
-use function count;
+use function is_string;
 use function method_exists;
 
 class PolicyVoter implements VoterInterface
@@ -74,9 +73,7 @@ class PolicyVoter implements VoterInterface
         return $user;
     }
 
-    /**
-     * @param mixed[] $attributes
-     */
+    /** @param mixed[] $attributes */
     private function getAction(array $attributes): string|null
     {
         foreach ($attributes as $attribute) {

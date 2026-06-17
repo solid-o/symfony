@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         name: Check code style
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v5
                 with:
                     fetch-depth: 10
 
@@ -22,14 +22,14 @@ jobs:
                     tools: cs2pr
 
             -   name: Cache dependencies installed with composer
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: "~/.composer/cache"
-                    key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('composer.lock') }}
-                    restore-keys: php-${{ matrix.php-version }}-composer-locked-
+                    key: php-8.4-composer-locked-${{ hashFiles('composer.lock') }}
+                    restore-keys: php-8.4-composer-locked-
 
             -   name: Install dependencies with composer
-                run: composer update --no-interaction --no-progress --no-suggest
+                run: composer update --no-interaction --no-progress
 
             -   if: ${{ github.base_ref == '' }}
                 run: composer cscheck
