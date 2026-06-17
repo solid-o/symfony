@@ -229,7 +229,11 @@ class ControllerListener implements EventSubscriberInterface
         return $configurations;
     }
 
-    /** @return object[] */
+    /**
+     * @param ReflectionClass<object> $object
+     *
+     * @return object[]
+     */
     private function getClassAttributes(ReflectionClass $object): array
     {
         return array_map(

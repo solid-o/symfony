@@ -11,6 +11,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 use function is_int;
 
+/** @implements DataTransformerInterface<mixed, mixed> */
 class FormTransformerAdapter implements DataTransformerInterface
 {
     public function __construct(private TransformerInterface $transformer)

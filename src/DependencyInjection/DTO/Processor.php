@@ -75,7 +75,7 @@ class Processor implements IteratorAggregate
             ->notPath($buildDir)
             ->notPath($cacheDir);
 
-        /** @phpstan-var array<class-string, ReflectionClass> $classes */
+        /** @phpstan-var array<class-string, ReflectionClass<object>> $classes */
         $classes = iterator_to_array($finder);
         $interfaces = array_filter($classes, static fn (ReflectionClass $class) => $class->isInterface());
         $modelsByInterface = [];
@@ -98,8 +98,8 @@ class Processor implements IteratorAggregate
     }
 
     /**
-     * @param array<string, ReflectionClass> $classes
-     * @phpstan-param array<class-string, ReflectionClass> $classes
+     * @param array<string, ReflectionClass<object>> $classes
+     * @phpstan-param array<class-string, ReflectionClass<object>> $classes
      *
      * @return array<string, ServiceClosureArgument>
      */

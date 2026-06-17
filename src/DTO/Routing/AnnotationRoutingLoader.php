@@ -96,6 +96,7 @@ class AnnotationRoutingLoader extends AttributeClassLoader
      * Configures the _controller default parameter and eventually the HTTP method
      * requirement of a given Route instance.
      *
+     * @param ReflectionClass<object> $class
      * @param mixed $annot The annotation class instance
      *
      * @throws LogicException When the service option is specified on a method.
@@ -114,7 +115,7 @@ class AnnotationRoutingLoader extends AttributeClassLoader
     }
 
     /**
-     * @param ReflectionClass|ReflectionMethod $reflection
+     * @param ReflectionClass<object>|ReflectionMethod $reflection
      *
      * @return iterable<object>
      */
