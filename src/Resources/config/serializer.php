@@ -4,30 +4,24 @@ declare(strict_types=1);
 
 // phpcs:disable SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
 
-use Solido\Serialization\DTO\JmsSerializerProxySubscriber;
-use Solido\Serialization\DTO\KcsSerializerProxySubscriber;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $container): void {
-    $exists = static function (string $class): bool {
-        try {
-            new ReflectionClass($class);
-
-            return true;
-        } catch (Throwable) {
-            return false;
-        }
-    };
-
-    if ($exists(KcsSerializerProxySubscriber::class)) {
+    if (
+        class_exists('Kcs\Serializer\EventDispatcher\PreSerializeEvent') &&
+        class_exists('Solido\Serialization\DTO\KcsSerializerProxySubscriber')
+    ) {
         $container->services()
-            ->set(KcsSerializerProxySubscriber::class)
+            ->set('Solido\Serialization\DTO\KcsSerializerProxySubscriber')
             ->tag('kernel.event_subscriber');
     }
 
-    if ($exists(JmsSerializerProxySubscriber::class)) {
+    if (
+        interface_exists('JMS\Serializer\EventDispatcher\EventSubscriberInterface') &&
+        class_exists('Solido\Serialization\DTO\JmsSerializerProxySubscriber')
+    ) {
         $container->services()
-            ->set(JmsSerializerProxySubscriber::class)
+            ->set('Solido\Serialization\DTO\JmsSerializerProxySubscriber')
             ->tag('jms_serializer.event_subscriber');
     }
 };

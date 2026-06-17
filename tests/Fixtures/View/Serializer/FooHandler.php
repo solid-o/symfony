@@ -17,7 +17,7 @@ class FooHandler implements SubscribingHandlerInterface
     {
         yield [
             'type' => 'FooObject',
-            'direction' => Direction::DIRECTION_SERIALIZATION,
+            'direction' => Direction::Serialization,
             'method' => 'serialize',
         ];
     }

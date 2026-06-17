@@ -153,10 +153,11 @@ class ControllerListener implements EventSubscriberInterface
             return;
         }
 
+        /** @var list<object> $attributes */
         $attributes = $event->getAttributes();
         foreach ($method->getAttributes() as $attribute) {
             try {
-                $attributes[$attribute->getName()][] = $attribute->newInstance();
+                $attributes[] = $attribute->newInstance();
             } catch (Throwable) {
                 // @ignoreException
             }

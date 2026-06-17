@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Solido\Symfony\Tests\Fixtures\Proxy\LockModel\v1\v1_0;
 
-use Kcs\Serializer\Annotation\Exclude;
+use Kcs\Serializer\Attribute\Exclude;
 use Solido\Symfony\Annotation\Lock;
 use Solido\Symfony\Tests\Fixtures\Proxy\LockModel\Contracts\RoutedInterface;
 use Symfony\Component\HttpFoundation\Request;

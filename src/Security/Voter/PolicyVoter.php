@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use function array_key_first;
 use function count;
@@ -35,7 +36,10 @@ class PolicyVoter implements VoterInterface
 
         // Subject could be null (in case of collection add operation)
         $resource = $subject?->getUrn();
-        $action = count($attributes) > 0 ? $attributes[array_key_first($attributes)] : '';
+        $action = $this->getAction($attributes);
+        if ($action === null) {
+            return VoterInterface::ACCESS_ABSTAIN;
+        }
 
         return $this->policyChecker->check($user->getUrn(), $action, $resource, $this->getContext()) ?
             VoterInterface::ACCESS_GRANTED :
@@ -68,5 +72,23 @@ class PolicyVoter implements VoterInterface
         }
 
         return $user;
+    }
+
+    /**
+     * @param mixed[] $attributes
+     */
+    private function getAction(array $attributes): string|null
+    {
+        foreach ($attributes as $attribute) {
+            if (is_string($attribute)) {
+                return $attribute;
+            }
+
+            if ($attribute instanceof IsGranted && is_string($attribute->attribute)) {
+                return $attribute->attribute;
+            }
+        }
+
+        return null;
     }
 }

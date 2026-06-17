@@ -5,6 +5,8 @@ namespace Solido\Symfony\Tests\EventListener;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 use Refugis\DoctrineExtra\ObjectIteratorInterface;
 use Solido\Pagination\PagerIterator;
 use Solido\Pagination\PageToken;
@@ -60,7 +62,7 @@ class ViewHandlerTest extends WebTestCase
         return new AppKernel('test', true);
     }
 
-    public function skipProvider(): array
+    public static function skipProvider(): array
     {
         $tests = [];
 
@@ -73,9 +75,7 @@ class ViewHandlerTest extends WebTestCase
         return $tests;
     }
 
-    /**
-     * @dataProvider skipProvider
-     */
+    #[DataProvider('skipProvider')]
     public function testSkip(Request $request, $result): void
     {
         $event = new ViewEvent($this->httpKernel->reveal(), $request, HttpKernelInterface::MAIN_REQUEST, $result);
@@ -183,7 +183,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event);
     }
 
-    public function provideIterator(): iterable
+    public static function provideIterator(): iterable
     {
         yield [new \ArrayIterator(['foo' => 'bar'])];
         yield [new class() implements \IteratorAggregate {
@@ -194,9 +194,7 @@ class ViewHandlerTest extends WebTestCase
         }];
     }
 
-    /**
-     * @dataProvider provideIterator
-     */
+    #[DataProvider('provideIterator')]
     public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing(iterable $iterator): void
     {
         $request = new Request();
@@ -234,9 +232,7 @@ class ViewHandlerTest extends WebTestCase
         return $iterator;
     }
 
-    /**
-     * @depends testShouldAddXTotalCountHeaderForEntityIterators
-     */
+    #[Depends('testShouldAddXTotalCountHeaderForEntityIterators')]
     public function testShouldUnwrapIteratorFromIteratorAggregate(ObjectProphecy $iterator): void
     {
         $result = new class($iterator->reveal()) implements \IteratorAggregate {

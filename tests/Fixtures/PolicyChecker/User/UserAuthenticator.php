@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 class UserAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function start(Request $request, AuthenticationException|null $authException = null): Response
     {
         // TODO: Implement start() method.
     }
@@ -27,7 +27,7 @@ class UserAuthenticator extends AbstractAuthenticator implements AuthenticationE
     public function authenticate(Request $request): Passport
     {
         return new Passport(
-            new UserBadge('', static fn () => new User()),
+            new UserBadge('test_username', static fn () => new User()),
             new CustomCredentials(static fn () => true, []),
         );
     }

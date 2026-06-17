@@ -10,12 +10,12 @@ use ReflectionMethod;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistryInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
 use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 use Symfony\Component\Routing\Loader\AttributeClassLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+use function class_exists;
 use function is_string;
 use function sort;
 use function str_ends_with;
@@ -64,6 +64,10 @@ class AnnotationRoutingLoader extends AttributeClassLoader
             foreach ($reflectionClass->getMethods() as $method) {
                 $this->defaultRouteIndex = 0;
                 foreach ($this->getAnnotations($method) as $annot) {
+                    if (! $annot instanceof RouteAttribute) {
+                        continue;
+                    }
+
                     $this->addRoute($collection, $annot, $globals, $reflectionClass, $method);
                 }
             }
@@ -75,6 +79,10 @@ class AnnotationRoutingLoader extends AttributeClassLoader
 
             $globals = $this->resetGlobals();
             foreach ($this->getAnnotations($reflectionClass) as $annot) {
+                if (! $annot instanceof RouteAttribute) {
+                    continue;
+                }
+
                 $this->addRoute($collection, $annot, $globals, $reflectionClass, $reflectionClass->getMethod('__invoke'));
             }
 
@@ -108,7 +116,7 @@ class AnnotationRoutingLoader extends AttributeClassLoader
     /**
      * @param ReflectionClass|ReflectionMethod $reflection
      *
-     * @return array<RouteAttribute|RouteAnnotation>
+     * @return iterable<object>
      */
     private function getAnnotations(object $reflection): iterable
     {
@@ -116,8 +124,10 @@ class AnnotationRoutingLoader extends AttributeClassLoader
             yield $attribute->newInstance();
         }
 
-        foreach ($reflection->getAttributes(RouteAnnotation::class) as $attribute) {
-            yield $attribute->newInstance();
+        if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
+            foreach ($reflection->getAttributes('Symfony\Component\Routing\Annotation\Route') as $attribute) {
+                yield $attribute->newInstance();
+            }
         }
     }
 

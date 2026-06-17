@@ -30,7 +30,7 @@
         "friendsofphp/proxy-manager-lts": "^1.0",
         "giggsey/libphonenumber-for-php": "^8.10",
         "jms/serializer": "^3.6",
-        "kcs/serializer": "^3.3 || ^4.0",
+        "kcs/serializer": "^5.0",
         "moneyphp/money": "^4.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^11.0 || ^12.0",

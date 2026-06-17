@@ -6,6 +6,7 @@ namespace Solido\Symfony\Tests\DependencyInjection;
 
 use Kcs\Serializer\Bundle\DependencyInjection\CompilerPass\NamingStrategyPass;
 use Kcs\Serializer\Bundle\DependencyInjection\SerializerExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Solido\Serialization\Adapter\KcsSerializerAdapter;
 use Solido\Serialization\SerializerInterface;
@@ -76,9 +77,7 @@ class SolidoExtensionTest extends TestCase
         self::assertEquals(KcsSerializerAdapter::class, $this->container->findDefinition(SerializerInterface::class)->getClass());
     }
 
-    /**
-     * @dataProvider provideInvalidGroups
-     */
+    #[DataProvider('provideInvalidGroups')]
     public function testShouldThrowOnInvalidSerializationGroupsType($data): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -92,7 +91,7 @@ class SolidoExtensionTest extends TestCase
         $this->container->compile();
     }
 
-    public function provideInvalidGroups()
+    public static function provideInvalidGroups(): iterable
     {
         yield [''];
         yield [42];
