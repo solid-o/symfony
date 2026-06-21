@@ -15,6 +15,7 @@
         }
     ],
     "scripts": {
+        "bench": "php benchmarks/kernel_boot.php",
         "phpstan": "phpstan analyse src/ -c phpstan.neon --level=9 --no-progress --debug --memory-limit=2048M",
         "cscheck": "vendor/bin/phpcs --standard=Solido src/",
         "csfix": "vendor/bin/phpcbf --standard=Solido src/"
