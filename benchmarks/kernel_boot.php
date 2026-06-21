@@ -12,7 +12,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 /**
  * @phpstan-type Scenario array{name: string, kernel: class-string<KernelInterface>}
- * @phpstan-type Result array{scenario: string, mode: 'cold'|'warm', iterations: int, average_ms: float, min_ms: float, max_ms: float, peak_memory_mb: float}
+ * @phpstan-type Result array{scenario: string, mode: 'cold'|'warm', iterations: int, average_ms: float, min_ms: float, max_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
  */
 
 $iterations = parsePositiveIntOption($argv, '--iterations', 5);
@@ -94,11 +94,15 @@ function runScenario(array $scenario, int $iterations, bool $cold): array
 {
     $durations = [];
     $peakMemory = 0.0;
+    $generatedPhpFiles = 0;
+    $dtoProxyPhpFiles = 0;
 
     for ($i = 0; $i < $iterations; ++$i) {
         $measurement = runSubprocessMeasurement($scenario['kernel'], $cold, $scenario['name'] . '_' . ($cold ? 'cold' : 'warm') . '_' . $i);
         $durations[] = $measurement['duration_ms'];
         $peakMemory = max($peakMemory, $measurement['peak_memory_mb']);
+        $generatedPhpFiles = max($generatedPhpFiles, $measurement['generated_php_files']);
+        $dtoProxyPhpFiles = max($dtoProxyPhpFiles, $measurement['dto_proxy_php_files']);
     }
 
     /** @var 'cold'|'warm' $mode */
@@ -112,13 +116,15 @@ function runScenario(array $scenario, int $iterations, bool $cold): array
         'min_ms' => min($durations),
         'max_ms' => max($durations),
         'peak_memory_mb' => $peakMemory,
+        'generated_php_files' => $generatedPhpFiles,
+        'dto_proxy_php_files' => $dtoProxyPhpFiles,
     ];
 }
 
 /**
  * @param class-string<KernelInterface> $kernelClass
  *
- * @return array{duration_ms: float, peak_memory_mb: float}
+ * @return array{duration_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
  */
 function runSubprocessMeasurement(string $kernelClass, bool $cold, string $environment): array
 {
@@ -132,7 +138,7 @@ function runSubprocessMeasurement(string $kernelClass, bool $cold, string $envir
 /**
  * @param class-string<KernelInterface> $kernelClass
  *
- * @return array{duration_ms: float, peak_memory_mb: float}
+ * @return array{duration_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
  */
 function runChildProcess(string $kernelClass, string $mode, string $environment, bool $cleanAfter): array
 {
@@ -172,13 +178,15 @@ function runChildProcess(string $kernelClass, string $mode, string $environment,
     return [
         'duration_ms' => (float) $decoded['duration_ms'],
         'peak_memory_mb' => (float) $decoded['peak_memory_mb'],
+        'generated_php_files' => (int) $decoded['generated_php_files'],
+        'dto_proxy_php_files' => (int) $decoded['dto_proxy_php_files'],
     ];
 }
 
 /**
  * @param class-string<KernelInterface> $kernelClass
  *
- * @return array{duration_ms: float, peak_memory_mb: float}
+ * @return array{duration_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
  */
 function runChildMeasurement(string $kernelClass, bool $cold, string $environment, bool $cleanAfter): array
 {
@@ -196,6 +204,8 @@ function runChildMeasurement(string $kernelClass, bool $cold, string $environmen
     $kernel->boot();
     $duration = (microtime(true) - $start) * 1000;
     $peakMemory = memory_get_peak_usage(true) / 1024 / 1024;
+    $generatedPhpFiles = countPhpFiles($kernel->getBuildDir()) + countPhpFiles($kernel->getCacheDir());
+    $dtoProxyPhpFiles = countPhpFiles($kernel->getBuildDir() . '/dto-proxies') + countPhpFiles($kernel->getCacheDir() . '/dto-proxies');
 
     $kernel->shutdown();
 
@@ -206,7 +216,25 @@ function runChildMeasurement(string $kernelClass, bool $cold, string $environmen
     return [
         'duration_ms' => $duration,
         'peak_memory_mb' => $peakMemory,
+        'generated_php_files' => $generatedPhpFiles,
+        'dto_proxy_php_files' => $dtoProxyPhpFiles,
     ];
+}
+
+function countPhpFiles(string $path): int
+{
+    if (! is_dir($path)) {
+        return 0;
+    }
+
+    $count = 0;
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $file) {
+        if ($file->isFile() && $file->getExtension() === 'php') {
+            ++$count;
+        }
+    }
+
+    return $count;
 }
 
 /**
@@ -268,7 +296,7 @@ function removeDirectory(string $path): void
  */
 function writeTable(array $results): void
 {
-    $headers = ['Scenario', 'Mode', 'Iterations', 'Avg ms', 'Min ms', 'Max ms', 'Peak MB'];
+    $headers = ['Scenario', 'Mode', 'Iterations', 'Avg ms', 'Min ms', 'Max ms', 'Peak MB', 'PHP files', 'DTO proxies'];
     $rows = array_map(static fn (array $result) => [
         $result['scenario'],
         $result['mode'],
@@ -277,6 +305,8 @@ function writeTable(array $results): void
         number_format($result['min_ms'], 2, '.', ''),
         number_format($result['max_ms'], 2, '.', ''),
         number_format($result['peak_memory_mb'], 2, '.', ''),
+        (string) $result['generated_php_files'],
+        (string) $result['dto_proxy_php_files'],
     ], $results);
 
     $widths = array_map(strlen(...), $headers);
