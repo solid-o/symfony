@@ -27,6 +27,7 @@ use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function array_merge;
+use function array_push;
 use function class_exists;
 use function get_class;
 use function get_parent_class;
@@ -45,6 +46,11 @@ use function substr;
  */
 class ControllerListener implements EventSubscriberInterface
 {
+    /** @var array<string, array{0: array<string, ConfigurationInterface|ConfigurationInterface[]>, 1: array<string, ConfigurationInterface|ConfigurationInterface[]>}> */
+    private array $configurations = [];
+    /** @var array<string, object[]> */
+    private array $methodAttributes = [];
+
     public function __construct(
         private readonly ConfigCacheFactoryInterface $cacheFactory,
         private readonly string $cacheDir,
@@ -137,14 +143,13 @@ class ControllerListener implements EventSubscriberInterface
             return;
         }
 
-        $object = new ReflectionClass($className);
-        $method = $object->getMethod($controller[1]);
+        $methodName = $controller[1];
 
         $controllerName = sprintf(
             '.solido.dto.%s.%s:%s',
             $className,
             $controller[0] instanceof ProxyInterface ? get_parent_class($controller[0]) : get_class($controller[0]),
-            $method->name,
+            $methodName,
         );
 
         $request->attributes->set('_controller', $controllerName);
@@ -155,13 +160,7 @@ class ControllerListener implements EventSubscriberInterface
 
         /** @var list<object> $attributes */
         $attributes = $event->getAttributes();
-        foreach ($method->getAttributes() as $attribute) {
-            try {
-                $attributes[] = $attribute->newInstance();
-            } catch (Throwable) {
-                // @ignoreException
-            }
-        }
+        array_push($attributes, ...$this->getControllerMethodAttributes($className, $methodName));
 
         $event->setController($event->getController(), $attributes);
     }
@@ -199,9 +198,14 @@ class ControllerListener implements EventSubscriberInterface
             throw new RuntimeException('Symfony VarExporter needs to be installed. Please run composer require symfony/var-exporter');
         }
 
+        $key = $cacheDir . "\0" . $className . "\0" . $methodName;
+        if (isset($this->configurations[$key])) {
+            return $this->configurations[$key];
+        }
+
         $cache = $this->getConfigCache($className, $methodName, $cacheDir);
 
-        return require $cache->getPath();
+        return $this->configurations[$key] = require $cache->getPath();
     }
 
     /**
@@ -249,5 +253,30 @@ class ControllerListener implements EventSubscriberInterface
             static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
             $method->getAttributes(ConfigurationInterface::class, ReflectionAttribute::IS_INSTANCEOF),
         );
+    }
+
+    /**
+     * @phpstan-param class-string<object> $className
+     *
+     * @return object[]
+     */
+    private function getControllerMethodAttributes(string $className, string $methodName): array
+    {
+        $key = $className . '::' . $methodName;
+        if (isset($this->methodAttributes[$key])) {
+            return $this->methodAttributes[$key];
+        }
+
+        $method = new ReflectionMethod($className, $methodName);
+        $attributes = [];
+        foreach ($method->getAttributes() as $attribute) {
+            try {
+                $attributes[] = $attribute->newInstance();
+            } catch (Throwable) {
+                // @ignoreException
+            }
+        }
+
+        return $this->methodAttributes[$key] = $attributes;
     }
 }
