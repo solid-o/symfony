@@ -17,14 +17,19 @@ class AppKernel extends TestKernel
      */
     public function registerBundles(): array
     {
-        return [
+        $bundles = [
             new FrameworkBundle(),
             new SolidoBundle(),
-            new DebugBundle(),
             new SecurityBundle(),
             new SerializerBundle(),
             new AppBundle(),
         ];
+
+        if ($this->isDebug()) {
+            $bundles[] = new DebugBundle();
+        }
+
+        return $bundles;
     }
 
     /**

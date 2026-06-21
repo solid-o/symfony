@@ -24,6 +24,9 @@ use function iterator_to_array;
 use function preg_match;
 use function preg_replace;
 use function str_replace;
+use function str_starts_with;
+
+use const ARRAY_FILTER_USE_BOTH;
 
 /** @template-implements IteratorAggregate<string, ServiceClosureArgument> */
 class Processor implements IteratorAggregate
@@ -50,17 +53,18 @@ class Processor implements IteratorAggregate
     public function getIterator(): Generator
     {
         $this->versions = [];
-        foreach ($this->namespaces as $namespace) {
-            yield from $this->processNamespace($this->container, $namespace);
-        }
+
+        yield from $this->processNamespaces($this->container, $this->namespaces);
     }
 
     /**
      * Searches through the base dir recursively for interfaces and their implementations.
      *
+     * @param string[] $namespaces
+     *
      * @return array<string, ServiceClosureArgument>
      */
-    private function processNamespace(ContainerBuilder $container, string $namespace): array
+    private function processNamespaces(ContainerBuilder $container, array $namespaces): array
     {
         $projectDir = $container->getParameter('kernel.project_dir');
         $buildDir = $container->getParameter('kernel.build_dir');
@@ -70,18 +74,26 @@ class Processor implements IteratorAggregate
 
         $finder = new ComposerFinder();
         $finder
-            ->inNamespace($namespace)
+            ->inNamespace($namespaces)
             ->in($projectDir)
             ->notPath($buildDir)
             ->notPath($cacheDir);
 
         /** @phpstan-var array<class-string, ReflectionClass<object>> $classes */
         $classes = iterator_to_array($finder);
-        $interfaces = array_filter($classes, static fn (ReflectionClass $class) => $class->isInterface());
         $modelsByInterface = [];
 
-        foreach ($interfaces as $interface => $unused) {
-            $modelsByInterface[$interface] = $this->processInterface($container, $interface, $namespace, $classes);
+        foreach ($namespaces as $namespace) {
+            $namespaceClasses = array_filter(
+                $classes,
+                static fn (ReflectionClass $class, string $className) => str_starts_with($className, $namespace . '\\'),
+                ARRAY_FILTER_USE_BOTH,
+            );
+            $interfaces = array_filter($namespaceClasses, static fn (ReflectionClass $class) => $class->isInterface());
+
+            foreach ($interfaces as $interface => $unused) {
+                $modelsByInterface[$interface] = $this->processInterface($container, $interface, $namespace, $namespaceClasses);
+            }
         }
 
         $locators = [];

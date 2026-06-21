@@ -6,7 +6,6 @@ namespace Solido\Symfony\DependencyInjection\CompilerPass;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Error;
-use Kcs\ClassFinder\Finder\RecursiveFinder;
 use RuntimeException;
 use Solido\DtoManagement\Exception\EmptyBuilderException;
 use Solido\DtoManagement\Finder\ServiceLocatorRegistry;
@@ -34,12 +33,13 @@ use function is_subclass_of;
 use function mkdir;
 use function sprintf;
 use function str_replace;
-use function str_starts_with;
 use function var_export;
 
 class AddDtoInterceptorsPass implements CompilerPassInterface
 {
     private AccessInterceptorFactory $proxyFactory;
+    /** @var array<string, string> */
+    private array $proxyClassMap = [];
 
     public function process(ContainerBuilder $container): void
     {
@@ -125,7 +125,7 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
             $container->getParameter('kernel.cache_dir');
         assert(is_string($kernelCacheDir));
 
-        $this->generateClassMap($cacheDir, $kernelCacheDir . '/dto-proxies-map.php');
+        $this->generateClassMap($kernelCacheDir . '/dto-proxies-map.php');
     }
 
     private function processLocator(ContainerBuilder $container, ServiceClosureArgument $argument): void
@@ -150,6 +150,11 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
             }
 
             $definition->setClass($proxyClass);
+            $proxyFile = $container->getParameterBag()->resolveValue(
+                '%solido.dto-management.proxy_cache_dir%/' . str_replace('\\', '', $proxyClass) . '.php',
+            );
+            assert(is_string($proxyFile));
+            $this->proxyClassMap[$proxyClass] = $proxyFile;
             if (! is_subclass_of($proxyClass, ServiceSubscriberInterface::class)) {
                 continue;
             }
@@ -160,20 +165,9 @@ class AddDtoInterceptorsPass implements CompilerPassInterface
         }
     }
 
-    private function generateClassMap(string $cacheDir, string $outFile): void
+    private function generateClassMap(string $outFile): void
     {
-        $map = [];
-        $finder = new RecursiveFinder($cacheDir);
-
-        foreach ($finder as $class => $reflector) {
-            if (str_starts_with($class, "class@anonymous\x00")) {
-                continue;
-            }
-
-            $map[$class] = $reflector->getFileName();
-        }
-
-        $exportedMap = var_export($map, true);
+        $exportedMap = var_export($this->proxyClassMap, true);
         $exportedMap = str_replace([dirname($outFile), "'' . "], ["' . __DIR__ . '", ''], $exportedMap);
 
         file_put_contents($outFile, '<?php return ' . $exportedMap . ';');
