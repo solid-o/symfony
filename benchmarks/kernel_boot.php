@@ -10,16 +10,15 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-/**
- * @phpstan-type Scenario array{name: string, kernel: class-string<KernelInterface>}
- * @phpstan-type Result array{scenario: string, mode: 'cold'|'warm', iterations: int, average_ms: float, min_ms: float, max_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
- */
-
 $iterations = parsePositiveIntOption($argv, '--iterations', 5);
 $output = parseStringOption($argv, '--output');
 $childKernel = parseStringOption($argv, '--child-kernel');
 
 if ($childKernel !== null) {
+    if (! class_exists($childKernel) || ! is_subclass_of($childKernel, KernelInterface::class)) {
+        throw new RuntimeException('Kernel class does not exist or is not a Symfony kernel: ' . $childKernel);
+    }
+
     $cold = parseStringOption($argv, '--child-mode') === 'cold';
     $environment = parseStringOption($argv, '--child-env') ?? 'bench';
     $cleanAfter = parseStringOption($argv, '--child-clean-after') === '1';
@@ -27,7 +26,7 @@ if ($childKernel !== null) {
     exit(0);
 }
 
-/** @var Scenario[] $scenarios */
+/** @var list<array{name: string, kernel: class-string<KernelInterface>}> $scenarios */
 $scenarios = [
     ['name' => 'body_converter', 'kernel' => BodyConverterKernel::class],
     ['name' => 'view', 'kernel' => ViewKernel::class],
@@ -53,6 +52,9 @@ if ($output !== null) {
 
 /**
  * @param string[] $argv
+ * @param positive-int $default
+ *
+ * @return positive-int
  */
 function parsePositiveIntOption(array $argv, string $name, int $default): int
 {
@@ -66,9 +68,7 @@ function parsePositiveIntOption(array $argv, string $name, int $default): int
     return max(1, $value);
 }
 
-/**
- * @param string[] $argv
- */
+/** @param string[] $argv */
 function parseStringOption(array $argv, string $name): string|null
 {
     foreach ($argv as $index => $argument) {
@@ -86,9 +86,10 @@ function parseStringOption(array $argv, string $name): string|null
 }
 
 /**
- * @param Scenario $scenario
+ * @param array{name: string, kernel: class-string<KernelInterface>} $scenario
+ * @param positive-int $iterations
  *
- * @return Result
+ * @return array{scenario: string, mode: 'cold'|'warm', iterations: int, average_ms: float, min_ms: float, max_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}
  */
 function runScenario(array $scenario, int $iterations, bool $cold): array
 {
@@ -103,6 +104,10 @@ function runScenario(array $scenario, int $iterations, bool $cold): array
         $peakMemory = max($peakMemory, $measurement['peak_memory_mb']);
         $generatedPhpFiles = max($generatedPhpFiles, $measurement['generated_php_files']);
         $dtoProxyPhpFiles = max($dtoProxyPhpFiles, $measurement['dto_proxy_php_files']);
+    }
+
+    if ($durations === []) {
+        throw new RuntimeException('Cannot run a benchmark scenario with zero iterations.');
     }
 
     /** @var 'cold'|'warm' $mode */
@@ -229,17 +234,21 @@ function countPhpFiles(string $path): int
 
     $count = 0;
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $file) {
-        if ($file->isFile() && $file->getExtension() === 'php') {
-            ++$count;
+        if (! $file instanceof SplFileInfo) {
+            continue;
         }
+
+        if (! $file->isFile() || $file->getExtension() !== 'php') {
+            continue;
+        }
+
+        ++$count;
     }
 
     return $count;
 }
 
-/**
- * @param class-string<KernelInterface> $kernelClass
- */
+/** @param class-string<KernelInterface> $kernelClass */
 function cleanupKernelRuntime(string $kernelClass, string $environment): void
 {
     $reflection = new ReflectionClass($kernelClass);
@@ -249,13 +258,15 @@ function cleanupKernelRuntime(string $kernelClass, string $environment): void
     }
 
     $rootDir = dirname($fileName);
-    foreach ([
-        $rootDir . '/var/cache/' . $environment,
-        $rootDir . '/var/build/' . $environment,
-        $rootDir . '/logs/' . $environment,
-        $rootDir . '/cache/' . $environment,
-        $rootDir . '/build/' . $environment,
-    ] as $path) {
+    foreach (
+        [
+            $rootDir . '/var/cache/' . $environment,
+            $rootDir . '/var/build/' . $environment,
+            $rootDir . '/logs/' . $environment,
+            $rootDir . '/cache/' . $environment,
+            $rootDir . '/build/' . $environment,
+        ] as $path
+    ) {
         removeDirectory($path);
     }
 }
@@ -273,27 +284,33 @@ function removeDirectory(string $path): void
         return;
     }
 
-    foreach (new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::CHILD_FIRST,
-    ) as $file) {
+    foreach (
+        new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        ) as $file
+    ) {
+        if (! $file instanceof SplFileInfo) {
+            continue;
+        }
+
         $filePath = $file->getPathname();
         if ($file->isDir() && ! $file->isLink()) {
             rmdir($filePath);
             continue;
         }
 
-        if (is_file($filePath) || is_link($filePath)) {
-            unlink($filePath);
+        if (! is_file($filePath) && ! is_link($filePath)) {
+            continue;
         }
+
+        unlink($filePath);
     }
 
     rmdir($path);
 }
 
-/**
- * @param Result[] $results
- */
+/** @param list<array{scenario: string, mode: 'cold'|'warm', iterations: int, average_ms: float, min_ms: float, max_ms: float, peak_memory_mb: float, generated_php_files: int, dto_proxy_php_files: int}> $results */
 function writeTable(array $results): void
 {
     $headers = ['Scenario', 'Mode', 'Iterations', 'Avg ms', 'Min ms', 'Max ms', 'Peak MB', 'PHP files', 'DTO proxies'];
