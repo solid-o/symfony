@@ -24,6 +24,7 @@
     "require": {
         "php": "^8.4",
         "ext-json": "*",
+        "symfony/console": "^7.4 || ^8.0",
         "symfony/framework-bundle": "^7.4 || ^8.0",
         "willdurand/negotiation": "^2.3 || ^3.0"
     },
@@ -53,6 +54,7 @@
         "solido/query-language": "^0.4 || ^0.5",
         "solido/security-policy-checker": "^0.4 || ^0.5",
         "solido/serialization": "^0.4 || ^0.5",
+        "solido/smithy": "dev-main",
         "solido/versioning": "^0.4 || ^0.5",
         "symfony/browser-kit": "^7.4 || ^8.0",
         "symfony/debug-bundle": "^7.4 || ^8.0",
@@ -80,6 +82,12 @@
             "Solido\\Symfony\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/solid-o/smithy"
+        }
+    ],
     "config": {
         "sort-packages": true,
         "allow-plugins": {

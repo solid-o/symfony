@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Solido\Serialization\Adapter\KcsSerializerAdapter;
 use Solido\Serialization\SerializerInterface;
+use Solido\Symfony\Command\SmithyDumpCommand;
 use Solido\Symfony\DependencyInjection\CompilerPass\RegisterSerializerPass;
 use Solido\Symfony\DependencyInjection\SolidoExtension;
 use stdClass;
@@ -89,6 +90,33 @@ class SolidoExtensionTest extends TestCase
         ]);
 
         $this->container->compile();
+    }
+
+    public function testShouldRegisterSmithyCommandWhenEnabled(): void
+    {
+        $this->container->registerExtension($this->extension);
+        $this->container->register('argument_metadata_factory', ArgumentMetadataFactory::class);
+        $this->container->loadFromExtension($this->extension->getAlias(), [
+            'dto' => [
+                'namespaces' => ['App\\DTO'],
+            ],
+            'request' => [
+                'enabled' => false,
+            ],
+            'serializer' => [
+                'enabled' => false,
+            ],
+            'smithy' => [
+                'enabled' => true,
+                'namespace' => 'com.example.api',
+                'service_name' => 'ExampleService',
+            ],
+        ]);
+
+        $this->container->compile();
+
+        self::assertTrue($this->container->has(SmithyDumpCommand::class));
+        self::assertSame(['App\\DTO'], $this->container->getParameter('solido.smithy.config')['dto_namespaces']);
     }
 
     public static function provideInvalidGroups(): iterable

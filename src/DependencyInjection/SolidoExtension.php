@@ -48,6 +48,7 @@ use function assert;
 use function class_exists;
 use function count;
 use function interface_exists;
+use function sprintf;
 
 class SolidoExtension extends Extension
 {
@@ -238,6 +239,31 @@ class SolidoExtension extends Extension
             foreach ($config['dto']['exclude'] as $exclude) {
                 $definition->addTag('solido.dto_service_locator_registry.exclude', ['value' => $exclude]);
             }
+        }
+
+        if ($config['smithy']['enabled']) {
+            if (! class_exists('Solido\\Smithy\\SmithyGenerator')) {
+                throw new InvalidConfigurationException('Solido Smithy component is not installed. Run composer require solido/smithy to install it.');
+            }
+
+            if (! interface_exists(ResolverInterface::class)) {
+                throw new InvalidConfigurationException('Solido DTO management component is required to generate Smithy models.');
+            }
+
+            if ($config['smithy']['namespace'] === null || $config['smithy']['service_name'] === null) {
+                throw new InvalidConfigurationException('Both solido.smithy.namespace and solido.smithy.service_name must be configured when Smithy generation is enabled.');
+            }
+
+            if ($config['smithy']['dto_namespaces'] === []) {
+                $config['smithy']['dto_namespaces'] = $config['dto']['namespaces'];
+            }
+
+            if ($config['smithy']['dto_namespaces'] === []) {
+                throw new InvalidConfigurationException(sprintf('At least one DTO namespace must be configured in %s or %s.', 'solido.smithy.dto_namespaces', 'solido.dto.namespaces'));
+            }
+
+            $container->setParameter('solido.smithy.config', $config['smithy']);
+            $loader->load('smithy.php');
         }
 
         $this->loadIfExists($loader, 'data_transformers.php', TransformerInterface::class);
