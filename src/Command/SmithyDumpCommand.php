@@ -21,6 +21,7 @@ use function file_put_contents;
 use function is_array;
 use function is_string;
 use function method_exists;
+use function preg_match;
 use function sprintf;
 use function str_contains;
 
@@ -55,6 +56,10 @@ final class SmithyDumpCommand extends Command
         $target = $this->option($input, 'output') ?? $this->stringConfig('output');
         if ($namespace === null || $serviceName === null) {
             throw new RuntimeException('Both Smithy namespace and service name must be configured.');
+        }
+
+        if (preg_match('/^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/', $namespace) !== 1) {
+            throw new RuntimeException(sprintf('Invalid Smithy namespace "%s". Use dot-separated Smithy identifiers, for example "com.example.api".', $namespace));
         }
 
         $result = $this->generator->generateResult(new GeneratorConfig(
